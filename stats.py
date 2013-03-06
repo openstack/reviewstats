@@ -99,9 +99,14 @@ def round_to_day(ts):
 
 reviewers = {}
 for review in reviews:
+    if review['type'] != 'CRVW':
+        # Only count code reviews.  Don't add another for Approved, which is
+        # type 'APRV'
+        continue
+
     reviewer = review['by'].get('username', 'unknown')
     reviewers.setdefault(reviewer,
-            {'votes': {'-2': 0, '-1': 0, '0': 0, '1': 0, '2': 0}})
+            {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0}})
     reviewers[reviewer]['total'] = reviewers[reviewer].get('total', 0) + 1
     cur = reviewers[reviewer]['votes'][review['value']]
     reviewers[reviewer]['votes'][review['value']] = cur + 1
@@ -121,12 +126,12 @@ if os.path.isfile(core_team_fn):
 
 print 'Reviews for the last %d days in %s' % (options.days, options.project)
 print '** -- %s-core team member' % core_team_name
-table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|0|+1|+2)'))
+table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|+1|+2)'))
 total = 0
 for k, v in reviewers:
     name = '%s%s' % (v, ' **' if v in core_team else '')
-    r = '%d (%d|%d|%d|%d|%d)' % (k['total'],
-            k['votes']['-2'], k['votes']['-1'], k['votes']['0'],
+    r = '%d (%d|%d|%d|%d)' % (k['total'],
+            k['votes']['-2'], k['votes']['-1'],
             k['votes']['1'], k['votes']['2'])
     table.add_row((name, r))
     total += k['total']
