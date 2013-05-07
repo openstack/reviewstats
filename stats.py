@@ -126,13 +126,16 @@ if os.path.isfile(core_team_fn):
 
 print 'Reviews for the last %d days in %s' % (options.days, options.project)
 print '** -- %s-core team member' % core_team_name
-table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|+1|+2)'))
+table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|+1|+2) (+/- ratio)'))
 total = 0
 for k, v in reviewers:
     name = '%s%s' % (v, ' **' if v in core_team else '')
-    r = '%d (%d|%d|%d|%d)' % (k['total'],
+    plus = float(k['votes']['2'] + k['votes']['1'])
+    minus = float(k['votes']['-2'] + k['votes']['-1'])
+    ratio = (plus / (plus + minus)) * 100
+    r = '%d (%d|%d|%d|%d) (%.1f%%)' % (k['total'],
             k['votes']['-2'], k['votes']['-1'],
-            k['votes']['1'], k['votes']['2'])
+            k['votes']['1'], k['votes']['2'], ratio)
     table.add_row((name, r))
     total += k['total']
 print table
