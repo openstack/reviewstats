@@ -36,6 +36,7 @@ CACHE_AGE = 3600  # Seconds
 CLIENT_MAP = {
     'python-novaclient': 'nova',
     'python-cinderclient': 'cinder',
+    'python-glanceclient': 'glance',
 }
 
 
