@@ -33,22 +33,20 @@ import time
 
 CACHE_AGE = 3600  # Seconds
 
-CLIENT_MAP = {
-    'python-novaclient': 'nova',
-    'python-cinderclient': 'cinder',
-    'python-glanceclient': 'glance',
-}
-
-
 optparser = optparse.OptionParser()
-optparser.add_option('-p', '--project', default='nova',
-        help='Project to generate stats for')
+optparser.add_option('-p', '--project', default='nova.json',
+        help='JSON file describing the project to generate stats for')
 optparser.add_option('-d', '--days', type='int', default=14,
         help='Number of days to consider')
 optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
 optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
 
 options, args = optparser.parse_args()
+
+project_fn = '%s.json' % options.project
+if os.path.isfile(project_fn):
+    with open(project_fn, 'r') as f:
+        project = json.loads(f.read())
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -57,7 +55,7 @@ client.load_system_host_keys()
 
 changes = []
 
-pickle_fn = '%s-changes.pickle' % options.project
+pickle_fn = '%s-changes.pickle' % project['name']
 
 if os.path.isfile(pickle_fn):
     mtime = os.stat(pickle_fn).st_mtime
@@ -65,12 +63,18 @@ if os.path.isfile(pickle_fn):
         with open(pickle_fn, 'r') as f:
             changes = pickle.load(f)
 
+def projects_q(project):
+    return ('(' +
+            ' OR '.join(['project:' + p for p in project['subprojects']]) +
+            ')')
+
 if len(changes) == 0:
+
     while True:
         client.connect('review.openstack.org', port=29418,
                 key_filename=options.key, username=options.user)
-        cmd = ('gerrit query project:openstack/%s '
-               '--all-approvals --patch-sets --format JSON' % options.project)
+        cmd = ('gerrit query %s --all-approvals --patch-sets --format JSON' %
+               projects_q(project))
         if len(changes) > 0:
             cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
         stdin, stdout, stderr = client.exec_command(cmd)
@@ -119,19 +123,12 @@ reviewers = [(v, k) for k, v in reviewers.iteritems()
              if k.lower() not in ('jenkins', 'smokestack')]
 reviewers.sort(reverse=True)
 
-core_team = []
-core_team_name = CLIENT_MAP.get(options.project, options.project)
-core_team_fn = '%s-core-team.json' % core_team_name
-if os.path.isfile(core_team_fn):
-    with open(core_team_fn, 'r') as f:
-        core_team = json.loads(f.read())
-
-print 'Reviews for the last %d days in %s' % (options.days, options.project)
-print '** -- %s-core team member' % core_team_name
+print 'Reviews for the last %d days in %s' % (options.days, project['name'])
+print '** -- %s-core team member' % project['name']
 table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|+1|+2) (+/- ratio)'))
 total = 0
 for k, v in reviewers:
-    name = '%s%s' % (v, ' **' if v in core_team else '')
+    name = '%s%s' % (v, ' **' if v in project['core-team'] else '')
     plus = float(k['votes']['2'] + k['votes']['1'])
     minus = float(k['votes']['-2'] + k['votes']['-1'])
     ratio = (plus / (plus + minus)) * 100
