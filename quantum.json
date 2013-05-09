@@ -1,0 +1,1 @@
+{"name": "quantum", "subprojects": ["openstack/quantum", "openstack/python-quantumclient"], "core-team": ["arosen", "amotoki", "danwent", "emagana", "garyk", "markmcclain", "maru", "nati-ueno", "rkukura", "salvatore-orlando", "snaiksat", "gongysh"]}
