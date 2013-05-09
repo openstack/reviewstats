@@ -1,0 +1,1 @@
+{"name": "oslo", "subprojects": ["openstack/oslo-incubator", "openstack/oslo.config", "openstack-dev/pbr", "openstack-dev/hacking"], "core-team": ["dims-v", "doug-hellmann", "jason-koelker", "markmc", "mikalstill", "russellb"]}
