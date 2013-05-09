@@ -37,6 +37,7 @@ CLIENT_MAP = {
     'python-novaclient': 'nova',
     'python-cinderclient': 'cinder',
     'python-glanceclient': 'glance',
+    'python-quantumclient': 'quantum',
 }
 
 
