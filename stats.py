@@ -43,9 +43,8 @@ optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
 
 options, args = optparser.parse_args()
 
-project_fn = '%s.json' % options.project
-if os.path.isfile(project_fn):
-    with open(project_fn, 'r') as f:
+if os.path.isfile(options.project):
+    with open(options.project, 'r') as f:
         project = json.loads(f.read())
 
 client = paramiko.SSHClient()
