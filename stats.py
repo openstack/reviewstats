@@ -20,6 +20,7 @@
 import calendar
 import cPickle as pickle
 import datetime
+import glob
 import json
 import optparse
 import os
@@ -36,6 +37,8 @@ CACHE_AGE = 3600  # Seconds
 optparser = optparse.OptionParser()
 optparser.add_option('-p', '--project', default='nova.json',
         help='JSON file describing the project to generate stats for')
+optparser.add_option('-a', '--all', action='store_true',
+        help='Generate stats across all known projects (*.json)')
 optparser.add_option('-d', '--days', type='int', default=14,
         help='Number of days to consider')
 optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
@@ -43,52 +46,69 @@ optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
 
 options, args = optparser.parse_args()
 
-if os.path.isfile(options.project):
-    with open(options.project, 'r') as f:
-        project = json.loads(f.read())
+if options.all:
+    files = glob.glob('./*.json')
+else:
+    files = [options.project]
+
+projects = []
+
+for fn in files:
+    if os.path.isfile(fn):
+        with open(fn, 'r') as f:
+            project = json.loads(f.read())
+            projects.append(project)
+
+if not projects:
+    print "Please specify a project."
+    sys.exit(1)
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 client.load_system_host_keys()
 
 
-changes = []
+all_changes = []
 
-pickle_fn = '%s-changes.pickle' % project['name']
+for project in projects:
+    changes = []
 
-if os.path.isfile(pickle_fn):
-    mtime = os.stat(pickle_fn).st_mtime
-    if (time.time() - mtime) <= CACHE_AGE:
-        with open(pickle_fn, 'r') as f:
-            changes = pickle.load(f)
+    pickle_fn = '%s-changes.pickle' % project['name']
 
-def projects_q(project):
-    return ('(' +
-            ' OR '.join(['project:' + p for p in project['subprojects']]) +
-            ')')
+    if os.path.isfile(pickle_fn):
+        mtime = os.stat(pickle_fn).st_mtime
+        if (time.time() - mtime) <= CACHE_AGE:
+            with open(pickle_fn, 'r') as f:
+                changes = pickle.load(f) 
+    def projects_q(project):
+        return ('(' +
+                ' OR '.join(['project:' + p for p in project['subprojects']]) +
+                ')')
 
-if len(changes) == 0:
+    if len(changes) == 0:
 
-    while True:
-        client.connect('review.openstack.org', port=29418,
-                key_filename=options.key, username=options.user)
-        cmd = ('gerrit query %s --all-approvals --patch-sets --format JSON' %
-               projects_q(project))
-        if len(changes) > 0:
-            cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
-        stdin, stdout, stderr = client.exec_command(cmd)
-        for l in stdout:
-            changes += [json.loads(l)]
-        if changes[-1]['rowCount'] == 0:
-            break
+        while True:
+            client.connect('review.openstack.org', port=29418,
+                    key_filename=options.key, username=options.user)
+            cmd = ('gerrit query %s --all-approvals --patch-sets --format JSON' %
+                   projects_q(project))
+            if len(changes) > 0:
+                cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
+            stdin, stdout, stderr = client.exec_command(cmd)
+            for l in stdout:
+                changes += [json.loads(l)]
+            if changes[-1]['rowCount'] == 0:
+                break
 
-    with open(pickle_fn, 'w') as f:
-        pickle.dump(changes, f)
+        with open(pickle_fn, 'w') as f:
+            pickle.dump(changes, f)
+
+    all_changes.extend(changes)
 
 
 reviews = []
 
-for change in changes:
+for change in all_changes:
 #    print json.dumps(change, sort_keys=True, indent=4)
     for patchset in change.get('patchSets', []):
         for review in patchset.get('approvals', []):
@@ -122,12 +142,24 @@ reviewers = [(v, k) for k, v in reviewers.iteritems()
              if k.lower() not in ('jenkins', 'smokestack')]
 reviewers.sort(reverse=True)
 
-print 'Reviews for the last %d days in %s' % (options.days, project['name'])
-print '** -- %s-core team member' % project['name']
+if options.all:
+    print 'Reviews for the last %d days in projects: %s' % (options.days,
+            [project['name'] for project in projects])
+else:
+    print 'Reviews for the last %d days in %s' % (options.days, projects[0]['name'])
+if options.all:
+    print '** -- Member of at least one core reviewer team'
+else:
+    print '** -- %s-core team member' % project['name']
 table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|+1|+2) (+/- ratio)'))
 total = 0
 for k, v in reviewers:
-    name = '%s%s' % (v, ' **' if v in project['core-team'] else '')
+    in_core_team = False
+    for project in projects:
+        if v in project['core-team']:
+            in_core_team = True
+            break
+    name = '%s%s' % (v, ' **' if in_core_team else '')
     plus = float(k['votes']['2'] + k['votes']['1'])
     minus = float(k['votes']['-2'] + k['votes']['-1'])
     ratio = (plus / (plus + minus)) * 100
