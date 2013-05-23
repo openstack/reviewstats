@@ -170,3 +170,4 @@ for k, v in reviewers:
     total += k['total']
 print table
 print '\nTotal reviews: %d' % total
+print 'Total reviewers: %d' % len(reviewers)
