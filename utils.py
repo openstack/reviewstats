@@ -49,7 +49,7 @@ def projects_q(project):
             ')')
 
 
-def get_changes(projects, ssh_user, ssh_key):
+def get_changes(projects, ssh_user, ssh_key, only_open=False):
     all_changes = []
 
     client = paramiko.SSHClient()
@@ -59,13 +59,17 @@ def get_changes(projects, ssh_user, ssh_key):
     for project in projects:
         changes = []
 
-        pickle_fn = '%s-changes.pickle' % project['name']
+        if not only_open:
+            # Only use the cache for *all* changes (the entire history).
+            # Requesting only the open changes isn't nearly as big of a deal,
+            # so just get the current data.
+            pickle_fn = '%s-changes.pickle' % project['name']
 
-        if os.path.isfile(pickle_fn):
-            mtime = os.stat(pickle_fn).st_mtime
-            if (time.time() - mtime) <= CACHE_AGE:
-                with open(pickle_fn, 'r') as f:
-                    changes = pickle.load(f)
+            if os.path.isfile(pickle_fn):
+                mtime = os.stat(pickle_fn).st_mtime
+                if (time.time() - mtime) <= CACHE_AGE:
+                    with open(pickle_fn, 'r') as f:
+                        changes = pickle.load(f)
 
         if len(changes) == 0:
 
@@ -74,6 +78,8 @@ def get_changes(projects, ssh_user, ssh_key):
                         key_filename=ssh_key, username=ssh_user)
                 cmd = ('gerrit query %s --all-approvals --patch-sets --format JSON' %
                        projects_q(project))
+                if only_open:
+                    cmd += ' status:open'
                 if len(changes) > 0:
                     cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
                 stdin, stdout, stderr = client.exec_command(cmd)
@@ -82,8 +88,9 @@ def get_changes(projects, ssh_user, ssh_key):
                 if changes[-1]['rowCount'] == 0:
                     break
 
-            with open(pickle_fn, 'w') as f:
-                pickle.dump(changes, f)
+            if not only_open:
+                with open(pickle_fn, 'w') as f:
+                    pickle.dump(changes, f)
 
         all_changes.extend(changes)
 
