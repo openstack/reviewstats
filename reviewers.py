@@ -18,21 +18,18 @@
 
 
 import calendar
-import cPickle as pickle
 import datetime
 import glob
 import json
 import optparse
 import os
 import os.path
-import paramiko
 from pprint import pprint
 import prettytable
 import sys
-import time
 
+import utils
 
-CACHE_AGE = 3600  # Seconds
 
 optparser = optparse.OptionParser()
 optparser.add_option('-p', '--project', default='nova.json',
@@ -46,65 +43,14 @@ optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
 
 options, args = optparser.parse_args()
 
-if options.all:
-    files = glob.glob('./*.json')
-else:
-    files = [options.project]
 
-projects = []
-
-for fn in files:
-    if os.path.isfile(fn):
-        with open(fn, 'r') as f:
-            project = json.loads(f.read())
-            projects.append(project)
+projects = utils.get_projects_info(options.project, options.all)
 
 if not projects:
     print "Please specify a project."
     sys.exit(1)
 
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.load_system_host_keys()
-
-
-all_changes = []
-
-for project in projects:
-    changes = []
-
-    pickle_fn = '%s-changes.pickle' % project['name']
-
-    if os.path.isfile(pickle_fn):
-        mtime = os.stat(pickle_fn).st_mtime
-        if (time.time() - mtime) <= CACHE_AGE:
-            with open(pickle_fn, 'r') as f:
-                changes = pickle.load(f) 
-    def projects_q(project):
-        return ('(' +
-                ' OR '.join(['project:' + p for p in project['subprojects']]) +
-                ')')
-
-    if len(changes) == 0:
-
-        while True:
-            client.connect('review.openstack.org', port=29418,
-                    key_filename=options.key, username=options.user)
-            cmd = ('gerrit query %s --all-approvals --patch-sets --format JSON' %
-                   projects_q(project))
-            if len(changes) > 0:
-                cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
-            stdin, stdout, stderr = client.exec_command(cmd)
-            for l in stdout:
-                changes += [json.loads(l)]
-            if changes[-1]['rowCount'] == 0:
-                break
-
-        with open(pickle_fn, 'w') as f:
-            pickle.dump(changes, f)
-
-    all_changes.extend(changes)
-
+all_changes = utils.get_changes(projects, options.user, options.key)
 
 reviews = []
 
@@ -150,7 +96,7 @@ else:
 if options.all:
     print '** -- Member of at least one core reviewer team'
 else:
-    print '** -- %s-core team member' % project['name']
+    print '** -- %s-core team member' % projects[0]['name']
 table = prettytable.PrettyTable(('Reviewer', 'Reviews (-2|-1|+1|+2) (+/- ratio)'))
 total = 0
 for k, v in reviewers:
