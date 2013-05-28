@@ -57,8 +57,9 @@ for change in changes:
     latest_patch = change['patchSets'][-1]
     waiting_for_review = True
     for review in latest_patch.get('approvals', []):
-        if review['type'] == 'CRVW' and (review['value'] != '-1' or
-                                         review['value'] == '-2'):
+        if review['type'] not in ('CRVW', 'VRIF'):
+            continue
+        if review['value'] in ('-1', '-2'):
             waiting_for_review = False
             break
     change['age'] = now_ts - latest_patch['createdOn']
