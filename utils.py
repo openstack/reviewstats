@@ -63,7 +63,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False):
             # Only use the cache for *all* changes (the entire history).
             # Requesting only the open changes isn't nearly as big of a deal,
             # so just get the current data.
-            pickle_fn = '%s-changes.pickle' % project['name']
+            pickle_fn = '.%s-changes.pickle' % project['name']
 
             if os.path.isfile(pickle_fn):
                 mtime = os.stat(pickle_fn).st_mtime
