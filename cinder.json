@@ -1,1 +1,1 @@
-{"name": "cinder", "subprojects": ["openstack/cinder", "openstack/python-cinderclient"], "core-team": ["john-griffith", "avishay-il", "zhiteng-huang", "vishvananda", "duncan-thomas", "thingee", "anotherjesse"]}
+{"name": "cinder", "subprojects": ["openstack/cinder", "openstack/python-cinderclient", "openstack/volume-api"], "core-team": ["john-griffith", "avishay-il", "zhiteng-huang", "vishvananda", "duncan-thomas", "thingee", "anotherjesse"]}

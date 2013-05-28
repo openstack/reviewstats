@@ -1,1 +1,1 @@
-{"name": "glance", "subprojects": ["openstack/glance", "openstack/python-glanceclient"], "core-team": ["markwash", "bcwaldon", "eglynn", "dan-prince", "flaper87", "alex-meade", "jbresnah", "iccha-sethi"]}
+{"name": "glance", "subprojects": ["openstack/glance", "openstack/python-glanceclient", "openstack/image-api"], "core-team": ["markwash", "bcwaldon", "eglynn", "dan-prince", "flaper87", "alex-meade", "jbresnah", "iccha-sethi"]}
