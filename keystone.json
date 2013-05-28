@@ -1,0 +1,1 @@
+{"name": "keystone", "subprojects": ["openstack/keystone", "openstack/python-keystoneclient"], "core-team": ["ayoung", "blk-u", "dolph", "guang-yee", "heckj", "henry-nash", "termie"]}
