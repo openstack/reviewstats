@@ -28,7 +28,7 @@ CACHE_AGE = 3600  # Seconds
 
 def get_projects_info(project=None, all_projects=False):
     if all_projects:
-        files = glob.glob('./*.json')
+        files = glob.glob('projects/*.json')
     else:
         files = [project]
 

@@ -32,7 +32,7 @@ import utils
 
 
 optparser = optparse.OptionParser()
-optparser.add_option('-p', '--project', default='nova.json',
+optparser.add_option('-p', '--project', default='projects/nova.json',
         help='JSON file describing the project to generate stats for')
 optparser.add_option('-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')

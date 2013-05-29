@@ -4,14 +4,14 @@ projects=$1
 all=0
 
 if [ "$projects" = "" ] ; then
-	projects=*.json
+	projects=projects/*.json
 	all=1
 fi
 
 mkdir -p results
 
 for project in ${projects} ; do
-	project_base=$(echo ${project} | cut -f1 -d'.')
+	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
 	(date -u && echo && ./openreviews.py -p ${project}) > results/${project_base}-openreviews.txt
 	for time in 30 90 180 ; do
 		(date -u && echo && ./reviewers.py -p ${project} -d ${time}) > results/${project_base}-reviewers-${time}.txt
