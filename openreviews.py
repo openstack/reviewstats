@@ -33,6 +33,12 @@ optparser.add_option('-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')
 optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
 optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
+optparser.add_option('-n', '--no-stable', action='store_true',
+        help='Exclude changesets for stable branch)')
+optparser.add_option('-l', '--longest-waiting', type='int', default=5,
+        help='Show n changesets that have waited the longest)')
+optparser.add_option('-m', '--waiting-more', type='int', default=7,
+        help='Show number of changesets that have waited more than n days)')
 
 options, args = optparser.parse_args()
 
@@ -51,8 +57,18 @@ waiting_on_reviewer = []
 now = datetime.datetime.utcnow()
 now_ts = calendar.timegm(now.timetuple())
 
+def sec_to_period_string(seconds):
+    days = seconds / (3600 * 24)
+    hours = (seconds / 3600) - (days * 24)
+    minutes = (seconds / 60) - (days * 24 * 60) - (hours * 60)
+    return '%d days, %d hours, %d minutes' % (days, hours, minutes)
+
+
+
 for change in changes:
     if 'rowCount' in change:
+        continue
+    if options.no_stable and 'stable' in change['branch']:
         continue
     latest_patch = change['patchSets'][-1]
     waiting_for_review = True
@@ -74,10 +90,23 @@ def average_age(changes):
     for change in changes:
         total_seconds += change['age']
     avg_age = total_seconds / len(changes)
-    days = avg_age / (3600 * 24)
-    hours = (avg_age / 3600) - (days * 24)
-    minutes = (avg_age / 60) - (days * 24 * 60) - (hours * 60)
-    return '%d days, %d hours, %d minutes' % (days, hours, minutes)
+    return sec_to_period_string(avg_age)
+
+def median_age(changes):
+    changes = sorted(changes, key=lambda change: change['age'])
+    median_age = changes[len(changes)/2]['age']
+    return sec_to_period_string(median_age)
+
+def number_waiting_more_than(changes, seconds):
+    index = 0
+    for change in changes:
+        if change['age'] > seconds:
+            return len(changes) - index
+        index += 1
+    return 0
+
+age_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
+                                        key=lambda change: change['age'])
 
 
 print 'Projects: %s' % [project['name'] for project in projects]
@@ -86,3 +115,13 @@ print 'Total Open Reviews: %d' % (len(waiting_on_reviewer) +
 print 'Waiting on Submitter: %d' % len(waiting_on_submitter)
 print 'Waiting on Reviewer: %d' % len(waiting_on_reviewer)
 print ' --> Average wait time: %s' % average_age(waiting_on_reviewer)
+print ' --> Median wait time: %s' % median_age(waiting_on_reviewer)
+print ' --> Number waiting more than %i days: %i' % (
+    options.waiting_more, number_waiting_more_than(
+        age_sorted_waiting_on_reviewer,
+        60*60*24*options.waiting_more))
+print ' --> Longest waiting reviews:'
+for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+    print '    --> %s %s \n          (%s)' % (
+        sec_to_period_string(change['age']),
+        change['url'], change['subject'])
