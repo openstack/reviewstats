@@ -1,0 +1,1 @@
+{"name": "ironic", "subprojects": ["openstack/ironic", "openstack/python-ironicclient"], "core-team": ["devananda", "mikalstill", "sdague", "lifeless"]}
