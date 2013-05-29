@@ -75,13 +75,26 @@ for change in changes:
         continue
     latest_patch = change['patchSets'][-1]
     waiting_for_review = True
-    for review in latest_patch.get('approvals', []):
+    approvals = latest_patch.get('approvals', [])
+    approvals.sort(key=lambda a:a['grantedOn'])
+    for review in approvals:
         if review['type'] not in ('CRVW', 'VRIF'):
             continue
         if review['value'] in ('-1', '-2'):
             waiting_for_review = False
             break
-    change['age'] = now_ts - latest_patch['createdOn']
+    # The createdOn timestamp on the patch isn't what we want.
+    # It's when the patch was written, not submitted for review.
+    # The next best thing in the data we have is the time of the
+    # first review.  When all is working well, jenkins or smokestack
+    # will comment within the first hour or two, so that's better
+    # than the other timestamp, which may reflect that the code
+    # was written many weeks ago, even though it was just recently
+    # submitted for review.
+    if approvals:
+        change['age'] = now_ts - approvals[0]['grantedOn']
+    else:
+        change['age'] = now_ts - latest_patch['createdOn']
     if waiting_for_review:
         waiting_on_reviewer.append(change)
     else:
