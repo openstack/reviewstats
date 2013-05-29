@@ -33,8 +33,8 @@ optparser.add_option('-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')
 optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
 optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
-optparser.add_option('-n', '--no-stable', action='store_true',
-        help='Exclude changesets for stable branch)')
+optparser.add_option('-s', '--stable', action='store_true',
+        help='Include stable branch commits')
 optparser.add_option('-l', '--longest-waiting', type='int', default=5,
         help='Show n changesets that have waited the longest)')
 optparser.add_option('-m', '--waiting-more', type='int', default=7,
@@ -68,7 +68,7 @@ def sec_to_period_string(seconds):
 for change in changes:
     if 'rowCount' in change:
         continue
-    if options.no_stable and 'stable' in change['branch']:
+    if not options.stable and 'stable' in change['branch']:
         continue
     latest_patch = change['patchSets'][-1]
     waiting_for_review = True
