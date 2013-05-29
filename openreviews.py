@@ -70,6 +70,9 @@ for change in changes:
         continue
     if not options.stable and 'stable' in change['branch']:
         continue
+    if change['status'] != 'NEW':
+        # Filter out WORKINPROGRESS
+        continue
     latest_patch = change['patchSets'][-1]
     waiting_for_review = True
     for review in latest_patch.get('approvals', []):
