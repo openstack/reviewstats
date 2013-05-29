@@ -1,0 +1,31 @@
+{"name": "infra", "subprojects": [
+    "openstack-infra/askbot-theme",
+    "openstack-infra/config",
+    "openstack-infra/devstack-gate",
+    "openstack-infra/gear",
+    "openstack-infra/gearman-plugin",
+    "openstack-infra/gerrit",
+    "openstack-infra/gerritbot",
+    "openstack-infra/gerritlib",
+    "openstack-infra/gitdm",
+    "openstack-infra/git-review",
+    "openstack-infra/jeepyb",
+    "openstack-infra/jenkins-job-builder",
+    "openstack-infra/lodgeit",
+    "openstack-infra/meetbot",
+    "openstack-infra/nose-html-output",
+    "openstack-infra/puppet-apparmor",
+    "openstack-infra/puppet-dashboard",
+    "openstack-infra/puppet-vcsrepo",
+    "openstack-infra/pypi-mirror",
+    "openstack-infra/releasestatus",
+    "openstack-infra/reviewday",
+    "openstack-infra/statusbot",
+    "openstack-infra/zmq-event-publisher",
+    "openstack-infra/zuul"
+], "core-team": [
+    "clark.boylan",
+    "corvus",
+    "fungi",
+    "mordred"
+]}
