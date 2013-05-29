@@ -1,1 +1,1 @@
-{"name": "docs", "subprojects": ["openstack/openstack-manuals"], "core-team": ["annegentle", "fifieldt", "emilienm", "lorinh", "koolhead17", "razique", "diane-fleming", "salvatore-orlando", "kbringard"]}
+{"name": "docs", "subprojects": ["openstack/openstack-manuals", "openstack/api-site", "openstack/operations-guide"], "core-team": ["annegentle", "fifieldt", "emilienm", "lorinh", "koolhead17", "razique", "diane-fleming", "salvatore-orlando", "kbringard"]}
