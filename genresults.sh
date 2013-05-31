@@ -19,7 +19,12 @@ for project in ${projects} ; do
 done
 
 if [ "${all}" = "1" ] ; then
-	(date -u && echo && ./openreviews.py -a) > results/all-openreviews.txt
+	rm results/all-openreviews.txt
+	(date -u && echo && ./openreviews.py -a) > results/all-openreviews.txt.tmp
+	for f in results/*-openreviews.txt ; do
+		(echo && cat $f) >> results/all-openreviews.txt.tmp
+	done
+	mv results/all-openreviews.txt.tmp results/all-openreviews.txt
 
 	for time in 30 90 180 ; do
 		(date -u && echo && ./reviewers.py -a -d ${time}) > results/all-reviewers-${time}.txt
