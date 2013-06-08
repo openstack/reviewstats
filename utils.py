@@ -53,8 +53,8 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False):
     all_changes = []
 
     client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.load_system_host_keys()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     for project in projects:
         changes = []
