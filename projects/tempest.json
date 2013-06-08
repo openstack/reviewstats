@@ -3,16 +3,10 @@
     "subprojects": ["openstack/tempest"],
     "core-team": [
         "afazekas",
-        "blamar",
-        "bcwaldon",
         "cyeoh-0",
-        "dwalleck",
         "david-kranz",
-        "westmaas",
-        "corvus",
         "jaypipes",
         "treinish",
-        "mordred",
         "sdague"
     ]
 }
