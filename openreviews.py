@@ -102,6 +102,8 @@ for change in changes:
 
 
 def average_age(changes):
+    if not changes:
+        return 0
     total_seconds = 0
     for change in changes:
         total_seconds += change['age']
