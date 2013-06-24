@@ -113,6 +113,8 @@ def average_age(changes):
     return sec_to_period_string(avg_age)
 
 def median_age(changes):
+    if not changes:
+        return 0
     changes = sorted(changes, key=lambda change: change['age'])
     median_age = changes[len(changes)/2]['age']
     return sec_to_period_string(median_age)
