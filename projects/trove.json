@@ -1,0 +1,1 @@
+{"name": "trove", "subprojects": ["stackforge/trove", "stackforge/python-troveclient"], "core-team": ["tim-simpson", "vipuls", "hubcap", "slicknik"]}
