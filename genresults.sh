@@ -10,6 +10,8 @@ fi
 
 mkdir -p results
 
+rm -f results/*
+
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
 	(date -u && echo && ./openreviews.py -p ${project}) > results/${project_base}-openreviews.txt
