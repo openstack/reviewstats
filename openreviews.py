@@ -39,6 +39,8 @@ optparser.add_option('-l', '--longest-waiting', type='int', default=5,
         help='Show n changesets that have waited the longest)')
 optparser.add_option('-m', '--waiting-more', type='int', default=7,
         help='Show number of changesets that have waited more than n days)')
+optparser.add_option('-H', '--html', action='store_true',
+        help='Use HTML output instead of plain text')
 
 options, args = optparser.parse_args()
 
@@ -127,19 +129,52 @@ age_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
                                         key=lambda change: change['age'])
 
 
-print 'Projects: %s' % [project['name'] for project in projects]
-print 'Total Open Reviews: %d' % (len(waiting_on_reviewer) +
-        len(waiting_on_submitter))
-print 'Waiting on Submitter: %d' % len(waiting_on_submitter)
-print 'Waiting on Reviewer: %d' % len(waiting_on_reviewer)
-print ' --> Average wait time: %s' % average_age(waiting_on_reviewer)
-print ' --> Median wait time: %s' % median_age(waiting_on_reviewer)
-print ' --> Number waiting more than %i days: %i' % (
-    options.waiting_more, number_waiting_more_than(
-        age_sorted_waiting_on_reviewer,
-        60*60*24*options.waiting_more))
-print ' --> Longest waiting reviews:'
-for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
-    print '    --> %s %s \n          (%s)' % (
-        sec_to_period_string(change['age']),
-        change['url'], change['subject'])
+def output_txt():
+    print 'Projects: %s' % [project['name'] for project in projects]
+    print 'Total Open Reviews: %d' % (len(waiting_on_reviewer) +
+            len(waiting_on_submitter))
+    print 'Waiting on Submitter: %d' % len(waiting_on_submitter)
+    print 'Waiting on Reviewer: %d' % len(waiting_on_reviewer)
+    print ' --> Average wait time: %s' % average_age(waiting_on_reviewer)
+    print ' --> Median wait time: %s' % median_age(waiting_on_reviewer)
+    print ' --> Number waiting more than %i days: %i' % (
+        options.waiting_more, number_waiting_more_than(
+            age_sorted_waiting_on_reviewer,
+            60*60*24*options.waiting_more))
+    print ' --> Longest waiting reviews:'
+    for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+        print '    --> %s %s \n          (%s)' % (
+            sec_to_period_string(change['age']),
+            change['url'], change['subject'])
+
+
+def output_html():
+    print '<html>'
+    print '<head><title>Open Revies for %s</title></head>' % (
+            [project['name'] for project in projects])
+    print '<p>Projects: %s</p>' % [project['name'] for project in projects]
+    print '<p>Total Open Reviews: %d</p>' % (len(waiting_on_reviewer) +
+            len(waiting_on_submitter))
+    print '<p>Waiting on Submitter: %d</p>' % len(waiting_on_submitter)
+    print '<p>Waiting on Reviewer: %d</p>' % len(waiting_on_reviewer)
+    print '<ul>'
+    print '\t<li>Average wait time: %s</li>' % average_age(waiting_on_reviewer)
+    print '\t<li>Median wait time: %s</li>' % median_age(waiting_on_reviewer)
+    print '\t<li>Number waiting more than %i days: %i</li>' % (
+        options.waiting_more, number_waiting_more_than(
+            age_sorted_waiting_on_reviewer,
+            60*60*24*options.waiting_more))
+    print '\t<li>Longest waiting reviews:</li>'
+    print '\t<ol>'
+    for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+        print '\t\t<li>%s - <a href="%s">%s</a> (%s)</li>' % (
+            sec_to_period_string(change['age']),
+            change['url'], change['url'], change['subject'])
+    print '\t</ol>'
+    print '</ul>'
+    print '</html>'
+
+if options.html:
+    output_html()
+else:
+    output_txt()
