@@ -152,7 +152,7 @@ def output_txt():
 
 def output_html():
     print '<html>'
-    print '<head><title>Open Revies for %s</title></head>' % (
+    print '<head><title>Open Reviews for %s</title></head>' % (
             [project['name'] for project in projects])
     print '<p>Projects: %s</p>' % [project['name'] for project in projects]
     print '<p>Total Open Reviews: %d</p>' % (len(waiting_on_reviewer) +
