@@ -204,7 +204,7 @@ def output_html():
     print '\t<ol>'
     for change in age2_sorted_waiting_on_reviewer[-options.longest_waiting:]:
         print '\t\t<li>%s - <a href="%s">%s</a> (%s)</li>' % (
-            sec_to_period_string(change['age']),
+            sec_to_period_string(change['age2']),
             change['url'], change['url'], change['subject'])
     print '\t</ol>'
     print '</ul>'
