@@ -110,7 +110,7 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
             average_age(waiting_on_reviewer, key='age3'))))
     last_without_nack_stats.append(('Median wait time', '%s' % (
             median_age(waiting_on_reviewer, key='age3'))))
-    stats.append(('Stats since the last revision without -1 or -2',
+    stats.append(('Stats since the last revision without -1 or -2 (ignoring jenkins)',
             last_without_nack_stats))
 
     changes = []
@@ -131,7 +131,7 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
     for change in age3_sorted[-options.longest_waiting:]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
                                       change['url'], change['subject']))
-    stats.append(('Longest waiting reviews (based on oldest rev without nack)',
+    stats.append(('Longest waiting reviews (based on oldest rev without nack, ignoring jenkins)',
             changes))
 
     result.append(stats)
@@ -199,6 +199,9 @@ def find_oldest_no_nack(change):
     for patch in reversed(change['patchSets']):
         nacked = False
         for review in patch.get('approvals', []):
+            if review['by'].get('username') == 'jenkins':
+                # Only consider nacks from people
+                continue
             if review['type'] not in ('CRVW', 'VRIF'):
                 continue
             if review['value'] in ('-1', '-2'):
@@ -208,7 +211,6 @@ def find_oldest_no_nack(change):
             break
         last_patch = patch
     return last_patch
-
 
 
 def main(argv=None):
