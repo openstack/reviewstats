@@ -199,10 +199,7 @@ def find_oldest_no_nack(change):
     for patch in reversed(change['patchSets']):
         nacked = False
         for review in patch.get('approvals', []):
-            if review['by'].get('username') == 'jenkins':
-                # Only consider nacks from people
-                continue
-            if review['type'] not in ('CRVW', 'VRIF'):
+            if review['type'] != 'CRVW':
                 continue
             if review['value'] in ('-1', '-2'):
                 nacked = True
