@@ -87,34 +87,46 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
             len(waiting_on_reviewer) + len(waiting_on_submitter))))
     stats.append(('Waiting on Submitter', '%d' % len(waiting_on_submitter)))
     stats.append(('Waiting on Reviewer', '%d' % len(waiting_on_reviewer)))
-    stats.append(('Average wait time (latest revision)', '%s' % (
+
+    latest_rev_stats = []
+    latest_rev_stats.append(('Average wait time', '%s' % (
             average_age(waiting_on_reviewer))))
-    stats.append(('Median wait time (latest revision)', '%s' % (
+    latest_rev_stats.append(('Median wait time', '%s' % (
             median_age(waiting_on_reviewer))))
-    stats.append(('Number waiting more than %i days (latest revision)' %
+    latest_rev_stats.append(('Number waiting more than %i days' %
             options.waiting_more, '%i' % (number_waiting_more_than(
-            age_sorted, 60 * 60 * 24 *
-            options.waiting_more))))
-    stats.append(('Average wait time (first revision)', '%s' % (
+            age_sorted, 60 * 60 * 24 * options.waiting_more))))
+    stats.append(('Stats since the latest revision', latest_rev_stats))
+
+    first_rev_stats = []
+    first_rev_stats.append(('Average wait time', '%s' % (
             average_age(waiting_on_reviewer, key='age2'))))
-    stats.append(('Median wait time (first revision)', '%s' % (
+    first_rev_stats.append(('Median wait time', '%s' % (
             median_age(waiting_on_reviewer, key='age2'))))
-    stats.append(('Average wait time (oldest without nack)', '%s' % (
+    stats.append(('Stats since the first revision', first_rev_stats))
+
+    last_without_nack_stats = []
+    last_without_nack_stats.append(('Average wait time', '%s' % (
             average_age(waiting_on_reviewer, key='age3'))))
-    stats.append(('Median wait time (oldest without nack)', '%s' % (
+    last_without_nack_stats.append(('Median wait time', '%s' % (
             median_age(waiting_on_reviewer, key='age3'))))
+    stats.append(('Stats since the last revision without -1 or -2',
+            last_without_nack_stats))
+
     changes = []
     for change in age_sorted[-options.longest_waiting:]:
         changes.append('%s %s (%s)' % (sec_to_period_string(change['age']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on latest revision)',
                  changes))
+
     changes = []
     for change in age2_sorted[-options.longest_waiting:]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on first revision)',
             changes))
+
     changes = []
     for change in age3_sorted[-options.longest_waiting:]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
