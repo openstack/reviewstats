@@ -66,6 +66,22 @@ def sec_to_period_string(seconds):
     return '%d days, %d hours, %d minutes' % (days, hours, minutes)
 
 
+def get_age_of_patch(patch):
+    approvals = patch.get('approvals', [])
+    approvals.sort(key=lambda a:a['grantedOn'])
+    # The createdOn timestamp on the patch isn't what we want.
+    # It's when the patch was written, not submitted for review.
+    # The next best thing in the data we have is the time of the
+    # first review.  When all is working well, jenkins or smokestack
+    # will comment within the first hour or two, so that's better
+    # than the other timestamp, which may reflect that the code
+    # was written many weeks ago, even though it was just recently
+    # submitted for review.
+    if approvals:
+        return now_ts - approvals[0]['grantedOn']
+    else:
+        return now_ts - patch['createdOn']
+
 
 for change in changes:
     if 'rowCount' in change:
@@ -85,50 +101,48 @@ for change in changes:
         if review['value'] in ('-1', '-2'):
             waiting_for_review = False
             break
-    # The createdOn timestamp on the patch isn't what we want.
-    # It's when the patch was written, not submitted for review.
-    # The next best thing in the data we have is the time of the
-    # first review.  When all is working well, jenkins or smokestack
-    # will comment within the first hour or two, so that's better
-    # than the other timestamp, which may reflect that the code
-    # was written many weeks ago, even though it was just recently
-    # submitted for review.
-    if approvals:
-        change['age'] = now_ts - approvals[0]['grantedOn']
-    else:
-        change['age'] = now_ts - latest_patch['createdOn']
+
+    change['age'] = get_age_of_patch(latest_patch)
+    change['age2'] = get_age_of_patch(change['patchSets'][0])
+
     if waiting_for_review:
         waiting_on_reviewer.append(change)
     else:
         waiting_on_submitter.append(change)
 
 
-def average_age(changes):
+def average_age(changes, key='age'):
     if not changes:
         return 0
     total_seconds = 0
     for change in changes:
-        total_seconds += change['age']
+        total_seconds += change[key]
     avg_age = total_seconds / len(changes)
     return sec_to_period_string(avg_age)
 
-def median_age(changes):
+
+def median_age(changes, key='age'):
     if not changes:
         return 0
-    changes = sorted(changes, key=lambda change: change['age'])
-    median_age = changes[len(changes)/2]['age']
+    changes = sorted(changes, key=lambda change: change[key])
+    median_age = changes[len(changes)/2][key]
     return sec_to_period_string(median_age)
 
-def number_waiting_more_than(changes, seconds):
+
+def number_waiting_more_than(changes, seconds, key='age'):
     index = 0
     for change in changes:
-        if change['age'] > seconds:
+        if change[key] > seconds:
             return len(changes) - index
         index += 1
     return 0
 
+
 age_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
                                         key=lambda change: change['age'])
+
+age2_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
+                                        key=lambda change: change['age2'])
 
 
 def output_txt():
@@ -137,16 +151,27 @@ def output_txt():
             len(waiting_on_submitter))
     print 'Waiting on Submitter: %d' % len(waiting_on_submitter)
     print 'Waiting on Reviewer: %d' % len(waiting_on_reviewer)
-    print ' --> Average wait time: %s' % average_age(waiting_on_reviewer)
-    print ' --> Median wait time: %s' % median_age(waiting_on_reviewer)
+    print ' --> Average wait time (latest revision): %s' % (
+            average_age(waiting_on_reviewer))
+    print ' --> Median wait time (latest revision): %s' % (
+            median_age(waiting_on_reviewer))
     print ' --> Number waiting more than %i days: %i' % (
         options.waiting_more, number_waiting_more_than(
             age_sorted_waiting_on_reviewer,
             60*60*24*options.waiting_more))
-    print ' --> Longest waiting reviews:'
+    print ' --> Average wait time (first revision): %s' % (
+            average_age(waiting_on_reviewer, key='age2'))
+    print ' --> Median wait time (latest revision): %s' % (
+            median_age(waiting_on_reviewer, key='age2'))
+    print ' --> Longest waiting reviews (based on latest revision):'
     for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
         print '    --> %s %s \n          (%s)' % (
             sec_to_period_string(change['age']),
+            change['url'], change['subject'])
+    print ' --> Longest waiting reviews (based on first revision):'
+    for change in age2_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+        print '    --> %s %s \n          (%s)' % (
+            sec_to_period_string(change['age2']),
             change['url'], change['subject'])
 
 
@@ -160,21 +185,31 @@ def output_html():
     print '<p>Waiting on Submitter: %d</p>' % len(waiting_on_submitter)
     print '<p>Waiting on Reviewer: %d</p>' % len(waiting_on_reviewer)
     print '<ul>'
-    print '\t<li>Average wait time: %s</li>' % average_age(waiting_on_reviewer)
-    print '\t<li>Median wait time: %s</li>' % median_age(waiting_on_reviewer)
+    print '\t<li>Average wait time (latest revision): %s</li>' % average_age(waiting_on_reviewer)
+    print '\t<li>Median wait time (latest revision): %s</li>' % median_age(waiting_on_reviewer)
     print '\t<li>Number waiting more than %i days: %i</li>' % (
         options.waiting_more, number_waiting_more_than(
             age_sorted_waiting_on_reviewer,
             60*60*24*options.waiting_more))
-    print '\t<li>Longest waiting reviews:</li>'
+    print '\t<li>Average wait time (first revision): %s</li>' % average_age(waiting_on_reviewer, key='age2')
+    print '\t<li>Median wait time (first revision): %s</li>' % median_age(waiting_on_reviewer, key='age2')
+    print '\t<li>Longest waiting reviews (based on latest revision):</li>'
     print '\t<ol>'
     for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
         print '\t\t<li>%s - <a href="%s">%s</a> (%s)</li>' % (
             sec_to_period_string(change['age']),
             change['url'], change['url'], change['subject'])
     print '\t</ol>'
+    print '\t<li>Longest waiting reviews (based on first revision):</li>'
+    print '\t<ol>'
+    for change in age2_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+        print '\t\t<li>%s - <a href="%s">%s</a> (%s)</li>' % (
+            sec_to_period_string(change['age']),
+            change['url'], change['url'], change['subject'])
+    print '\t</ol>'
     print '</ul>'
     print '</html>'
+
 
 if options.html:
     output_html()
