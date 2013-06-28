@@ -78,8 +78,7 @@ def number_waiting_more_than(changes, seconds, key='age'):
 
 
 def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
-        age_sorted_waiting_on_reviewer, age2_sorted_waiting_on_reviewer,
-        options):
+        age_sorted, age2_sorted, age3_sorted, options):
     result = []
     result.append(('Projects', '%s' % [project['name']
                                       for project in projects]))
@@ -94,23 +93,33 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
             median_age(waiting_on_reviewer))))
     stats.append(('Number waiting more than %i days (latest revision)' %
             options.waiting_more, '%i' % (number_waiting_more_than(
-            age_sorted_waiting_on_reviewer, 60 * 60 * 24 *
+            age_sorted, 60 * 60 * 24 *
             options.waiting_more))))
     stats.append(('Average wait time (first revision)', '%s' % (
             average_age(waiting_on_reviewer, key='age2'))))
-    stats.append(('Median wait time (latest revision)', '%s' % (
+    stats.append(('Median wait time (first revision)', '%s' % (
             median_age(waiting_on_reviewer, key='age2'))))
+    stats.append(('Average wait time (oldest without nack)', '%s' % (
+            average_age(waiting_on_reviewer, key='age3'))))
+    stats.append(('Median wait time (oldest without nack)', '%s' % (
+            median_age(waiting_on_reviewer, key='age3'))))
     changes = []
-    for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+    for change in age_sorted[-options.longest_waiting:]:
         changes.append('%s %s (%s)' % (sec_to_period_string(change['age']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on latest revision)',
                  changes))
     changes = []
-    for change in age2_sorted_waiting_on_reviewer[-options.longest_waiting:]:
+    for change in age2_sorted[-options.longest_waiting:]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on first revision)',
+            changes))
+    changes = []
+    for change in age3_sorted[-options.longest_waiting:]:
+       changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
+                                      change['url'], change['subject']))
+    stats.append(('Longest waiting reviews (based on oldest rev without nack)',
             changes))
 
     result.append(stats)
@@ -173,6 +182,23 @@ def print_stats_html(stats, f=sys.stdout):
     f.write('</html>\n')
 
 
+def find_oldest_no_nack(change):
+    last_patch = None
+    for patch in reversed(change['patchSets']):
+        nacked = False
+        for review in patch.get('approvals', []):
+            if review['type'] not in ('CRVW', 'VRIF'):
+                continue
+            if review['value'] in ('-1', '-2'):
+                nacked = True
+                break
+        if nacked:
+            break
+        last_patch = patch
+    return last_patch
+
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -231,21 +257,22 @@ def main(argv=None):
 
         change['age'] = get_age_of_patch(latest_patch, now_ts)
         change['age2'] = get_age_of_patch(change['patchSets'][0], now_ts)
+        patch = find_oldest_no_nack(change)
+        change['age3'] = get_age_of_patch(patch, now_ts) if patch else 0
 
         if waiting_for_review:
             waiting_on_reviewer.append(change)
         else:
             waiting_on_submitter.append(change)
 
-    age_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
-                                            key=lambda change: change['age'])
+    age_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age'])
 
-    age2_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
-                                            key=lambda change: change['age2'])
+    age2_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age2'])
+
+    age3_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age3'])
 
     stats = gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
-                age_sorted_waiting_on_reviewer,
-                age2_sorted_waiting_on_reviewer, options)
+                age_sorted, age2_sorted, age3_sorted, options)
 
     if options.html:
         print_stats_html(stats)
