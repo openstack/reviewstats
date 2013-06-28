@@ -77,36 +77,68 @@ def number_waiting_more_than(changes, seconds, key='age'):
     return 0
 
 
-def output_txt(projects, waiting_on_reviewer, waiting_on_submitter,
+def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
         age_sorted_waiting_on_reviewer, age2_sorted_waiting_on_reviewer,
         options):
-    print 'Projects: %s' % [project['name'] for project in projects]
-    print 'Total Open Reviews: %d' % (len(waiting_on_reviewer) +
-            len(waiting_on_submitter))
-    print 'Waiting on Submitter: %d' % len(waiting_on_submitter)
-    print 'Waiting on Reviewer: %d' % len(waiting_on_reviewer)
-    print ' --> Average wait time (latest revision): %s' % (
-            average_age(waiting_on_reviewer))
-    print ' --> Median wait time (latest revision): %s' % (
-            median_age(waiting_on_reviewer))
-    print ' --> Number waiting more than %i days: %i' % (
-        options.waiting_more, number_waiting_more_than(
-            age_sorted_waiting_on_reviewer,
-            60*60*24*options.waiting_more))
-    print ' --> Average wait time (first revision): %s' % (
-            average_age(waiting_on_reviewer, key='age2'))
-    print ' --> Median wait time (latest revision): %s' % (
-            median_age(waiting_on_reviewer, key='age2'))
-    print ' --> Longest waiting reviews (based on latest revision):'
+    result = []
+    result.append(('Projects', '%s' % [project['name']
+                                      for project in projects]))
+    stats = []
+    stats.append(('Total Open Reviews', '%d' % (
+            len(waiting_on_reviewer) + len(waiting_on_submitter))))
+    stats.append(('Waiting on Submitter', '%d' % len(waiting_on_submitter)))
+    stats.append(('Waiting on Reviewer', '%d' % len(waiting_on_reviewer)))
+    stats.append(('Average wait time (latest revision)', '%s' % (
+            average_age(waiting_on_reviewer))))
+    stats.append(('Median wait time (latest revision)', '%s' % (
+            median_age(waiting_on_reviewer))))
+    stats.append(('Number waiting more than %i days (latest revision)' %
+            options.waiting_more, '%i' % (number_waiting_more_than(
+            age_sorted_waiting_on_reviewer, 60 * 60 * 24 *
+            options.waiting_more))))
+    stats.append(('Average wait time (first revision)', '%s' % (
+            average_age(waiting_on_reviewer, key='age2'))))
+    stats.append(('Median wait time (latest revision)', '%s' % (
+            median_age(waiting_on_reviewer, key='age2'))))
+    changes = []
     for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
-        print '    --> %s %s \n          (%s)' % (
-            sec_to_period_string(change['age']),
-            change['url'], change['subject'])
-    print ' --> Longest waiting reviews (based on first revision):'
+        changes.append('%s %s (%s)' % (sec_to_period_string(change['age']),
+                                      change['url'], change['subject']))
+    stats.append(('Longest waiting reviews (based on latest revision)',
+                 changes))
+    changes = []
     for change in age2_sorted_waiting_on_reviewer[-options.longest_waiting:]:
-        print '    --> %s %s \n          (%s)' % (
-            sec_to_period_string(change['age2']),
-            change['url'], change['subject'])
+       changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
+                                      change['url'], change['subject']))
+    stats.append(('Longest waiting reviews (based on first revision)',
+            changes))
+
+    result.append(stats)
+
+    return result
+
+
+def print_stats_txt(stats, f=sys.stdout):
+    def print_list_txt(l, level):
+        for item in l:
+            if not isinstance(item, list):
+                f.write('%s> ' % ('--' * level))
+            print_item_txt(item, level)
+
+    def print_item_txt(item, level):
+        if isinstance(item, basestring):
+            f.write('%s\n' % item)
+        elif isinstance(item, list):
+            print_list_txt(item, level + 1)
+        elif isinstance(item, tuple):
+            f.write('%s: ' % item[0])
+            if isinstance(item[1], list):
+                f.write('\n')
+            print_item_txt(item[1], level)
+        else:
+            raise Exception('Unhandled type')
+
+    print_list_txt(stats, 0)
 
 
 def output_html(projects, waiting_on_reviewer, waiting_on_submitter,
@@ -217,14 +249,16 @@ def main(argv=None):
     age2_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
                                             key=lambda change: change['age2'])
 
+    stats = gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
+                age_sorted_waiting_on_reviewer,
+                age2_sorted_waiting_on_reviewer, options)
+
     if options.html:
         output_html(projects, waiting_on_reviewer, waiting_on_submitter,
                 age_sorted_waiting_on_reviewer,
                 age2_sorted_waiting_on_reviewer, options)
     else:
-        output_txt(projects, waiting_on_reviewer, waiting_on_submitter,
-                age_sorted_waiting_on_reviewer,
-                age2_sorted_waiting_on_reviewer, options)
+        print_stats_txt(stats)
 
 
 if __name__ == '__main__':
