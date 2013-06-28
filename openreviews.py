@@ -141,42 +141,36 @@ def print_stats_txt(stats, f=sys.stdout):
     print_list_txt(stats, 0)
 
 
-def output_html(projects, waiting_on_reviewer, waiting_on_submitter,
-        age_sorted_waiting_on_reviewer, age2_sorted_waiting_on_reviewer,
-        options):
-    print '<html>'
-    print '<head><title>Open Reviews for %s</title></head>' % (
-            [project['name'] for project in projects])
-    print '<p>Projects: %s</p>' % [project['name'] for project in projects]
-    print '<p>Total Open Reviews: %d</p>' % (len(waiting_on_reviewer) +
-            len(waiting_on_submitter))
-    print '<p>Waiting on Submitter: %d</p>' % len(waiting_on_submitter)
-    print '<p>Waiting on Reviewer: %d</p>' % len(waiting_on_reviewer)
-    print '<ul>'
-    print '\t<li>Average wait time (latest revision): %s</li>' % average_age(waiting_on_reviewer)
-    print '\t<li>Median wait time (latest revision): %s</li>' % median_age(waiting_on_reviewer)
-    print '\t<li>Number waiting more than %i days: %i</li>' % (
-        options.waiting_more, number_waiting_more_than(
-            age_sorted_waiting_on_reviewer,
-            60*60*24*options.waiting_more))
-    print '\t<li>Average wait time (first revision): %s</li>' % average_age(waiting_on_reviewer, key='age2')
-    print '\t<li>Median wait time (first revision): %s</li>' % median_age(waiting_on_reviewer, key='age2')
-    print '\t<li>Longest waiting reviews (based on latest revision):</li>'
-    print '\t<ol>'
-    for change in age_sorted_waiting_on_reviewer[-options.longest_waiting:]:
-        print '\t\t<li>%s - <a href="%s">%s</a> (%s)</li>' % (
-            sec_to_period_string(change['age']),
-            change['url'], change['url'], change['subject'])
-    print '\t</ol>'
-    print '\t<li>Longest waiting reviews (based on first revision):</li>'
-    print '\t<ol>'
-    for change in age2_sorted_waiting_on_reviewer[-options.longest_waiting:]:
-        print '\t\t<li>%s - <a href="%s">%s</a> (%s)</li>' % (
-            sec_to_period_string(change['age2']),
-            change['url'], change['url'], change['subject'])
-    print '\t</ol>'
-    print '</ul>'
-    print '</html>'
+def print_stats_html(stats, f=sys.stdout):
+    def print_list_html(l, level):
+        if level:
+            f.write('<%s>\n' % ('ul' if level == 1 else 'ol'))
+        for item in l:
+            if level:
+                f.write('%s<li>' % ('  ' * level))
+            print_item_html(item, level)
+            if level:
+                f.write('</li>\n')
+        if level:
+            f.write('</%s>\n' % ('ul' if level == 1 else 'ol'))
+
+    def print_item_html(item, level):
+        if isinstance(item, basestring):
+            f.write('%s' % item)
+        elif isinstance(item, list):
+            print_list_html(item, level + 1)
+        elif isinstance(item, tuple):
+            f.write('%s: ' % item[0])
+            if isinstance(item[1], list):
+                f.write('\n')
+            print_item_html(item[1], level)
+        else:
+            raise Exception('Unhandled type')
+
+    f.write('<html>\n')
+    f.write('<head><title>Open Reviews for %s</title></head>\n' % stats[0][1])
+    print_list_html(stats, 0)
+    f.write('</html>\n')
 
 
 def main(argv=None):
@@ -254,9 +248,7 @@ def main(argv=None):
                 age2_sorted_waiting_on_reviewer, options)
 
     if options.html:
-        output_html(projects, waiting_on_reviewer, waiting_on_submitter,
-                age_sorted_waiting_on_reviewer,
-                age2_sorted_waiting_on_reviewer, options)
+        print_stats_html(stats)
     else:
         print_stats_txt(stats)
 
