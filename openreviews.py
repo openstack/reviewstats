@@ -26,39 +26,6 @@ import sys
 import utils
 
 
-optparser = optparse.OptionParser()
-optparser.add_option('-p', '--project', default='projects/nova.json',
-        help='JSON file describing the project to generate stats for')
-optparser.add_option('-a', '--all', action='store_true',
-        help='Generate stats across all known projects (*.json)')
-optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
-optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
-optparser.add_option('-s', '--stable', action='store_true',
-        help='Include stable branch commits')
-optparser.add_option('-l', '--longest-waiting', type='int', default=5,
-        help='Show n changesets that have waited the longest)')
-optparser.add_option('-m', '--waiting-more', type='int', default=7,
-        help='Show number of changesets that have waited more than n days)')
-optparser.add_option('-H', '--html', action='store_true',
-        help='Use HTML output instead of plain text')
-
-options, args = optparser.parse_args()
-
-projects = utils.get_projects_info(options.project, options.all)
-
-if not projects:
-    print "Please specify a project."
-    sys.exit(1)
-
-changes = utils.get_changes(projects, options.user, options.key,
-        only_open=True)
-
-waiting_on_submitter = []
-waiting_on_reviewer = []
-
-now = datetime.datetime.utcnow()
-now_ts = calendar.timegm(now.timetuple())
-
 def sec_to_period_string(seconds):
     days = seconds / (3600 * 24)
     hours = (seconds / 3600) - (days * 24)
@@ -66,7 +33,7 @@ def sec_to_period_string(seconds):
     return '%d days, %d hours, %d minutes' % (days, hours, minutes)
 
 
-def get_age_of_patch(patch):
+def get_age_of_patch(patch, now_ts):
     approvals = patch.get('approvals', [])
     approvals.sort(key=lambda a:a['grantedOn'])
     # The createdOn timestamp on the patch isn't what we want.
@@ -81,34 +48,6 @@ def get_age_of_patch(patch):
         return now_ts - approvals[0]['grantedOn']
     else:
         return now_ts - patch['createdOn']
-
-
-for change in changes:
-    if 'rowCount' in change:
-        continue
-    if not options.stable and 'stable' in change['branch']:
-        continue
-    if change['status'] != 'NEW':
-        # Filter out WORKINPROGRESS
-        continue
-    latest_patch = change['patchSets'][-1]
-    waiting_for_review = True
-    approvals = latest_patch.get('approvals', [])
-    approvals.sort(key=lambda a:a['grantedOn'])
-    for review in approvals:
-        if review['type'] not in ('CRVW', 'VRIF'):
-            continue
-        if review['value'] in ('-1', '-2'):
-            waiting_for_review = False
-            break
-
-    change['age'] = get_age_of_patch(latest_patch)
-    change['age2'] = get_age_of_patch(change['patchSets'][0])
-
-    if waiting_for_review:
-        waiting_on_reviewer.append(change)
-    else:
-        waiting_on_submitter.append(change)
 
 
 def average_age(changes, key='age'):
@@ -138,14 +77,9 @@ def number_waiting_more_than(changes, seconds, key='age'):
     return 0
 
 
-age_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
-                                        key=lambda change: change['age'])
-
-age2_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
-                                        key=lambda change: change['age2'])
-
-
-def output_txt():
+def output_txt(projects, waiting_on_reviewer, waiting_on_submitter,
+        age_sorted_waiting_on_reviewer, age2_sorted_waiting_on_reviewer,
+        options):
     print 'Projects: %s' % [project['name'] for project in projects]
     print 'Total Open Reviews: %d' % (len(waiting_on_reviewer) +
             len(waiting_on_submitter))
@@ -175,7 +109,9 @@ def output_txt():
             change['url'], change['subject'])
 
 
-def output_html():
+def output_html(projects, waiting_on_reviewer, waiting_on_submitter,
+        age_sorted_waiting_on_reviewer, age2_sorted_waiting_on_reviewer,
+        options):
     print '<html>'
     print '<head><title>Open Reviews for %s</title></head>' % (
             [project['name'] for project in projects])
@@ -211,7 +147,85 @@ def output_html():
     print '</html>'
 
 
-if options.html:
-    output_html()
-else:
-    output_txt()
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+
+    optparser = optparse.OptionParser()
+    optparser.add_option('-p', '--project', default='projects/nova.json',
+            help='JSON file describing the project to generate stats for')
+    optparser.add_option('-a', '--all', action='store_true',
+            help='Generate stats across all known projects (*.json)')
+    optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
+    optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
+    optparser.add_option('-s', '--stable', action='store_true',
+            help='Include stable branch commits')
+    optparser.add_option('-l', '--longest-waiting', type='int', default=5,
+            help='Show n changesets that have waited the longest)')
+    optparser.add_option('-m', '--waiting-more', type='int', default=7,
+            help='Show number of changesets that have waited more than n days)')
+    optparser.add_option('-H', '--html', action='store_true',
+            help='Use HTML output instead of plain text')
+
+    options, args = optparser.parse_args()
+
+    projects = utils.get_projects_info(options.project, options.all)
+
+    if not projects:
+        print "Please specify a project."
+        sys.exit(1)
+
+    changes = utils.get_changes(projects, options.user, options.key,
+            only_open=True)
+
+    waiting_on_submitter = []
+    waiting_on_reviewer = []
+
+    now = datetime.datetime.utcnow()
+    now_ts = calendar.timegm(now.timetuple())
+
+    for change in changes:
+        if 'rowCount' in change:
+            continue
+        if not options.stable and 'stable' in change['branch']:
+            continue
+        if change['status'] != 'NEW':
+            # Filter out WORKINPROGRESS
+            continue
+        latest_patch = change['patchSets'][-1]
+        waiting_for_review = True
+        approvals = latest_patch.get('approvals', [])
+        approvals.sort(key=lambda a:a['grantedOn'])
+        for review in approvals:
+            if review['type'] not in ('CRVW', 'VRIF'):
+                continue
+            if review['value'] in ('-1', '-2'):
+                waiting_for_review = False
+                break
+
+        change['age'] = get_age_of_patch(latest_patch, now_ts)
+        change['age2'] = get_age_of_patch(change['patchSets'][0], now_ts)
+
+        if waiting_for_review:
+            waiting_on_reviewer.append(change)
+        else:
+            waiting_on_submitter.append(change)
+
+    age_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
+                                            key=lambda change: change['age'])
+
+    age2_sorted_waiting_on_reviewer = sorted(waiting_on_reviewer,
+                                            key=lambda change: change['age2'])
+
+    if options.html:
+        output_html(projects, waiting_on_reviewer, waiting_on_submitter,
+                age_sorted_waiting_on_reviewer,
+                age2_sorted_waiting_on_reviewer, options)
+    else:
+        output_txt(projects, waiting_on_reviewer, waiting_on_submitter,
+                age_sorted_waiting_on_reviewer,
+                age2_sorted_waiting_on_reviewer, options)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
