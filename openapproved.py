@@ -63,11 +63,21 @@ def main(argv=None):
             continue
         for patch_set in change['patchSets'][:-1]:
             if approved(patch_set) and not approved(change['patchSets'][-1]):
+                if has_negative_feedback(change['patchSets'][-1]):
+                    continue
                 approved_and_rebased.add("%s %s" % (change['url'], change['subject']))
 
     for x in approved_and_rebased:
         print x
     print "total %d" % len(approved_and_rebased)
+
+
+def has_negative_feedback(patch_set):
+    approvals = patch_set.get('approvals', [])
+    for review in approvals:
+        if review['type'] == 'CRVW' and review['value'] in ('-1', '-2'):
+            return True
+    return False
 
 
 def approved(patch_set):
