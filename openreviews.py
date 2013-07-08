@@ -77,8 +77,11 @@ def number_waiting_more_than(changes, seconds, key='age'):
     return 0
 
 
-def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
-        age_sorted, age2_sorted, age3_sorted, options):
+def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
+    age_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age'])
+    age2_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age2'])
+    age3_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age3'])
+
     result = []
     result.append(('Projects', '%s' % [project['name']
                                       for project in projects]))
@@ -276,14 +279,8 @@ def main(argv=None):
         else:
             waiting_on_submitter.append(change)
 
-    age_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age'])
-
-    age2_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age2'])
-
-    age3_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age3'])
-
     stats = gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
-                age_sorted, age2_sorted, age3_sorted, options)
+                      options)
 
     if options.html:
         print_stats_html(stats)
