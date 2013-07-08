@@ -78,9 +78,12 @@ def number_waiting_more_than(changes, seconds, key='age'):
 
 
 def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
-    age_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age'])
-    age2_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age2'])
-    age3_sorted = sorted(waiting_on_reviewer, key=lambda change: change['age3'])
+    age_sorted = sorted(waiting_on_reviewer,
+                        key=lambda change: change['age'], reverse=True)
+    age2_sorted = sorted(waiting_on_reviewer,
+                         key=lambda change: change['age2'], reverse=True)
+    age3_sorted = sorted(waiting_on_reviewer,
+                         key=lambda change: change['age3'], reverse=True)
 
     result = []
     result.append(('Projects', '%s' % [project['name']
@@ -117,21 +120,21 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
             last_without_nack_stats))
 
     changes = []
-    for change in age_sorted[-options.longest_waiting:]:
+    for change in age_sorted[:options.longest_waiting]:
         changes.append('%s %s (%s)' % (sec_to_period_string(change['age']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on latest revision)',
                  changes))
 
     changes = []
-    for change in age2_sorted[-options.longest_waiting:]:
+    for change in age2_sorted[:options.longest_waiting]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on first revision)',
             changes))
 
     changes = []
-    for change in age3_sorted[-options.longest_waiting:]:
+    for change in age3_sorted[:options.longest_waiting]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
                                       change['url'], change['subject']))
     stats.append(('Longest waiting reviews (based on oldest rev without nack, ignoring jenkins)',
