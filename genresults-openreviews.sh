@@ -10,15 +10,14 @@ fi
 
 mkdir -p results
 
-rm -f results/*
+rm -f results/*-openreviews*
+rm -f results/*-openapproved*
 
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
 	(date -u && echo && ./openreviews.py -p ${project}) > results/${project_base}-openreviews.txt
 	./openreviews.py -p ${project} --html > results/${project_base}-openreviews.html
-	for time in 30 90 180 ; do
-		(date -u && echo && ./reviewers.py -p ${project} -d ${time}) > results/${project_base}-reviewers-${time}.txt
-	done
+	(date -u && echo && ./openapproved.py -p ${project}) > results/${project_base}-openapproved.txt
 done
 
 if [ "${all}" = "1" ] ; then
@@ -34,7 +33,5 @@ if [ "${all}" = "1" ] ; then
 	echo "</html>" >> results/all-openreviews.html.tmp
 	mv results/all-openreviews.html.tmp results/all-openreviews.html
 
-	for time in 30 90 180 ; do
-		(date -u && echo && ./reviewers.py -a -d ${time}) > results/all-reviewers-${time}.txt
-	done
+	(date -u && echo && ./openapproved.py -a) > results/all-openapproved.txt
 fi
