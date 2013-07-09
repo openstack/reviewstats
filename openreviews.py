@@ -77,6 +77,12 @@ def number_waiting_more_than(changes, seconds, key='age'):
     return 0
 
 
+def format_url(url, options):
+    return '%s%s%s' % ('<a href="' if options.html else '',
+                       url,
+                       ('">%s</a>' % url) if options.html else '')
+
+
 def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     age_sorted = sorted(waiting_on_reviewer,
                         key=lambda change: change['age'], reverse=True)
@@ -122,21 +128,24 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     changes = []
     for change in age_sorted[:options.longest_waiting]:
         changes.append('%s %s (%s)' % (sec_to_period_string(change['age']),
-                                      change['url'], change['subject']))
+                                       format_url(change['url'], options),
+                                       change['subject']))
     stats.append(('Longest waiting reviews (based on latest revision)',
                  changes))
 
     changes = []
     for change in age2_sorted[:options.longest_waiting]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
-                                      change['url'], change['subject']))
+                                      format_url(change['url'], options),
+                                      change['subject']))
     stats.append(('Longest waiting reviews (based on first revision)',
             changes))
 
     changes = []
     for change in age3_sorted[:options.longest_waiting]:
        changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
-                                      change['url'], change['subject']))
+                                      format_url(change['url'], options),
+                                      change['subject']))
     stats.append(('Longest waiting reviews (based on oldest rev without nack, ignoring jenkins)',
             changes))
 
