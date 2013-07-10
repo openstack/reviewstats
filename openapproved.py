@@ -16,10 +16,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-"""Identify approved and open patches.
+"""Identify approved and open patches, that are probably just trivial rebases.
 
 Prints out list of approved patches that failed to merge and are currently
-still open.
+still open. Only show patches that are likely to be trivial rebases.
 """
 
 import optparse
@@ -75,7 +75,7 @@ def main(argv=None):
 def has_negative_feedback(patch_set):
     approvals = patch_set.get('approvals', [])
     for review in approvals:
-        if review['type'] == 'CRVW' and review['value'] in ('-1', '-2'):
+        if review['type'] in ('CRVW','VRIF') and review['value'] in ('-1', '-2'):
             return True
     return False
 
