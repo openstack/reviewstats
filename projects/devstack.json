@@ -1,0 +1,15 @@
+{
+    "name": "devstack",
+    "subprojects": ["openstack-dev/devstack"],
+    "core-team": [
+        "sdague",
+        "dtroyer",
+        "garyk",
+        "danwent",
+        "anotherjesse",
+        "vishvananda",
+        "corvus",
+        "bcwaldon",
+        "termie"
+    ]
+}
