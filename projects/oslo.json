@@ -5,6 +5,8 @@
         "openstack-dev/pbr",
         "openstack/oslo-incubator",
         "openstack/oslo.config",
+        "openstack/oslo.messaging",
+        "openstack/oslo.sphinx",
     ],
     "core-team": [
         "dims-v",
