@@ -9,10 +9,11 @@
         "openstack/oslo.sphinx",
     ],
     "core-team": [
+        "bnemec",
         "dims-v",
         "doug-hellmann",
         "flaper87"
-        "jason-koelker",
+        "jdanjou",
         "markmc",
         "mikalstill",
         "russellb",
