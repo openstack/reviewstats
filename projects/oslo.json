@@ -1,1 +1,19 @@
-{"name": "oslo", "subprojects": ["openstack/oslo-incubator", "openstack/oslo.config", "openstack-dev/pbr", "openstack-dev/hacking"], "core-team": ["dims-v", "doug-hellmann", "jason-koelker", "markmc", "mikalstill", "russellb", "zyluo", "flaper87"]}
+{
+    "name": "oslo",
+    "subprojects": [
+        "openstack-dev/hacking"
+        "openstack-dev/pbr",
+        "openstack/oslo-incubator",
+        "openstack/oslo.config",
+    ],
+    "core-team": [
+        "dims-v",
+        "doug-hellmann",
+        "flaper87"
+        "jason-koelker",
+        "markmc",
+        "mikalstill",
+        "russellb",
+        "zyluo",
+    ]
+}
