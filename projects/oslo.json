@@ -1,22 +1,22 @@
 {
     "name": "oslo",
     "subprojects": [
-        "openstack-dev/hacking"
+        "openstack-dev/hacking",
         "openstack-dev/pbr",
         "openstack/oslo-incubator",
         "openstack/oslo.config",
         "openstack/oslo.messaging",
-        "openstack/oslo.sphinx",
+        "openstack/oslo.sphinx"
     ],
     "core-team": [
         "bnemec",
         "dims-v",
         "doug-hellmann",
-        "flaper87"
+        "flaper87",
         "jdanjou",
         "markmc",
         "mikalstill",
         "russellb",
-        "zyluo",
+        "zyluo"
     ]
 }
