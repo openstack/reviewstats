@@ -19,6 +19,7 @@
 
 import calendar
 import datetime
+import getpass
 import glob
 import json
 import optparse
@@ -38,7 +39,7 @@ optparser.add_option('-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')
 optparser.add_option('-d', '--days', type='int', default=14,
         help='Number of days to consider')
-optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
+optparser.add_option('-u', '--user', default=getpass.getuser(), help='gerrit user')
 optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
 
 options, args = optparser.parse_args()
