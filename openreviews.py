@@ -18,6 +18,7 @@
 
 import calendar
 import datetime
+import getpass
 import optparse
 import os
 import os.path
@@ -234,7 +235,7 @@ def main(argv=None):
             help='JSON file describing the project to generate stats for')
     optparser.add_option('-a', '--all', action='store_true',
             help='Generate stats across all known projects (*.json)')
-    optparser.add_option('-u', '--user', default='russellb', help='gerrit user')
+    optparser.add_option('-u', '--user', default=getpass.getuser(), help='gerrit user')
     optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
     optparser.add_option('-s', '--stable', action='store_true',
             help='Include stable branch commits')
