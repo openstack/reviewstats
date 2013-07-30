@@ -1,1 +1,1 @@
-{"name": "neutron", "subprojects": ["openstack/neutron", "openstack/python-neutronclient", "openstack/netconn-api"], "core-team": ["arosen", "amotoki", "danwent", "emagana", "garyk", "markmcclain", "maru", "nati-ueno", "rkukura", "salvatore-orlando", "snaiksat", "gongysh"]}
+{"name": "neutron", "subprojects": ["openstack/neutron", "openstack/python-neutronclient", "openstack/netconn-api"], "core-team": ["arosen", "amotoki", "armando-migliaccio", "emagana", "garyk", "markmcclain", "maru", "mestery", "nati-ueno", "rkukura", "salvatore-orlando", "snaiksat", "gongysh"]}
