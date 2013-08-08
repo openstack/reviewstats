@@ -38,7 +38,8 @@ def get_projects_info(project=None, all_projects=False):
         if os.path.isfile(fn):
             with open(fn, 'r') as f:
                 project = json.loads(f.read())
-                projects.append(project)
+                if not (all_projects and project.get('unofficial')):
+                    projects.append(project)
 
     return projects
 
