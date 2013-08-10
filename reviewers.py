@@ -37,12 +37,15 @@ def round_to_day(ts):
     return (ts / (SECONDS_PER_DAY)) * SECONDS_PER_DAY
 
 
-def process_patchset(patchset, reviewers, ts):
+def process_patchset(project, patchset, reviewers, ts):
     vote_types = set()
     for review in patchset.get('approvals', []):
         if review['type'] != 'CRVW':
             # Only count code reviews.  Don't add another for Approved, which is
             # type 'APRV'
+            continue
+        if review['by'].get('username', 'unknown') not in project['core-team']:
+            # Only checking for disagreements from core team members
             continue
         vote_types.add(review['value'])
 
@@ -98,7 +101,7 @@ def main(argv=None):
         changes = utils.get_changes([project], options.user, options.key)
         for change in changes:
             for patchset in change.get('patchSets', []):
-                process_patchset(patchset, reviewers, ts)
+                process_patchset(project, patchset, reviewers, ts)
 
     reviewers = [(v, k) for k, v in reviewers.iteritems()
                  if k.lower() not in ('jenkins', 'smokestack')]
@@ -114,7 +117,9 @@ def main(argv=None):
     else:
         print '** -- %s-core team member' % projects[0]['name']
     table = prettytable.PrettyTable(
-            ('Reviewer', 'Reviews (-2|-1|+1|+2) (+/- ratio)', 'Disagreements'))
+            ('Reviewer',
+             'Reviews (-2|-1|+1|+2) (+/- ratio)',
+             'Disagreements (1)'))
     total = 0
     for k, v in reviewers:
         in_core_team = False
@@ -136,6 +141,8 @@ def main(argv=None):
     print table
     print '\nTotal reviews: %d' % total
     print 'Total reviewers: %d' % len(reviewers)
+    print '\n(1) Disaggreements are defined as a +1 or +2 vote on a patch ' \
+          'where a core team member gave a -1 or -2 vote.'
 
     return 0
 
