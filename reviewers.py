@@ -141,7 +141,7 @@ def main(argv=None):
     print table
     print '\nTotal reviews: %d' % total
     print 'Total reviewers: %d' % len(reviewers)
-    print '\n(1) Disaggreements are defined as a +1 or +2 vote on a patch ' \
+    print '\n(1) Disagreements are defined as a +1 or +2 vote on a patch ' \
           'where a core team member gave a -1 or -2 vote.'
 
     return 0
