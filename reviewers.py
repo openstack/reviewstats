@@ -134,7 +134,7 @@ def main(argv=None):
         r = '%d (%d|%d|%d|%d) (%.1f%%)' % (k['total'],
                 k['votes']['-2'], k['votes']['-1'],
                 k['votes']['1'], k['votes']['2'], ratio)
-        dratio = (float(k['disagreements']) / float(k['total'])) * 100
+        dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
         d = '%d (%.1f%%)' % (k['disagreements'], dratio)
         table.add_row((name, r, d))
         total += k['total']
