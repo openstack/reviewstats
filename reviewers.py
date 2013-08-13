@@ -118,8 +118,8 @@ def main(argv=None):
         print '** -- %s-core team member' % projects[0]['name']
     table = prettytable.PrettyTable(
             ('Reviewer',
-             'Reviews (-2|-1|+1|+2) (+/- ratio)',
-             'Disagreements (1)'))
+             'Reviews   -2  -1  +1  +2    +/- %',
+             'Disagreements*'))
     total = 0
     for k, v in reviewers:
         in_core_team = False
@@ -131,17 +131,17 @@ def main(argv=None):
         plus = float(k['votes']['2'] + k['votes']['1'])
         minus = float(k['votes']['-2'] + k['votes']['-1'])
         ratio = (plus / (plus + minus)) * 100
-        r = '%d (%d|%d|%d|%d) (%.1f%%)' % (k['total'],
+        r = '%7d  %3d %3d %3d %3d   %5.1f%%' % (k['total'],
                 k['votes']['-2'], k['votes']['-1'],
                 k['votes']['1'], k['votes']['2'], ratio)
         dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
-        d = '%d (%.1f%%)' % (k['disagreements'], dratio)
+        d = '%3d (%5.1f%%)' % (k['disagreements'], dratio)
         table.add_row((name, r, d))
         total += k['total']
     print table
     print '\nTotal reviews: %d' % total
     print 'Total reviewers: %d' % len(reviewers)
-    print '\n(1) Disagreements are defined as a +1 or +2 vote on a patch ' \
+    print '\n(*) Disagreements are defined as a +1 or +2 vote on a patch ' \
           'where a core team member gave a -1 or -2 vote.'
 
     return 0
