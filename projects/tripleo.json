@@ -1,0 +1,15 @@
+{"name": "tripleo", "subprojects": [
+    "openstack/tripleo-incubator",
+    "stackforge/diskimage-builder",
+    "stackforge/os-apply-config",
+    "stackforge/os-collect-config",
+    "stackforge/os-refresh-config",
+    "stackforge/triplee-image-elements",
+    "stackforge/tripleo-heat-templates",
+], "core-team": [
+    "lifeless",
+    "Spamaps",
+    "Ng",
+    "devananda",
+    "arata776",
+]}
