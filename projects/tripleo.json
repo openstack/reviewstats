@@ -5,11 +5,11 @@
     "stackforge/os-collect-config",
     "stackforge/os-refresh-config",
     "stackforge/triplee-image-elements",
-    "stackforge/tripleo-heat-templates",
+    "stackforge/tripleo-heat-templates"
 ], "core-team": [
     "lifeless",
     "Spamaps",
     "Ng",
     "devananda",
-    "arata776",
+    "arata776"
 ]}
