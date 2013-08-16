@@ -8,7 +8,7 @@
     "stackforge/tripleo-heat-templates"
 ], "core-team": [
     "lifeless",
-    "Spamaps",
+    "clint-fewbar",
     "Ng",
     "devananda",
     "arata776"
