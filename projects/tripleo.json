@@ -1,11 +1,11 @@
 {"name": "tripleo", "subprojects": [
     "openstack/tripleo-incubator",
-    "stackforge/diskimage-builder",
-    "stackforge/os-apply-config",
-    "stackforge/os-collect-config",
-    "stackforge/os-refresh-config",
-    "stackforge/triplee-image-elements",
-    "stackforge/tripleo-heat-templates"
+    "openstack/diskimage-builder",
+    "openstack/os-apply-config",
+    "openstack/os-collect-config",
+    "openstack/os-refresh-config",
+    "openstack/tripleo-image-elements",
+    "openstack/tripleo-heat-templates"
 ], "core-team": [
     "lifeless",
     "clint-fewbar",
