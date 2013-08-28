@@ -1,0 +1,14 @@
+{
+    "name": "savanna",
+    "subprojects": [
+        "stackforge/savanna",
+        "stackforge/savanna-pythonclient",
+        "stackforge/savanna-dashboard",
+        "stackforge/savanna-extra"
+    ],
+    "unofficial": true,
+    "core-team": [
+        "slukjanov",
+        "aignatov"
+    ]
+}
