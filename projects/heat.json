@@ -1,1 +1,1 @@
-{"name": "heat", "subprojects": ["openstack/heat", "openstack/heat-templates", "openstack/heat-cfntools", "openstack/python-heatclient"], "core-team": ["asalkeld", "clint-fewbar", "jpeeler-z", "steve-stevebaker", "sdake", "shardy", "therve", "zaneb"]}
+{"name": "heat", "subprojects": ["openstack/heat", "openstack/heat-templates", "openstack/heat-cfntools", "openstack/python-heatclient"], "core-team": ["asalkeld", "clint-fewbar", "jpeeler-z", "Liang", "steve-stevebaker", "sdake", "shardy", "therve", "zaneb"]}
