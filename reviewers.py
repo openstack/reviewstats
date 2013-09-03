@@ -38,7 +38,8 @@ def round_to_day(ts):
 
 
 def process_patchset(project, patchset, reviewers, ts):
-    vote_types = set()
+    latest_core_neg_vote = 0
+    latest_core_pos_vote = 0
     for review in patchset.get('approvals', []):
         if review['type'] != 'CRVW':
             # Only count code reviews.  Don't add another for Approved, which is
@@ -47,7 +48,12 @@ def process_patchset(project, patchset, reviewers, ts):
         if review['by'].get('username', 'unknown') not in project['core-team']:
             # Only checking for disagreements from core team members
             continue
-        vote_types.add(review['value'])
+        if int(review['value']) > 0:
+            latest_core_pos_vote = max(latest_core_pos_vote,
+                                       int(review['grantedOn']))
+        else:
+            latest_core_neg_vote = max(latest_core_neg_vote,
+                                       int(review['grantedOn']))
 
     for review in patchset.get('approvals', []):
         if review['grantedOn'] < ts:
@@ -65,7 +71,16 @@ def process_patchset(project, patchset, reviewers, ts):
         reviewers[reviewer]['total'] = reviewers[reviewer].get('total', 0) + 1
         cur = reviewers[reviewer]['votes'][review['value']]
         reviewers[reviewer]['votes'][review['value']] = cur + 1
-        if review['value'] in ('1', '2') and set(('-1', '-2')) & vote_types:
+        if (review['value'] in ('1', '2')
+                and int(review['grantedOn']) < latest_core_neg_vote):
+            # A core team member gave a negative vote after this person gave a
+            # positive one
+            cur = reviewers[reviewer]['disagreements']
+            reviewers[reviewer]['disagreements'] = cur + 1
+        if (review['value'] in ('-1', '-2')
+                and int(review['grantedOn']) < latest_core_pos_vote):
+            # A core team member gave a positive vote after this person gave a
+            # negative one
             cur = reviewers[reviewer]['disagreements']
             reviewers[reviewer]['disagreements'] = cur + 1
 
@@ -142,7 +157,8 @@ def main(argv=None):
     print '\nTotal reviews: %d' % total
     print 'Total reviewers: %d' % len(reviewers)
     print '\n(*) Disagreements are defined as a +1 or +2 vote on a patch ' \
-          'where a core team member gave a -1 or -2 vote.'
+          'where a core team member later gave a -1 or -2 vote, or a ' \
+          'negative vote overridden with a postive one afterwards.'
 
     return 0
 
