@@ -6,7 +6,8 @@
         "openstack/oslo-incubator",
         "openstack/oslo.config",
         "openstack/oslo.messaging",
-        "openstack/oslo.sphinx"
+        "openstack/oslo.sphinx",
+        "openstack/requirements"
     ],
     "core-team": [
         "bnemec",
