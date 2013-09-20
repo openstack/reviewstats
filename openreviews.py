@@ -72,10 +72,10 @@ def median_age(changes, key='age'):
 def number_waiting_more_than(changes, seconds, key='age'):
     index = 0
     for change in changes:
-        if change[key] > seconds:
-            return len(changes) - index
+        if change[key] < seconds:
+            return index
         index += 1
-    return 0
+    return len(changes)
 
 
 def format_url(url, options):
