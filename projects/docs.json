@@ -1,1 +1,32 @@
-{"name": "docs", "subprojects": ["openstack/openstack-manuals", "openstack/api-site", "openstack/operations-guide"], "core-team": ["annegentle", "fifieldt", "emilienm", "lorinh", "koolhead17", "razique", "diane-fleming", "salvatore-orlando", "kbringard"]}
+{
+    "name": "docs",
+    "subprojects": [
+	"openstack/openstack-manuals",
+	"openstack/api-site",
+	"openstack/operations-guide"
+    ],
+    "core-team": [
+	"annegentle",
+	"bdpayne",
+	"colinmcnamara",
+	"daisy-ycguo",
+	"danwent",
+	"david-thingbag",
+	"diane-fleming",
+	"emilienm",
+	"fifieldt",
+	"heckj",
+	"jaegerandi",
+	"jsavak",
+	"kbringard",
+	"koolhead17",
+	"ladquin",
+	"lorinh",
+	"razique",
+	"russellb",
+	"salvatore-orlando",
+	"sarob",
+	"sdeaton2",
+	"sgordon"
+    ]
+}
