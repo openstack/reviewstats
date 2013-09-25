@@ -4,11 +4,14 @@
         "stackforge/savanna",
         "stackforge/savanna-pythonclient",
         "stackforge/savanna-dashboard",
-        "stackforge/savanna-extra"
+        "stackforge/savanna-extra",
+        "stackforge/savanna-image-elements",
+        "stackforge/puppet-savanna"
     ],
-    "unofficial": true,
     "core-team": [
         "slukjanov",
-        "aignatov"
+        "aignatov",
+        "farrellee",
+        "jspeidel"
     ]
 }
