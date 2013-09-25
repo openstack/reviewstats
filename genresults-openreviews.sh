@@ -18,7 +18,6 @@ for project in ${projects} ; do
 	(date -u && echo && ./openreviews.py -p ${project}) > results/${project_base}-openreviews.txt
 	./openreviews.py -p ${project} --html > results/${project_base}-openreviews.html
 	(date -u && echo && ./openapproved.py -p ${project}) > results/${project_base}-openapproved.txt
-	(date -u && echo && ./reviews_for_bugs.py -p ${project}) > results/${project_base}-reviews-for-bugs.txt
 done
 
 if [ "${all}" = "1" ] ; then
