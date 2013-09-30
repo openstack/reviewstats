@@ -29,6 +29,8 @@ def main():
             description="Get reviews for open bugs against a milestone")
     parser.add_argument('-p', '--project', default='projects/nova.json',
             help='JSON file describing the project to generate stats for')
+    parser.add_argument('-m', '--milestone', default='',
+            help='Only show bugs targeted to a specified milestone')
     parser.add_argument('-u', '--user', default=getpass.getuser(),
             help='gerrit user')
     parser.add_argument('-k', '--key', default=None, help='ssh key for gerrit')
@@ -45,7 +47,11 @@ def main():
     launchpad = Launchpad.login_with('openstack-releasing', 'production')
     proj = launchpad.projects[project_name]
     statuses = ['New', 'Incomplete', 'Confirmed', 'Triaged', 'In Progress']
-    bugtasks = proj.searchTasks(status=statuses)
+    if args.milestone:
+        milestone = proj.getMilestone(name=args.milestone)
+        bugtasks = proj.searchTasks(status=statuses, milestone=milestone)
+    else:
+        bugtasks = proj.searchTasks(status=statuses)
     bugs_by_id = {}
     for bt in bugtasks:
         bugs_by_id[str(bt.bug.id)] = bt
@@ -76,6 +82,8 @@ def main():
             project_name)
 
     for milestone, reviews in milestones.items():
+        if args.milestone and milestone != args.milestone:
+            continue
         print 'Milestone: %s' % milestone
         for review, bugid in reviews:
             print '--> %s -- https://bugs.launchpad.net/%s/+bug/%s' % (review,
