@@ -34,12 +34,16 @@ def main(argv=None):
         argv = sys.argv
 
     optparser = optparse.OptionParser()
-    optparser.add_option('-p', '--project', default='projects/nova.json',
-                         help='JSON file describing the project to generate stats for')
-    optparser.add_option('-a', '--all', action='store_true',
-                         help='Generate stats across all known projects (*.json)')
-    optparser.add_option('-u', '--user', default=getpass.getuser(), help='gerrit user')
-    optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
+    optparser.add_option(
+        '-p', '--project', default='projects/nova.json',
+        help='JSON file describing the project to generate stats for')
+    optparser.add_option(
+        '-a', '--all', action='store_true',
+        help='Generate stats across all known projects (*.json)')
+    optparser.add_option(
+        '-u', '--user', default=getpass.getuser(), help='gerrit user')
+    optparser.add_option(
+        '-k', '--key', default=None, help='ssh key for gerrit')
     optparser.add_option('-s', '--stable', action='store_true',
                          help='Include stable branch commits')
     options, args = optparser.parse_args()
@@ -66,7 +70,8 @@ def main(argv=None):
             if approved(patch_set) and not approved(change['patchSets'][-1]):
                 if has_negative_feedback(change['patchSets'][-1]):
                     continue
-                approved_and_rebased.add("%s %s" % (change['url'], change['subject']))
+                approved_and_rebased.add("%s %s" % (change['url'],
+                                                    change['subject']))
 
     for x in approved_and_rebased:
         print x
@@ -76,7 +81,8 @@ def main(argv=None):
 def has_negative_feedback(patch_set):
     approvals = patch_set.get('approvals', [])
     for review in approvals:
-        if review['type'] in ('CRVW','VRIF') and review['value'] in ('-1', '-2'):
+        if review['type'] in ('CRVW', 'VRIF') \
+                and review['value'] in ('-1', '-2'):
             return True
     return False
 

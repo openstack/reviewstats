@@ -26,13 +26,15 @@ import utils
 
 def main():
     parser = ArgumentParser(
-            description="Get reviews for open bugs against a milestone")
-    parser.add_argument('-p', '--project', default='projects/nova.json',
-            help='JSON file describing the project to generate stats for')
-    parser.add_argument('-m', '--milestone', default='',
-            help='Only show bugs targeted to a specified milestone')
-    parser.add_argument('-u', '--user', default=getpass.getuser(),
-            help='gerrit user')
+        description="Get reviews for open bugs against a milestone")
+    parser.add_argument(
+        '-p', '--project', default='projects/nova.json',
+        help='JSON file describing the project to generate stats for')
+    parser.add_argument(
+        '-m', '--milestone', default='',
+        help='Only show bugs targeted to a specified milestone')
+    parser.add_argument(
+        '-u', '--user', default=getpass.getuser(), help='gerrit user')
     parser.add_argument('-k', '--key', default=None, help='ssh key for gerrit')
 
     args = parser.parse_args()
@@ -79,15 +81,15 @@ def main():
         milestones[milestone].append((change['url'], bugid))
 
     print 'Reviews for bugs grouped by milestone for project: %s\n' % (
-            project_name)
+        project_name)
 
     for milestone, reviews in milestones.items():
         if args.milestone and milestone != args.milestone:
             continue
         print 'Milestone: %s' % milestone
         for review, bugid in reviews:
-            print '--> %s -- https://bugs.launchpad.net/%s/+bug/%s' % (review,
-                    project_name, bugid)
+            print '--> %s -- https://bugs.launchpad.net/%s/+bug/%s' \
+                % (review, project_name, bugid)
         print
 
 if __name__ == '__main__':

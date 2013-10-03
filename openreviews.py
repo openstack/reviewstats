@@ -20,8 +20,6 @@ import calendar
 import datetime
 import getpass
 import optparse
-import os
-import os.path
 import sys
 
 import utils
@@ -36,7 +34,7 @@ def sec_to_period_string(seconds):
 
 def get_age_of_patch(patch, now_ts):
     approvals = patch.get('approvals', [])
-    approvals.sort(key=lambda a:a['grantedOn'])
+    approvals.sort(key=lambda a: a['grantedOn'])
     # The createdOn timestamp on the patch isn't what we want.
     # It's when the patch was written, not submitted for review.
     # The next best thing in the data we have is the time of the
@@ -94,37 +92,40 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
 
     result = []
     result.append(('Projects', '%s' % [project['name']
-                                      for project in projects]))
+                                       for project in projects]))
     stats = []
     stats.append(('Total Open Reviews', '%d' % (
-            len(waiting_on_reviewer) + len(waiting_on_submitter))))
+                  len(waiting_on_reviewer) + len(waiting_on_submitter))))
     stats.append(('Waiting on Submitter', '%d' % len(waiting_on_submitter)))
     stats.append(('Waiting on Reviewer', '%d' % len(waiting_on_reviewer)))
 
     latest_rev_stats = []
-    latest_rev_stats.append(('Average wait time', '%s' % (
-            average_age(waiting_on_reviewer))))
-    latest_rev_stats.append(('Median wait time', '%s' % (
-            median_age(waiting_on_reviewer))))
-    latest_rev_stats.append(('Number waiting more than %i days' %
-            options.waiting_more, '%i' % (number_waiting_more_than(
+    latest_rev_stats.append(('Average wait time', '%s'
+                             % (average_age(waiting_on_reviewer))))
+    latest_rev_stats.append(('Median wait time', '%s'
+                             % (median_age(waiting_on_reviewer))))
+    latest_rev_stats.append((
+        'Number waiting more than %i days' % options.waiting_more,
+        '%i' % (number_waiting_more_than(
             age_sorted, 60 * 60 * 24 * options.waiting_more))))
     stats.append(('Stats since the latest revision', latest_rev_stats))
 
     first_rev_stats = []
-    first_rev_stats.append(('Average wait time', '%s' % (
-            average_age(waiting_on_reviewer, key='age2'))))
-    first_rev_stats.append(('Median wait time', '%s' % (
-            median_age(waiting_on_reviewer, key='age2'))))
+    first_rev_stats.append(('Average wait time', '%s'
+                            % (average_age(waiting_on_reviewer, key='age2'))))
+    first_rev_stats.append(('Median wait time', '%s'
+                            % (median_age(waiting_on_reviewer, key='age2'))))
     stats.append(('Stats since the first revision', first_rev_stats))
 
     last_without_nack_stats = []
-    last_without_nack_stats.append(('Average wait time', '%s' % (
-            average_age(waiting_on_reviewer, key='age3'))))
-    last_without_nack_stats.append(('Median wait time', '%s' % (
-            median_age(waiting_on_reviewer, key='age3'))))
-    stats.append(('Stats since the last revision without -1 or -2 (ignoring jenkins)',
-            last_without_nack_stats))
+    last_without_nack_stats.append(('Average wait time', '%s'
+                                    % (average_age(waiting_on_reviewer,
+                                                   key='age3'))))
+    last_without_nack_stats.append(('Median wait time', '%s'
+                                    % (median_age(waiting_on_reviewer,
+                                                  key='age3'))))
+    stats.append(('Stats since the last revision without -1 or -2 '
+                  '(ignoring jenkins)', last_without_nack_stats))
 
     changes = []
     for change in age_sorted[:options.longest_waiting]:
@@ -136,19 +137,19 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
 
     changes = []
     for change in age2_sorted[:options.longest_waiting]:
-       changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
-                                      format_url(change['url'], options),
-                                      change['subject']))
+        changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
+                                       format_url(change['url'], options),
+                                       change['subject']))
     stats.append(('Longest waiting reviews (based on first revision)',
-            changes))
+                  changes))
 
     changes = []
     for change in age3_sorted[:options.longest_waiting]:
-       changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
-                                      format_url(change['url'], options),
-                                      change['subject']))
-    stats.append(('Longest waiting reviews (based on oldest rev without nack, ignoring jenkins)',
-            changes))
+        changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
+                                       format_url(change['url'], options),
+                                       change['subject']))
+    stats.append(('Longest waiting reviews (based on oldest rev without nack, '
+                  'ignoring jenkins)', changes))
 
     result.append(stats)
 
@@ -231,20 +232,28 @@ def main(argv=None):
         argv = sys.argv
 
     optparser = optparse.OptionParser()
-    optparser.add_option('-p', '--project', default='projects/nova.json',
-            help='JSON file describing the project to generate stats for')
-    optparser.add_option('-a', '--all', action='store_true',
-            help='Generate stats across all known projects (*.json)')
-    optparser.add_option('-u', '--user', default=getpass.getuser(), help='gerrit user')
-    optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
-    optparser.add_option('-s', '--stable', action='store_true',
-            help='Include stable branch commits')
-    optparser.add_option('-l', '--longest-waiting', type='int', default=5,
-            help='Show n changesets that have waited the longest)')
-    optparser.add_option('-m', '--waiting-more', type='int', default=7,
-            help='Show number of changesets that have waited more than n days)')
-    optparser.add_option('-H', '--html', action='store_true',
-            help='Use HTML output instead of plain text')
+    optparser.add_option(
+        '-p', '--project', default='projects/nova.json',
+        help='JSON file describing the project to generate stats for')
+    optparser.add_option(
+        '-a', '--all', action='store_true',
+        help='Generate stats across all known projects (*.json)')
+    optparser.add_option(
+        '-u', '--user', default=getpass.getuser(), help='gerrit user')
+    optparser.add_option(
+        '-k', '--key', default=None, help='ssh key for gerrit')
+    optparser.add_option(
+        '-s', '--stable', action='store_true',
+        help='Include stable branch commits')
+    optparser.add_option(
+        '-l', '--longest-waiting', type='int', default=5,
+        help='Show n changesets that have waited the longest)')
+    optparser.add_option(
+        '-m', '--waiting-more', type='int', default=7,
+        help='Show number of changesets that have waited more than n days)')
+    optparser.add_option(
+        '-H', '--html', action='store_true',
+        help='Use HTML output instead of plain text')
 
     options, args = optparser.parse_args()
 
@@ -255,7 +264,7 @@ def main(argv=None):
         sys.exit(1)
 
     changes = utils.get_changes(projects, options.user, options.key,
-            only_open=True)
+                                only_open=True)
 
     waiting_on_submitter = []
     waiting_on_reviewer = []
@@ -274,7 +283,7 @@ def main(argv=None):
         latest_patch = change['patchSets'][-1]
         waiting_for_review = True
         approvals = latest_patch.get('approvals', [])
-        approvals.sort(key=lambda a:a['grantedOn'])
+        approvals.sort(key=lambda a: a['grantedOn'])
         for review in approvals:
             if review['type'] not in ('CRVW', 'VRIF'):
                 continue

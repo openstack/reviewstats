@@ -16,16 +16,10 @@
 # under the License.
 
 
-
 import calendar
 import datetime
 import getpass
-import glob
-import json
 import optparse
-import os
-import os.path
-from pprint import pprint
 import prettytable
 import sys
 
@@ -42,8 +36,8 @@ def process_patchset(project, patchset, reviewers, ts):
     latest_core_pos_vote = 0
     for review in patchset.get('approvals', []):
         if review['type'] != 'CRVW':
-            # Only count code reviews.  Don't add another for Approved, which is
-            # type 'APRV'
+            # Only count code reviews.  Don't add another for Approved, which
+            # is type 'APRV'
             continue
         if review['by'].get('username', 'unknown') not in project['core-team']:
             # Only checking for disagreements from core team members
@@ -60,13 +54,13 @@ def process_patchset(project, patchset, reviewers, ts):
             continue
 
         if review['type'] != 'CRVW':
-            # Only count code reviews.  Don't add another for Approved, which is
-            # type 'APRV'
+            # Only count code reviews.  Don't add another for Approved, which
+            # is type 'APRV'
             continue
 
         reviewer = review['by'].get('username', 'unknown')
         reviewers.setdefault(reviewer,
-                {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0}})
+                             {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0}})
         reviewers[reviewer].setdefault('disagreements', 0)
         reviewers[reviewer]['total'] = reviewers[reviewer].get('total', 0) + 1
         cur = reviewers[reviewer]['votes'][review['value']]
@@ -90,14 +84,19 @@ def main(argv=None):
         argv = sys.argv
 
     optparser = optparse.OptionParser()
-    optparser.add_option('-p', '--project', default='projects/nova.json',
-            help='JSON file describing the project to generate stats for')
-    optparser.add_option('-a', '--all', action='store_true',
-            help='Generate stats across all known projects (*.json)')
-    optparser.add_option('-d', '--days', type='int', default=14,
-            help='Number of days to consider')
-    optparser.add_option('-u', '--user', default=getpass.getuser(), help='gerrit user')
-    optparser.add_option('-k', '--key', default=None, help='ssh key for gerrit')
+    optparser.add_option(
+        '-p', '--project', default='projects/nova.json',
+        help='JSON file describing the project to generate stats for')
+    optparser.add_option(
+        '-a', '--all', action='store_true',
+        help='Generate stats across all known projects (*.json)')
+    optparser.add_option(
+        '-d', '--days', type='int', default=14,
+        help='Number of days to consider')
+    optparser.add_option(
+        '-u', '--user', default=getpass.getuser(), help='gerrit user')
+    optparser.add_option(
+        '-k', '--key', default=None, help='ssh key for gerrit')
 
     options, args = optparser.parse_args()
 
@@ -120,21 +119,22 @@ def main(argv=None):
 
     reviewers = [(v, k) for k, v in reviewers.iteritems()
                  if k.lower() not in ('jenkins', 'smokestack')]
-    reviewers.sort(reverse=True, key=lambda r:r[0]['total'])
+    reviewers.sort(reverse=True, key=lambda r: r[0]['total'])
 
     if options.all:
-        print 'Reviews for the last %d days in projects: %s' % (options.days,
-                [project['name'] for project in projects])
+        print 'Reviews for the last %d days in projects: %s' \
+            % (options.days, [project['name'] for project in projects])
     else:
-        print 'Reviews for the last %d days in %s' % (options.days, projects[0]['name'])
+        print 'Reviews for the last %d days in %s' \
+            % (options.days, projects[0]['name'])
     if options.all:
         print '** -- Member of at least one core reviewer team'
     else:
         print '** -- %s-core team member' % projects[0]['name']
     table = prettytable.PrettyTable(
-            ('Reviewer',
-             'Reviews   -2  -1  +1  +2    +/- %',
-             'Disagreements*'))
+        ('Reviewer',
+         'Reviews   -2  -1  +1  +2    +/- %',
+         'Disagreements*'))
     total = 0
     for k, v in reviewers:
         in_core_team = False
@@ -146,9 +146,10 @@ def main(argv=None):
         plus = float(k['votes']['2'] + k['votes']['1'])
         minus = float(k['votes']['-2'] + k['votes']['-1'])
         ratio = (plus / (plus + minus)) * 100
-        r = '%7d  %3d %3d %3d %3d   %5.1f%%' % (k['total'],
-                k['votes']['-2'], k['votes']['-1'],
-                k['votes']['1'], k['votes']['2'], ratio)
+        r = '%7d  %3d %3d %3d %3d   %5.1f%%' % (
+            k['total'], k['votes']['-2'],
+            k['votes']['-1'], k['votes']['1'],
+            k['votes']['2'], ratio)
         dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
         d = '%3d (%5.1f%%)' % (k['disagreements'], dratio)
         table.add_row((name, r, d))
