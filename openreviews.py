@@ -21,6 +21,7 @@ import datetime
 import getpass
 import optparse
 import sys
+import logging
 
 import utils
 
@@ -94,8 +95,8 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     result.append(('Projects', '%s' % [project['name']
                                        for project in projects]))
     stats = []
-    stats.append(('Total Open Reviews', '%d' % (
-                  len(waiting_on_reviewer) + len(waiting_on_submitter))))
+    stats.append(('Total Open Reviews', '%d'
+                  % (len(waiting_on_reviewer) + len(waiting_on_submitter))))
     stats.append(('Waiting on Submitter', '%d' % len(waiting_on_submitter)))
     stats.append(('Waiting on Reviewer', '%d' % len(waiting_on_reviewer)))
 
@@ -216,7 +217,7 @@ def find_oldest_no_nack(change):
     for patch in reversed(change['patchSets']):
         nacked = False
         for review in patch.get('approvals', []):
-            if review['type'] != 'CRVW':
+            if review['type'] != 'CRVW' and review['type'] != 'Code-Review':
                 continue
             if review['value'] in ('-1', '-2'):
                 nacked = True
@@ -254,17 +255,30 @@ def main(argv=None):
     optparser.add_option(
         '-H', '--html', action='store_true',
         help='Use HTML output instead of plain text')
+    optparser.add_option(
+        '--server', default='review.openstack.org',
+        help='Gerrit server to connect to')
+    optparser.add_option(
+        '--debug', action='store_true', help='Show extra debug output')
+    optparser.add_option(
+        '--projects-dir', default='./projects',
+        help='Directory where to locate the project files')
 
     options, args = optparser.parse_args()
 
-    projects = utils.get_projects_info(options.project, options.all)
+    logging.basicConfig(level=logging.ERROR)
+    if options.debug:
+        logging.root.setLevel(logging.DEBUG)
+
+    projects = utils.get_projects_info(options.project, options.all,
+                                       base_dir=options.projects_dir)
 
     if not projects:
         print "Please specify a project."
         sys.exit(1)
 
     changes = utils.get_changes(projects, options.user, options.key,
-                                only_open=True)
+                                only_open=True, server=options.server)
 
     waiting_on_submitter = []
     waiting_on_reviewer = []
@@ -285,7 +299,8 @@ def main(argv=None):
         approvals = latest_patch.get('approvals', [])
         approvals.sort(key=lambda a: a['grantedOn'])
         for review in approvals:
-            if review['type'] not in ('CRVW', 'VRIF'):
+            if review['type'] not in ('CRVW', 'VRIF',
+                                      'Code-Review', 'Verified'):
                 continue
             if review['value'] in ('-1', '-2'):
                 waiting_for_review = False
