@@ -21,14 +21,15 @@ import json
 import paramiko
 import os
 import time
+import logging
 
 
 CACHE_AGE = 3600  # Seconds
 
 
-def get_projects_info(project=None, all_projects=False):
+def get_projects_info(project=None, all_projects=False, base_dir='./projects'):
     if all_projects:
-        files = glob.glob('projects/*.json')
+        files = glob.glob('%s/*.json' % base_dir)
     else:
         files = [project]
 
@@ -59,6 +60,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False):
 
     for project in projects:
         changes = []
+        logging.debug('Getting changes for project %s' % project['name'])
 
         if not only_open:
             # Only use the cache for *all* changes (the entire history).
@@ -72,16 +74,15 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False):
                     with open(pickle_fn, 'r') as f:
                         changes = pickle.load(f)
 
-        if len(changes) == 0:
-
+        if not changes:
             while True:
                 client.connect('review.openstack.org', port=29418,
-                        key_filename=ssh_key, username=ssh_user)
-                cmd = ('gerrit query %s --all-approvals --patch-sets --format JSON' %
-                       projects_q(project))
+                               key_filename=ssh_key, username=ssh_user)
+                cmd = ('gerrit query %s --all-approvals --patch-sets '
+                       '--format JSON' % projects_q(project))
                 if only_open:
                     cmd += ' status:open'
-                if len(changes) > 0:
+                if changes:
                     cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
                 stdin, stdout, stderr = client.exec_command(cmd)
                 for l in stdout:
