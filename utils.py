@@ -51,7 +51,8 @@ def projects_q(project):
             ')')
 
 
-def get_changes(projects, ssh_user, ssh_key, only_open=False):
+def get_changes(projects, ssh_user, ssh_key, only_open=False,
+                server='review.openstack.org'):
     all_changes = []
 
     client = paramiko.SSHClient()
@@ -76,7 +77,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False):
 
         if not changes:
             while True:
-                client.connect('review.openstack.org', port=29418,
+                client.connect(server, port=29418,
                                key_filename=ssh_key, username=ssh_user)
                 cmd = ('gerrit query %s --all-approvals --patch-sets '
                        '--format JSON' % projects_q(project))
