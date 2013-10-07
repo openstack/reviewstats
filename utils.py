@@ -26,6 +26,8 @@ import logging
 
 CACHE_AGE = 3600  # Seconds
 
+LOG = logging.getLogger(__name__)
+
 
 def get_projects_info(project=None, all_projects=False, base_dir='./projects'):
     if all_projects:
@@ -38,7 +40,11 @@ def get_projects_info(project=None, all_projects=False, base_dir='./projects'):
     for fn in files:
         if os.path.isfile(fn):
             with open(fn, 'r') as f:
-                project = json.loads(f.read())
+                try:
+                    project = json.loads(f.read())
+                except Exception:
+                    LOG.error('Failed to parse %s' % fn)
+                    raise
                 if not (all_projects and project.get('unofficial')):
                     projects.append(project)
 
