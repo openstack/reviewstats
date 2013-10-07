@@ -12,15 +12,19 @@ mkdir -p results
 
 rm -f results/*-reviewers-*
 
+if [ -n "${GERRIT_USER}" ] ; then
+	EXTRA_ARGS="-u ${GERRIT_USER}"
+fi
+
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
 	for time in 30 90 180 ; do
-		(date -u && echo && ./reviewers.py -p ${project} -d ${time}) > results/${project_base}-reviewers-${time}.txt
+		(date -u && echo && ./reviewers.py -p ${project} -d ${time} ${EXTRA_ARGS}) > results/${project_base}-reviewers-${time}.txt
 	done
 done
 
 if [ "${all}" = "1" ] ; then
 	for time in 30 90 180 ; do
-		(date -u && echo && ./reviewers.py -a -d ${time}) > results/all-reviewers-${time}.txt
+		(date -u && echo && ./reviewers.py -a -d ${time} ${EXTRA_ARGS}) > results/all-reviewers-${time}.txt
 	done
 fi
