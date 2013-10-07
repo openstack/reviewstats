@@ -1,14 +1,14 @@
 {"name": "tripleo", "subprojects": [
-    "openstack/tripleo-incubator",
     "openstack/diskimage-builder",
     "openstack/os-apply-config",
     "openstack/os-collect-config",
     "openstack/os-refresh-config",
-    "openstack/tripleo-image-elements",
+    "openstack/python-tuskarclient",
     "openstack/tripleo-heat-templates",
-    "stackforge/python-tuskarclient",
-    "stackforge/tuskar",
-    "stackforge/tuskar-ui"
+    "openstack/tripleo-image-elements",
+    "openstack/tripleo-incubator",
+    "openstack/tuskar",
+    "openstack/tuskar-ui"
 ], "core-team": [
     "arata776",
     "clint-fewbar",
