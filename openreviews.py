@@ -60,12 +60,19 @@ def average_age(changes, key='age'):
     return sec_to_period_string(avg_age)
 
 
-def median_age(changes, key='age'):
+def quartile_age(changes, quartile=2, key='age'):
+    """Quartile age
+
+    quartile 1: 25%
+    quartile 2: 50% (median) default
+    quartile 3: 75%
+    """
+
     if not changes:
         return 0
     changes = sorted(changes, key=lambda change: change[key])
-    median_age = changes[len(changes)/2][key]
-    return sec_to_period_string(median_age)
+    quartile_age = changes[len(changes) * quartile/4][key]
+    return sec_to_period_string(quartile_age)
 
 
 def number_waiting_more_than(changes, seconds, key='age'):
@@ -103,8 +110,14 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     latest_rev_stats = []
     latest_rev_stats.append(('Average wait time', '%s'
                              % (average_age(waiting_on_reviewer))))
+    latest_rev_stats.append(('1rd quartile wait time', '%s'
+                             % (quartile_age(waiting_on_reviewer,
+                                             quartile=1))))
     latest_rev_stats.append(('Median wait time', '%s'
-                             % (median_age(waiting_on_reviewer))))
+                             % (quartile_age(waiting_on_reviewer))))
+    latest_rev_stats.append(('3rd quartile wait time', '%s'
+                             % (quartile_age(waiting_on_reviewer,
+                                             quartile=3))))
     latest_rev_stats.append((
         'Number waiting more than %i days' % options.waiting_more,
         '%i' % (number_waiting_more_than(
@@ -115,17 +128,31 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     last_without_nack_stats.append(('Average wait time', '%s'
                                     % (average_age(waiting_on_reviewer,
                                                    key='age3'))))
+    last_without_nack_stats.append(('1rd quartile wait time', '%s'
+                                    % (quartile_age(waiting_on_reviewer,
+                                                    quartile=1,
+                                                    key='age3'))))
     last_without_nack_stats.append(('Median wait time', '%s'
-                                    % (median_age(waiting_on_reviewer,
-                                                  key='age3'))))
+                                    % (quartile_age(waiting_on_reviewer,
+                                                    key='age3'))))
+    last_without_nack_stats.append(('3rd quartile wait time', '%s'
+                                    % (quartile_age(waiting_on_reviewer,
+                                                    quartile=3,
+                                                    key='age3'))))
     stats.append(('Stats since the last revision without -1 or -2 '
                   '(ignoring jenkins)', last_without_nack_stats))
 
     first_rev_stats = []
     first_rev_stats.append(('Average wait time', '%s'
                             % (average_age(waiting_on_reviewer, key='age2'))))
+    first_rev_stats.append(('1st quartile wait time', '%s'
+                            % (quartile_age(waiting_on_reviewer, quartile=1,
+                                            key='age2'))))
     first_rev_stats.append(('Median wait time', '%s'
-                            % (median_age(waiting_on_reviewer, key='age2'))))
+                            % (quartile_age(waiting_on_reviewer, key='age2'))))
+    first_rev_stats.append(('3rd quartile wait time', '%s'
+                            % (quartile_age(waiting_on_reviewer, quartile=3,
+                                            key='age2'))))
     stats.append(('Stats since the first revision (total age)',
                   first_rev_stats))
 
