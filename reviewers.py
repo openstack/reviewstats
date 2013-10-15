@@ -79,6 +79,19 @@ def process_patchset(project, patchset, reviewers, ts):
             reviewers[reviewer]['disagreements'] = cur + 1
 
 
+def write_pretty(reviewer_data, file_obj):
+    """Write out reviewers using PrettyTable."""
+    table = prettytable.PrettyTable(
+        ('Reviewer',
+         'Reviews   -2  -1  +1  +2    +/- %',
+         'Disagreements*'))
+    for (name, r_data, d_data) in reviewer_data:
+        r = '%7d  %3d %3d %3d %3d   %s' % r_data
+        d = '%3d (%s)' % d_data
+        table.add_row((name, r, d))
+    file_obj.write("%s\n" % table)
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -90,6 +103,14 @@ def main(argv=None):
     optparser.add_option(
         '-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')
+    optparser.add_option(
+        '-o', '--output', default='-',
+        help='Where to write output. If - stdout is used and only one output'
+            'format may be given. Otherwise the output format is appended to'
+            'the output parameter to generate file names.')
+    optparser.add_option(
+        '--outputs', default=['txt'], action='append',
+        help='Select what outputs to generate. (html only support today).')
     optparser.add_option(
         '-d', '--days', type='int', default=14,
         help='Number of days to consider')
@@ -120,17 +141,6 @@ def main(argv=None):
     reviewers = [(v, k) for k, v in reviewers.iteritems()
                  if k.lower() not in ('jenkins', 'smokestack')]
     reviewers.sort(reverse=True, key=lambda r: r[0]['total'])
-
-    if options.all:
-        print 'Reviews for the last %d days in projects: %s' \
-            % (options.days, [project['name'] for project in projects])
-    else:
-        print 'Reviews for the last %d days in %s' \
-            % (options.days, projects[0]['name'])
-    if options.all:
-        print '** -- Member of at least one core reviewer team'
-    else:
-        print '** -- %s-core team member' % projects[0]['name']
     # Do logical processing of reviewers.
     reviewer_data = []
     total = 0
@@ -152,21 +162,45 @@ def main(argv=None):
         reviewer_data.append((name, r, d))
         total += k['total']
     # And output.
-    table = prettytable.PrettyTable(
-        ('Reviewer',
-         'Reviews   -2  -1  +1  +2    +/- %',
-         'Disagreements*'))
-    for (name, r_data, d_data) in reviewer_data:
-        r = '%7d  %3d %3d %3d %3d   %s' % r_data
-        d = '%3d (%s)' % d_data
-        table.add_row((name, r, d))
-    print table
-    print '\nTotal reviews: %d' % total
-    print 'Total reviewers: %d' % len(reviewers)
-    print '\n(*) Disagreements are defined as a +1 or +2 vote on a patch ' \
-          'where a core team member later gave a -1 or -2 vote, or a ' \
-          'negative vote overridden with a postive one afterwards.'
-
+    writers = {
+        'txt': write_pretty,
+        }
+    if options.output == '-':
+        if len(options.outputs) != 1:
+            raise Exception("Can only output one format to stdout.")
+    for output in options.outputs:
+        if options.output == '-':
+            file_obj = sys.stdout
+            on_done = None
+        else:
+            file_obj = open(options.outputs + '.' + output, 'wt')
+            on_done = file_obj.close
+        try:
+            writer = writers[output]
+            if options.all:
+                file_obj.write(
+                    'Reviews for the last %d days in projects: %s\n' %
+                    (options.days, [project['name'] for project in projects]))
+            else:
+                file_obj.write('Reviews for the last %d days in %s\n'
+                    % (options.days, projects[0]['name']))
+            if options.all:
+                file_obj.write(
+                    '** -- Member of at least one core reviewer team\n')
+            else:
+                file_obj.write(
+                    '** -- %s-core team member\n' % projects[0]['name'])
+            writer(reviewer_data, file_obj)
+            file_obj.write('\nTotal reviews: %d\n' % total)
+            file_obj.write('Total reviewers: %d\n' % len(reviewers))
+            file_obj.write(
+                '\n(*) Disagreements are defined as a +1 or +2 vote on a ' \
+                'patch where a core team member later gave a -1 or -2 vote' \
+                ', or a negative vote overridden with a positive one ' \
+                'afterwards.\n')
+        finally:
+            if on_done:
+                on_done()
     return 0
 
 
