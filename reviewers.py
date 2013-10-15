@@ -131,10 +131,8 @@ def main(argv=None):
         print '** -- Member of at least one core reviewer team'
     else:
         print '** -- %s-core team member' % projects[0]['name']
-    table = prettytable.PrettyTable(
-        ('Reviewer',
-         'Reviews   -2  -1  +1  +2    +/- %',
-         'Disagreements*'))
+    # Do logical processing of reviewers.
+    reviewer_data = []
     total = 0
     for k, v in reviewers:
         in_core_team = False
@@ -146,14 +144,22 @@ def main(argv=None):
         plus = float(k['votes']['2'] + k['votes']['1'])
         minus = float(k['votes']['-2'] + k['votes']['-1'])
         ratio = (plus / (plus + minus)) * 100
-        r = '%7d  %3d %3d %3d %3d   %5.1f%%' % (
-            k['total'], k['votes']['-2'],
+        r = (k['total'], k['votes']['-2'],
             k['votes']['-1'], k['votes']['1'],
-            k['votes']['2'], ratio)
+            k['votes']['2'], "%5.1f%%" % ratio)
         dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
-        d = '%3d (%5.1f%%)' % (k['disagreements'], dratio)
-        table.add_row((name, r, d))
+        d = (k['disagreements'], "%5.1f%%" % dratio)
+        reviewer_data.append((name, r, d))
         total += k['total']
+    # And output.
+    table = prettytable.PrettyTable(
+        ('Reviewer',
+         'Reviews   -2  -1  +1  +2    +/- %',
+         'Disagreements*'))
+    for (name, r_data, d_data) in reviewer_data:
+        r = '%7d  %3d %3d %3d %3d   %s' % r_data
+        d = '%3d (%s)' % d_data
+        table.add_row((name, r, d))
     print table
     print '\nTotal reviews: %d' % total
     print 'Total reviewers: %d' % len(reviewers)
