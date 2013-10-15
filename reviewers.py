@@ -17,6 +17,7 @@
 
 
 import calendar
+import csv
 import datetime
 import getpass
 import optparse
@@ -77,6 +78,17 @@ def process_patchset(project, patchset, reviewers, ts):
             # negative one
             cur = reviewers[reviewer]['disagreements']
             reviewers[reviewer]['disagreements'] = cur + 1
+
+
+def write_csv(reviewer_data, file_obj):
+    """Write out reviewers using CSV."""
+    writer = csv.writer(file_obj)
+    writer.writerow(
+        ('Reviewer', 'Reviews','-2', '-1', '+1', '+2', '+/- %',
+         'Disagreements', 'Disagreement%'))
+    for (name, r_data, d_data) in reviewer_data:
+        row = (name,) + r_data + d_data
+        writer.writerow(row)
 
 
 def write_pretty(reviewer_data, file_obj):
@@ -163,6 +175,7 @@ def main(argv=None):
         total += k['total']
     # And output.
     writers = {
+        'csv': write_csv,
         'txt': write_pretty,
         }
     if options.output == '-':
@@ -173,7 +186,7 @@ def main(argv=None):
             file_obj = sys.stdout
             on_done = None
         else:
-            file_obj = open(options.outputs + '.' + output, 'wt')
+            file_obj = open(options.output + '.' + output, 'wt')
             on_done = file_obj.close
         try:
             writer = writers[output]
