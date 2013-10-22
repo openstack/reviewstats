@@ -104,3 +104,11 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False,
         all_changes.extend(changes)
 
     return all_changes
+
+
+def patch_set_approved(patch_set):
+    approvals = patch_set.get('approvals', [])
+    for review in approvals:
+        if review['type'] == 'APRV':
+            return True
+    return False

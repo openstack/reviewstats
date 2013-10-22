@@ -323,6 +323,9 @@ def main(argv=None):
             # Filter out WORKINPROGRESS
             continue
         latest_patch = change['patchSets'][-1]
+        if utils.patch_set_approved(latest_patch):
+            # Ignore patches already approved and just waiting to merge
+            continue
         waiting_for_review = True
         approvals = latest_patch.get('approvals', [])
         approvals.sort(key=lambda a: a['grantedOn'])

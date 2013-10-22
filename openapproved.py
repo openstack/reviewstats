@@ -67,7 +67,8 @@ def main(argv=None):
             # Filter out WORKINPROGRESS
             continue
         for patch_set in change['patchSets'][:-1]:
-            if approved(patch_set) and not approved(change['patchSets'][-1]):
+            if (utils.patch_set_approved(patch_set)
+                    and not utils.patch_set_approved(change['patchSets'][-1])):
                 if has_negative_feedback(change['patchSets'][-1]):
                     continue
                 approved_and_rebased.add("%s %s" % (change['url'],
@@ -83,14 +84,6 @@ def has_negative_feedback(patch_set):
     for review in approvals:
         if review['type'] in ('CRVW', 'VRIF') \
                 and review['value'] in ('-1', '-2'):
-            return True
-    return False
-
-
-def approved(patch_set):
-    approvals = patch_set.get('approvals', [])
-    for review in approvals:
-        if review['type'] == 'APRV':
             return True
     return False
 
