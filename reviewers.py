@@ -54,37 +54,40 @@ def process_patchset(project, patchset, reviewers, ts):
         if review['grantedOn'] < ts:
             continue
 
-        if review['type'] != 'CRVW':
-            # Only count code reviews.  Don't add another for Approved, which
-            # is type 'APRV'
+        if review['type'] not in ('CRVW', 'APRV'):
             continue
 
         reviewer = review['by'].get('username', 'unknown')
-        reviewers.setdefault(reviewer,
-                             {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0}})
+        reviewers.setdefault(
+            reviewer, {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0, 'A': 0}})
         reviewers[reviewer].setdefault('disagreements', 0)
-        reviewers[reviewer]['total'] = reviewers[reviewer].get('total', 0) + 1
-        cur = reviewers[reviewer]['votes'][review['value']]
-        reviewers[reviewer]['votes'][review['value']] = cur + 1
-        if (review['value'] in ('1', '2')
-                and int(review['grantedOn']) < latest_core_neg_vote):
-            # A core team member gave a negative vote after this person gave a
-            # positive one
-            cur = reviewers[reviewer]['disagreements']
-            reviewers[reviewer]['disagreements'] = cur + 1
-        if (review['value'] in ('-1', '-2')
-                and int(review['grantedOn']) < latest_core_pos_vote):
-            # A core team member gave a positive vote after this person gave a
-            # negative one
-            cur = reviewers[reviewer]['disagreements']
-            reviewers[reviewer]['disagreements'] = cur + 1
+        if review['type'] == 'APRV':
+            cur = reviewers[reviewer]['votes']['A']
+            reviewers[reviewer]['votes']['A'] = cur + 1
+        else:
+            cur_total = reviewers[reviewer].get('total', 0)
+            reviewers[reviewer]['total'] = cur_total + 1
+            cur = reviewers[reviewer]['votes'][review['value']]
+            reviewers[reviewer]['votes'][review['value']] = cur + 1
+            if (review['value'] in ('1', '2')
+                    and int(review['grantedOn']) < latest_core_neg_vote):
+                # A core team member gave a negative vote after this person
+                # gave a positive one
+                cur = reviewers[reviewer]['disagreements']
+                reviewers[reviewer]['disagreements'] = cur + 1
+            if (review['value'] in ('-1', '-2')
+                    and int(review['grantedOn']) < latest_core_pos_vote):
+                # A core team member gave a positive vote after this person
+                # gave a negative one
+                cur = reviewers[reviewer]['disagreements']
+                reviewers[reviewer]['disagreements'] = cur + 1
 
 
 def write_csv(reviewer_data, file_obj):
     """Write out reviewers using CSV."""
     writer = csv.writer(file_obj)
     writer.writerow(
-        ('Reviewer', 'Reviews','-2', '-1', '+1', '+2', '+/- %',
+        ('Reviewer', 'Reviews', '-2', '-1', '+1', '+2', '+A', '+/- %',
          'Disagreements', 'Disagreement%'))
     for (name, r_data, d_data) in reviewer_data:
         row = (name,) + r_data + d_data
@@ -95,10 +98,10 @@ def write_pretty(reviewer_data, file_obj):
     """Write out reviewers using PrettyTable."""
     table = prettytable.PrettyTable(
         ('Reviewer',
-         'Reviews   -2  -1  +1  +2    +/- %',
+         'Reviews   -2  -1  +1  +2  +A    +/- %',
          'Disagreements*'))
     for (name, r_data, d_data) in reviewer_data:
-        r = '%7d  %3d %3d %3d %3d   %s' % r_data
+        r = '%7d  %3d %3d %3d %3d %3d   %s' % r_data
         d = '%3d (%s)' % d_data
         table.add_row((name, r, d))
     file_obj.write("%s\n" % table)
@@ -122,7 +125,7 @@ def main(argv=None):
             'the output parameter to generate file names.')
     optparser.add_option(
         '--outputs', default=['txt'], action='append',
-        help='Select what outputs to generate. (html only support today).')
+        help='Select what outputs to generate. (txt,csv).')
     optparser.add_option(
         '-d', '--days', type='int', default=14,
         help='Number of days to consider')
@@ -168,7 +171,7 @@ def main(argv=None):
         ratio = (plus / (plus + minus)) * 100
         r = (k['total'], k['votes']['-2'],
             k['votes']['-1'], k['votes']['1'],
-            k['votes']['2'], "%5.1f%%" % ratio)
+            k['votes']['2'], k['votes']['A'], "%5.1f%%" % ratio)
         dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
         d = (k['disagreements'], "%5.1f%%" % dratio)
         reviewer_data.append((name, r, d))
