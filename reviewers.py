@@ -61,6 +61,7 @@ def process_patchset(project, patchset, reviewers, ts):
         reviewers.setdefault(
             reviewer, {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0, 'A': 0}})
         reviewers[reviewer].setdefault('disagreements', 0)
+        reviewers[reviewer].setdefault('total', 0)
         if review['type'] == 'APRV':
             cur = reviewers[reviewer]['votes']['A']
             reviewers[reviewer]['votes']['A'] = cur + 1
