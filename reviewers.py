@@ -169,7 +169,7 @@ def main(argv=None):
         name = '%s%s' % (v, ' **' if in_core_team else '')
         plus = float(k['votes']['2'] + k['votes']['1'])
         minus = float(k['votes']['-2'] + k['votes']['-1'])
-        ratio = (plus / (plus + minus)) * 100
+        ratio = ((plus / (plus + minus)) * 100) if plus + minus > 0 else 0
         r = (k['total'], k['votes']['-2'],
             k['votes']['-1'], k['votes']['1'],
             k['votes']['2'], k['votes']['A'], "%5.1f%%" % ratio)
