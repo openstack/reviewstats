@@ -1,0 +1,10 @@
+{
+    "name": "solum",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/solum"
+    ],
+    "core-team": [
+	"aotto"
+    ]
+}
