@@ -25,13 +25,13 @@ metadata() {
 
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
-	for time in 30 60 90 180 ; do
+	for time in 30 60 90 180 365 1095; do
 		(metadata && ./reviewers.py -p ${project} -d ${time} ${EXTRA_ARGS} -o results/${project_base}-reviewers-${time} --outputs txt --outputs csv)
 	done
 done
 
 if [ "${all}" = "1" ] ; then
-	for time in 30 60 90 180 ; do
+	for time in 30 60 90 180 365 1095; do
 		(metadata && ./reviewers.py -a -d ${time} ${EXTRA_ARGS} -o results/all-reviewers-${time} --outputs txt --outputs csv)
 	done
 fi
