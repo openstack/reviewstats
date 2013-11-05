@@ -139,8 +139,8 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
                                     % (quartile_age(waiting_on_reviewer,
                                                     quartile=3,
                                                     key='age3'))))
-    stats.append(('Stats since the last revision without -1 or -2 '
-                  '(ignoring jenkins)', last_without_nack_stats))
+    stats.append(('Stats since the last revision without -1 or -2 ',
+                 last_without_nack_stats))
 
     first_rev_stats = []
     first_rev_stats.append(('Average wait time', '%s'
@@ -169,8 +169,8 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
         changes.append('%s %s (%s)' % (sec_to_period_string(change['age3']),
                                        format_url(change['url'], options),
                                        change['subject']))
-    stats.append(('Longest waiting reviews (based on oldest rev without nack, '
-                  'ignoring jenkins)', changes))
+    stats.append(('Longest waiting reviews (based on oldest rev without -1 or'
+                 ' -2)', changes))
 
     changes = []
     for change in age2_sorted[:options.longest_waiting]:
@@ -245,8 +245,6 @@ def find_oldest_no_nack(change):
     for patch in reversed(change['patchSets']):
         nacked = False
         for review in patch.get('approvals', []):
-            if review['type'] != 'CRVW' and review['type'] != 'Code-Review':
-                continue
             if review['value'] in ('-1', '-2'):
                 nacked = True
                 break
