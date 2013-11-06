@@ -1,0 +1,15 @@
+{
+    "name": "climate",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/climate"
+    ],
+    "core-team": [
+        "jdanjou",
+        "sbauza",
+        "dbelova",
+        "swann",
+        "frossigneux",
+        "starodubcevna"
+    ]
+}
