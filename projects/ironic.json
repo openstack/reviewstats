@@ -3,7 +3,7 @@
     "openstack/python-ironicclient"
 ], "core-team": [
     "devananda",
-    "lucasgomes",
+    "lucasagomes",
     "lifeless",
     "mikalstill",
     "nobodycam",
