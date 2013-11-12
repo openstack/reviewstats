@@ -160,6 +160,7 @@ def main(argv=None):
     # Do logical processing of reviewers.
     reviewer_data = []
     total = 0
+    core_total = 0
     for k, v in reviewers:
         in_core_team = False
         for project in projects:
@@ -177,6 +178,8 @@ def main(argv=None):
         d = (k['disagreements'], "%5.1f%%" % dratio)
         reviewer_data.append((name, r, d))
         total += k['total']
+        if in_core_team:
+            core_total += k['total']
     # And output.
     writers = {
         'csv': write_csv,
@@ -210,6 +213,8 @@ def main(argv=None):
             writer(reviewer_data, file_obj)
             file_obj.write('\nTotal reviews: %d\n' % total)
             file_obj.write('Total reviewers: %d\n' % len(reviewers))
+            file_obj.write('Total reviews by core team: %d\n' % core_total)
+            file_obj.write('Core team size: %d\n' % len(project['core-team']))
             file_obj.write(
                 '\n(*) Disagreements are defined as a +1 or +2 vote on a ' \
                 'patch where a core team member later gave a -1 or -2 vote' \
