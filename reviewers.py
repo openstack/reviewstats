@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2011 - Soren Hansen
 # Copyright (C) 2013 - Red Hat, Inc.
@@ -32,9 +33,20 @@ def round_to_day(ts):
     return (ts / (SECONDS_PER_DAY)) * SECONDS_PER_DAY
 
 
+def set_defaults(reviewer, reviewers):
+    reviewers.setdefault(
+        reviewer, {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0, 'A': 0}})
+    reviewers[reviewer].setdefault('disagreements', 0)
+    reviewers[reviewer].setdefault('total', 0)
+    reviewers[reviewer].setdefault('received', 0)
+
+
 def process_patchset(project, patchset, reviewers, ts):
     latest_core_neg_vote = 0
     latest_core_pos_vote = 0
+
+    submitter = patchset['uploader'].get('username', 'unknown')
+
     for review in patchset.get('approvals', []):
         if review['type'] != 'CRVW':
             # Only count code reviews.  Don't add another for Approved, which
@@ -58,16 +70,16 @@ def process_patchset(project, patchset, reviewers, ts):
             continue
 
         reviewer = review['by'].get('username', 'unknown')
-        reviewers.setdefault(
-            reviewer, {'votes': {'-2': 0, '-1': 0, '1': 0, '2': 0, 'A': 0}})
-        reviewers[reviewer].setdefault('disagreements', 0)
-        reviewers[reviewer].setdefault('total', 0)
+        set_defaults(reviewer, reviewers)
+
         if review['type'] == 'APRV':
             cur = reviewers[reviewer]['votes']['A']
             reviewers[reviewer]['votes']['A'] = cur + 1
         else:
             cur_total = reviewers[reviewer].get('total', 0)
             reviewers[reviewer]['total'] = cur_total + 1
+            set_defaults(submitter, reviewers)
+            reviewers[submitter]['received'] += 1
             cur = reviewers[reviewer]['votes'][review['value']]
             reviewers[reviewer]['votes'][review['value']] = cur + 1
             if (review['value'] in ('1', '2')
@@ -89,9 +101,9 @@ def write_csv(reviewer_data, file_obj):
     writer = csv.writer(file_obj)
     writer.writerow(
         ('Reviewer', 'Reviews', '-2', '-1', '+1', '+2', '+A', '+/- %',
-         'Disagreements', 'Disagreement%'))
-    for (name, r_data, d_data) in reviewer_data:
-        row = (name,) + r_data + d_data
+         'Disagreements', 'Disagreement%', 'Received'))
+    for (name, r_data, d_data, s_data) in reviewer_data:
+        row = (name,) + r_data + d_data + s_data
         writer.writerow(row)
 
 
@@ -100,11 +112,13 @@ def write_pretty(reviewer_data, file_obj):
     table = prettytable.PrettyTable(
         ('Reviewer',
          'Reviews   -2  -1  +1  +2  +A    +/- %',
-         'Disagreements*'))
-    for (name, r_data, d_data) in reviewer_data:
+         'Disagreements*',
+         'Received***'))
+    for (name, r_data, d_data, s_data) in reviewer_data:
         r = '%7d  %3d %3d %3d %3d %3d   %s' % r_data
         d = '%3d (%s)' % d_data
-        table.add_row((name, r, d))
+        s = '%3d (%s)' % s_data
+        table.add_row((name, r, d, s))
     file_obj.write("%s\n" % table)
 
 
@@ -183,7 +197,10 @@ def main(argv=None):
             k['votes']['2'], k['votes']['A'], "%5.1f%%" % ratio)
         dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
         d = (k['disagreements'], "%5.1f%%" % dratio)
-        reviewer_data.append((name, r, d))
+        sratio = ((float(k['total']) / k['received']) * 100
+                  if k['received'] else 0)
+        s = (k['received'], "%5.1f%%" % sratio if k['received'] else '∞')
+        reviewer_data.append((name, r, d, s))
         total += k['total']
         if in_core_team:
             core_total += k['total']
@@ -229,6 +246,12 @@ def main(argv=None):
                 'patch where a core team member later gave a -1 or -2 vote' \
                 ', or a negative vote overridden with a positive one ' \
                 'afterwards.\n')
+            file_obj.write(
+                '\n(***) Received - the number of reviews that this person '
+                'received on their patches in this time period. The given '
+                'ratio is the number of reviews given over the number '
+                'received.\n')
+
         finally:
             if on_done:
                 on_done()
