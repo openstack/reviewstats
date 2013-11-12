@@ -33,23 +33,6 @@ def sec_to_period_string(seconds):
     return '%d days, %d hours, %d minutes' % (days, hours, minutes)
 
 
-def get_age_of_patch(patch, now_ts):
-    approvals = patch.get('approvals', [])
-    approvals.sort(key=lambda a: a['grantedOn'])
-    # The createdOn timestamp on the patch isn't what we want.
-    # It's when the patch was written, not submitted for review.
-    # The next best thing in the data we have is the time of the
-    # first review.  When all is working well, jenkins or smokestack
-    # will comment within the first hour or two, so that's better
-    # than the other timestamp, which may reflect that the code
-    # was written many weeks ago, even though it was just recently
-    # submitted for review.
-    if approvals:
-        return now_ts - approvals[0]['grantedOn']
-    else:
-        return now_ts - patch['createdOn']
-
-
 def average_age(changes, key='age'):
     if not changes:
         return 0
@@ -335,10 +318,10 @@ def main(argv=None):
                 waiting_for_review = False
                 break
 
-        change['age'] = get_age_of_patch(latest_patch, now_ts)
-        change['age2'] = get_age_of_patch(change['patchSets'][0], now_ts)
+        change['age'] = utils.get_age_of_patch(latest_patch, now_ts)
+        change['age2'] = utils.get_age_of_patch(change['patchSets'][0], now_ts)
         patch = find_oldest_no_nack(change)
-        change['age3'] = get_age_of_patch(patch, now_ts) if patch else 0
+        change['age3'] = utils.get_age_of_patch(patch, now_ts) if patch else 0
 
         if waiting_for_review:
             waiting_on_reviewer.append(change)

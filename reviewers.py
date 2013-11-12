@@ -145,14 +145,21 @@ def main(argv=None):
 
     reviewers = {}
 
-    cut_off = datetime.datetime.now() - datetime.timedelta(days=options.days)
+    now = datetime.datetime.utcnow()
+    cut_off = now - datetime.timedelta(days=options.days)
     ts = calendar.timegm(cut_off.timetuple())
+    now_ts = calendar.timegm(now.timetuple())
+
+    patches_created = 0
 
     for project in projects:
         changes = utils.get_changes([project], options.user, options.key)
         for change in changes:
             for patchset in change.get('patchSets', []):
                 process_patchset(project, patchset, reviewers, ts)
+                age = utils.get_age_of_patch(patchset, now_ts)
+                if (now_ts - age) > ts:
+                    patches_created += 1
 
     reviewers = [(v, k) for k, v in reviewers.iteritems()
                  if k.lower() not in ('jenkins', 'smokestack')]
@@ -215,6 +222,8 @@ def main(argv=None):
             file_obj.write('Total reviewers: %d\n' % len(reviewers))
             file_obj.write('Total reviews by core team: %d\n' % core_total)
             file_obj.write('Core team size: %d\n' % len(project['core-team']))
+            file_obj.write('New patch sets in the last %d days: %d\n' % (
+                           options.days, patches_created))
             file_obj.write(
                 '\n(*) Disagreements are defined as a +1 or +2 vote on a ' \
                 'patch where a core team member later gave a -1 or -2 vote' \
