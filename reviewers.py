@@ -235,12 +235,16 @@ def main(argv=None):
                 file_obj.write(
                     '** -- %s-core team member\n' % projects[0]['name'])
             writer(reviewer_data, file_obj)
-            file_obj.write('\nTotal reviews: %d\n' % total)
+            file_obj.write('\nTotal reviews: %d (%.1f/day)\n' % (total,
+                float(total) / options.days))
             file_obj.write('Total reviewers: %d\n' % len(reviewers))
-            file_obj.write('Total reviews by core team: %d\n' % core_total)
+            file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
+                core_total, float(core_total) / options.days))
             file_obj.write('Core team size: %d\n' % len(project['core-team']))
-            file_obj.write('New patch sets in the last %d days: %d\n' % (
-                           options.days, patches_created))
+            file_obj.write(
+                'New patch sets in the last %d days: %d (%.1f/day)\n'
+                % (options.days, patches_created,
+                   float(patches_created) / options.days))
             file_obj.write(
                 '\n(*) Disagreements are defined as a +1 or +2 vote on a ' \
                 'patch where a core team member later gave a -1 or -2 vote' \
