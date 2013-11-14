@@ -237,12 +237,16 @@ def main(argv=None):
             writer(reviewer_data, file_obj)
             file_obj.write('\nTotal reviews: %d (%.1f/day)\n' % (total,
                 float(total) / options.days))
-            file_obj.write('Total reviewers: %d\n' % len(reviewers))
+            file_obj.write('Total reviewers: %d (avg %.1f reviews/day)\n' % (
+                           len(reviewers),
+                           float(total) / options.days / len(reviewers)))
             file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
                 core_total, float(core_total) / options.days))
             core_team_size = sum([len(project['core-team'])
                                   for project in projects])
-            file_obj.write('Core team size: %d\n' % core_team_size)
+            file_obj.write('Core team size: %d (avg %.1f reviews/day)\n' % (
+                           core_team_size,
+                           float(core_total) / options.days / core_team_size))
             file_obj.write(
                 'New patch sets in the last %d days: %d (%.1f/day)\n'
                 % (options.days, patches_created,
