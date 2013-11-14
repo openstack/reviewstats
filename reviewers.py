@@ -199,7 +199,7 @@ def main(argv=None):
         d = (k['disagreements'], "%5.1f%%" % dratio)
         sratio = ((float(k['total']) / k['received']) * 100
                   if k['received'] else 0)
-        s = (k['received'], "%5.1f%%" % sratio if k['received'] else '∞')
+        s = (k['received'], "%5.1f%%" % sratio if k['received'] else 'inf')
         reviewer_data.append((name, r, d, s))
         total += k['total']
         if in_core_team:
