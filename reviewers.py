@@ -165,15 +165,34 @@ def main(argv=None):
     now_ts = calendar.timegm(now.timetuple())
 
     patches_created = 0
+    changes_created = 0
+    changes_involved = 0
+    changes_merged = 0
+    changes_abandoned = 0
+    changes_wip = 0
 
     for project in projects:
         changes = utils.get_changes([project], options.user, options.key)
         for change in changes:
+            patch_for_change = False
+            first_patchset = True
             for patchset in change.get('patchSets', []):
                 process_patchset(project, patchset, reviewers, ts)
                 age = utils.get_age_of_patch(patchset, now_ts)
                 if (now_ts - age) > ts:
                     patches_created += 1
+                    patch_for_change = True
+                    if first_patchset:
+                        changes_created += 1
+                first_patchset = False
+            if patch_for_change:
+                changes_involved += 1
+                if change['status'] == 'MERGED':
+                    changes_merged += 1
+                elif change['status'] == 'ABANDONED':
+                    changes_abandoned += 1
+                elif change['status'] == 'WORKINPROGRESS':
+                    changes_wip += 1
 
     reviewers = [(v, k) for k, v in reviewers.iteritems()
                  if k.lower() not in ('jenkins', 'smokestack')]
@@ -251,6 +270,37 @@ def main(argv=None):
                 'New patch sets in the last %d days: %d (%.1f/day)\n'
                 % (options.days, patches_created,
                    float(patches_created) / options.days))
+            file_obj.write(
+                'Changes involved in the last %d days: %d (%.1f/day)\n'
+                % (options.days, changes_involved,
+                   float(changes_involved) / options.days))
+            file_obj.write(
+                '  New changes in the last %d days: %d (%.1f/day)\n'
+                % (options.days, changes_created,
+                   float(changes_created) / options.days))
+            file_obj.write(
+                '  Changes merged in the last %d days: %d (%.1f/day)\n'
+                % (options.days, changes_merged,
+                   float(changes_merged) / options.days))
+            file_obj.write(
+                '  Changes abandoned in the last %d days: %d (%.1f/day)\n'
+                % (options.days, changes_abandoned,
+                   float(changes_abandoned) / options.days))
+            file_obj.write(
+                ('  Changes left in state WIP in the last %d days: %d '
+                 '(%.1f/day)\n')
+                % (options.days, changes_wip,
+                   float(changes_wip) / options.days))
+            queue_growth = (changes_created - changes_merged -
+                            changes_abandoned - changes_wip)
+            file_obj.write(
+                ('  Queue growth in the last %d days: %d '
+                 '(%.1f/day)\n')
+                % (options.days, queue_growth,
+                   float(queue_growth) / options.days))
+            file_obj.write(
+                '  Average number of patches per changeset: %.1f\n'
+                % (float(patches_created) / changes_involved))
             file_obj.write(
                 '\n(*) Disagreements are defined as a +1 or +2 vote on a ' \
                 'patch where a core team member later gave a -1 or -2 vote' \
