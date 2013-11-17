@@ -2,7 +2,8 @@
     "name": "solum",
     "unofficial": true,
     "subprojects": [
-        "stackforge/solum"
+        "stackforge/solum",
+        "stackforge/python-solumclient"
     ],
     "core-team": [
         "aotto",
