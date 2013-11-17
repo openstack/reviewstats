@@ -5,6 +5,10 @@
         "stackforge/solum"
     ],
     "core-team": [
-	"aotto"
+        "aotto",
+        "russellb",
+        "mordred",
+        "lifeless",
+        "kgriffs"
     ]
 }
