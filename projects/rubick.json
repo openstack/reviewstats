@@ -1,0 +1,11 @@
+{
+    "name": "rubick",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/rubick"
+    ],
+    "core-team": [
+        "mkulkin",
+        "gelbuhos"
+    ]
+}
