@@ -1,0 +1,13 @@
+{
+    "name": "storyboard",
+    "subprojects": [
+        "openstack-infra/storyboard"
+    ],
+    "core-team": [
+        "ttx",
+        "cboylan",
+        "fungi",
+        "corvus",
+        "monty"
+    ]
+}
