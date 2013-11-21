@@ -210,11 +210,13 @@ def main(argv=None):
         name = '%s%s' % (v, ' **' if in_core_team else '')
         plus = float(k['votes']['2'] + k['votes']['1'])
         minus = float(k['votes']['-2'] + k['votes']['-1'])
-        ratio = ((plus / (plus + minus)) * 100) if plus + minus > 0 else 0
+        all_reviews = plus + minus
+        ratio = ((plus / (all_reviews)) * 100) if all_reviews > 0 else 0
         r = (k['total'], k['votes']['-2'],
             k['votes']['-1'], k['votes']['1'],
             k['votes']['2'], k['votes']['A'], "%5.1f%%" % ratio)
-        dratio = ((float(k['disagreements']) / plus) * 100) if plus else 0.0
+        dratio = (((float(k['disagreements']) / all_reviews) * 100)
+                  if all_reviews else 0.0)
         d = (k['disagreements'], "%5.1f%%" % dratio)
         sratio = ((float(k['total']) / k['received']) * 100
                   if k['received'] else 0)
