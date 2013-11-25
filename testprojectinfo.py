@@ -24,7 +24,7 @@ import utils
 def main():
     logging.basicConfig(level=logging.DEBUG)
     # Make sure all projects info load successfully
-    projects = utils.get_projects_info('', True)
+    utils.get_projects_info('', True)
     return 0
 
 

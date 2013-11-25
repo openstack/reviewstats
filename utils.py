@@ -18,11 +18,11 @@
 import cPickle as pickle
 import glob
 import json
-import paramiko
+import logging
 import os
 import time
-import logging
 
+import paramiko
 
 CACHE_AGE = 3600  # Seconds
 
