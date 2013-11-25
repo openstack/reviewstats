@@ -15,5 +15,5 @@ metadata() {
 
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
-	(metadata && ./reviews_for_bugs.py -p ${project} ${EXTRA_ARGS}) > results/${project_base}-reviews-for-bugs.txt
+	(metadata && reviews_for_bugs -p ${project} ${EXTRA_ARGS}) > results/${project_base}-reviews-for-bugs.txt
 done

@@ -1,5 +1,3 @@
-#!/usr/bin/python
-#
 # Copyright 2013 Russell Bryant <rbryant@redhat.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -91,6 +89,3 @@ def main():
             print '--> %s -- https://bugs.launchpad.net/%s/+bug/%s' \
                 % (review, project_name, bugid)
         print
-
-if __name__ == '__main__':
-    sys.exit(main())
