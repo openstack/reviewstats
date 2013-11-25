@@ -11,7 +11,7 @@
 # under the License.
 
 from reviewstats.tests import base
-import utils
+from reviewstats import utils
 
 
 class TestProjectInfo(base.TestCase):

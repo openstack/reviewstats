@@ -26,7 +26,7 @@ import getpass
 import optparse
 import sys
 
-import utils
+from reviewstats import utils
 
 
 def main(argv=None):

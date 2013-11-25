@@ -23,7 +23,7 @@ import logging
 import optparse
 import sys
 
-import utils
+from reviewstats import utils
 
 
 def sec_to_period_string(seconds):
