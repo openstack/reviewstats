@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright (C) 2011 - Soren Hansen
 # Copyright (C) 2013 - Red Hat, Inc.
 #
@@ -335,7 +333,3 @@ def main(argv=None):
         print_stats_html(stats)
     else:
         print_stats_txt(stats)
-
-
-if __name__ == '__main__':
-    sys.exit(main())

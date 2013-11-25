@@ -26,18 +26,18 @@ metadata() {
 
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
-	(metadata && ./openreviews.py -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openreviews.txt
-	./openreviews.py -p ${project} --html ${EXTRA_ARGS} > results/${project_base}-openreviews.html
+	(metadata && openreviews -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openreviews.txt
+	openreviews -p ${project} --html ${EXTRA_ARGS} > results/${project_base}-openreviews.html
 	(metadata && openapproved -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openapproved.txt
 done
 
 if [ "${all}" = "1" ] ; then
-	(metadata && ./openreviews.py -a ${EXTRA_ARGS}) > results/all-openreviews.txt.tmp
+	(metadata && openreviews -a ${EXTRA_ARGS}) > results/all-openreviews.txt.tmp
 	for f in results/*-openreviews.txt ; do
 		(echo && cat $f) >> results/all-openreviews.txt.tmp
 	done
 	mv results/all-openreviews.txt.tmp results/all-openreviews.txt
-	./openreviews.py -a --html ${EXTRA_ARGS} | grep -v '</html>' > results/all-openreviews.html.tmp
+	openreviews -a --html ${EXTRA_ARGS} | grep -v '</html>' > results/all-openreviews.html.tmp
 	for f in results/*-openreviews.html ; do
 		cat $f | grep -v 'html>' | grep -v 'head>' >> results/all-openreviews.html.tmp
 	done
