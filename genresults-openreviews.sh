@@ -28,7 +28,7 @@ for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
 	(metadata && ./openreviews.py -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openreviews.txt
 	./openreviews.py -p ${project} --html ${EXTRA_ARGS} > results/${project_base}-openreviews.html
-	(metadata && ./openapproved.py -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openapproved.txt
+	(metadata && openapproved -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openapproved.txt
 done
 
 if [ "${all}" = "1" ] ; then
@@ -44,5 +44,5 @@ if [ "${all}" = "1" ] ; then
 	echo "</html>" >> results/all-openreviews.html.tmp
 	mv results/all-openreviews.html.tmp results/all-openreviews.html
 
-	(metadata && ./openapproved.py -a ${EXTRA_ARGS}) > results/all-openapproved.txt
+	(metadata && openapproved -a ${EXTRA_ARGS}) > results/all-openapproved.txt
 fi

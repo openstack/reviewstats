@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright (C) 2011 - Soren Hansen
 # Copyright (C) 2013 - Red Hat, Inc.
 #
@@ -86,7 +84,3 @@ def has_negative_feedback(patch_set):
                 and review['value'] in ('-1', '-2'):
             return True
     return False
-
-
-if __name__ == '__main__':
-    sys.exit(main())
