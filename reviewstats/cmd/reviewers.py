@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2011 - Soren Hansen
@@ -320,7 +319,3 @@ def main(argv=None):
             if on_done:
                 on_done()
     return 0
-
-
-if __name__ == '__main__':
-    sys.exit(main())
