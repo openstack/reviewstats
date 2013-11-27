@@ -19,7 +19,7 @@ from launchpadlib.launchpad import Launchpad
 import re
 import sys
 
-import utils
+from reviewstats import utils
 
 
 def main():
