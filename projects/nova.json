@@ -1,1 +1,27 @@
-{"name": "nova", "subprojects": ["openstack/nova", "openstack/python-novaclient", "openstack/compute-api"], "core-team": ["jogo", "sdague", "danms", "p-draigbrady", "mikalstill", "russellb", "cerberus", "markmc", "cbehrens", "klmitch", "cyeoh-0", "vishvananda", "belliott", "ndipanov", "alaski", "berrange", "johngarbutt"]}
+{
+    "name": "nova",
+    "subprojects": [
+        "openstack/nova",
+        "openstack/python-novaclient",
+        "openstack/compute-api"
+    ],
+    "core-team": [
+        "alaski",
+        "belliott",
+        "berrange",
+        "cbehrens",
+        "cerberus",
+        "cyeoh-0",
+        "danms",
+        "jogo",
+        "johngarbutt",
+        "klmitch",
+        "markmc",
+        "mikalstill",
+        "ndipanov",
+        "p-draigbrady",
+        "russellb",
+        "sdague",
+        "vishvananda"
+    ]
+}
