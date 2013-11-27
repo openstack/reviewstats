@@ -17,7 +17,6 @@ from argparse import ArgumentParser
 import getpass
 from launchpadlib.launchpad import Launchpad
 import re
-import sys
 
 from reviewstats import utils
 
