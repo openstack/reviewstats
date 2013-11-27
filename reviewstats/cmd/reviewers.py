@@ -24,7 +24,7 @@ import optparse
 import prettytable
 import sys
 
-import utils
+from reviewstats import utils
 
 
 def round_to_day(ts):
