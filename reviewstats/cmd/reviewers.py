@@ -27,6 +27,13 @@ import sys
 from reviewstats import utils
 
 
+# NOTE(russellb) This data is tracked but not currently put in the
+# output because it needs to be made more accurate.  Right now trivial
+# rebases that have reviews automatically re-applied get included, and
+# they shouldn't be.
+ENABLE_RECEIVED = False
+
+
 def round_to_day(ts):
     SECONDS_PER_DAY = 60 * 60 * 24
     return (ts / (SECONDS_PER_DAY)) * SECONDS_PER_DAY
@@ -98,26 +105,35 @@ def process_patchset(project, patchset, reviewers, ts):
 def write_csv(reviewer_data, file_obj):
     """Write out reviewers using CSV."""
     writer = csv.writer(file_obj)
+    row = ['Reviewer', 'Reviews', '-2', '-1', '+1', '+2', '+A', '+/- %',
+         'Disagreements', 'Disagreement%']
+    if ENABLE_RECEIVED:
+        row.append('Received')
     writer.writerow(
-        ('Reviewer', 'Reviews', '-2', '-1', '+1', '+2', '+A', '+/- %',
-         'Disagreements', 'Disagreement%', 'Received'))
+        )
     for (name, r_data, d_data, s_data) in reviewer_data:
-        row = (name,) + r_data + d_data + s_data
+        row = [name, r_data, d_data]
+        if ENABLED_RECEIVED:
+            row.append(s_data)
         writer.writerow(row)
 
 
 def write_pretty(reviewer_data, file_obj):
     """Write out reviewers using PrettyTable."""
-    table = prettytable.PrettyTable(
-        ('Reviewer',
-         'Reviews   -2  -1  +1  +2  +A    +/- %',
-         'Disagreements*',
-         'Received***'))
+    columns = ['Reviewer',
+               'Reviews   -2  -1  +1  +2  +A    +/- %',
+               'Disagreements*']
+    if ENABLE_RECEIVED:
+        columns.append('Received***')
+    table = prettytable.PrettyTable(columns)
     for (name, r_data, d_data, s_data) in reviewer_data:
         r = '%7d  %3d %3d %3d %3d %3d   %s' % r_data
         d = '%3d (%s)' % d_data
         s = '%3d (%s)' % s_data
-        table.add_row((name, r, d, s))
+        row = [name, r, d]
+        if ENABLE_RECEIVED:
+            row.append(s)
+        table.add_row(row)
     file_obj.write("%s\n" % table)
 
 
@@ -309,11 +325,12 @@ def main(argv=None):
                 'patch where a core team member later gave a -1 or -2 vote'
                 ', or a negative vote overridden with a positive one '
                 'afterwards.\n')
-            file_obj.write(
-                '\n(***) Received - the number of reviews that this person '
-                'received on their patches in this time period. The given '
-                'ratio is the number of reviews given over the number '
-                'received.\n')
+            if ENABLE_RECEIVED:
+                file_obj.write(
+                    '\n(***) Received - number of reviews that this person '
+                    'received on their patches in this time period. The given '
+                    'ratio is the number of reviews given over the number '
+                    'received.\n')
 
         finally:
             if on_done:
