@@ -2,4 +2,5 @@ paramiko
 pbr>=0.5.21,<1.0
 prettytable
 Babel>=0.9.6
+pytz>=2010h
 six>=1.4.1

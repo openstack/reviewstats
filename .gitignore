@@ -1,4 +1,5 @@
 *.pickle
+.lpcreds
 results
 *.py[cod]
 

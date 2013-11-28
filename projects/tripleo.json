@@ -30,4 +30,12 @@
     "slagle",
     "tomas-8c8",
     "tzumainn"
+], "lp_projects": [
+    "diskimage-builder",
+    "os-apply-config",
+    "os-collect-config",
+    "os-refresh-config",
+    "python-tuskarclient",
+    "tripleo",
+    "tuskar"
 ]}
