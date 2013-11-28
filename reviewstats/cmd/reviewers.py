@@ -275,9 +275,10 @@ def main(argv=None):
             file_obj.write(
                 '\nTotal reviews: %d (%.1f/day)\n' % (
                 total, float(total) / options.days))
+            num_reviewers = len([r for r in reviewers if r[0]['total']])
             file_obj.write(
                 'Total reviewers: %d (avg %.1f reviews/day)\n' % (
-                len(reviewers), float(total) / options.days / len(reviewers)))
+                num_reviewers, float(total) / options.days / num_reviewers))
             file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
                 core_total, float(core_total) / options.days))
             core_team_size = sum([len(project['core-team'])
