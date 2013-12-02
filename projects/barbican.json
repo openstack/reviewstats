@@ -1,0 +1,13 @@
+{
+    "name": "barbican",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/barbican"
+    ],
+    "core-team": [
+        "dougmendizabal",
+        "woodster",
+        "reaperhulk",
+        "john.vrbanac"
+    ]
+}
