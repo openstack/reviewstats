@@ -102,7 +102,8 @@ def process_patchset(project, patchset, reviewers, ts):
                 reviewers[reviewer]['disagreements'] = cur + 1
 
 
-def write_csv(reviewer_data, file_obj):
+def write_csv(reviewer_data, file_obj, options, reviewers, projects,
+              totals, change_stats):
     """Write out reviewers using CSV."""
     writer = csv.writer(file_obj)
     row = ['Reviewer', 'Reviews', '-2', '-1', '+1', '+2', '+A', '+/- %',
@@ -117,8 +118,25 @@ def write_csv(reviewer_data, file_obj):
         writer.writerow(row)
 
 
-def write_pretty(reviewer_data, file_obj):
+def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
+                 totals, change_stats):
     """Write out reviewers using PrettyTable."""
+
+    if options.all:
+        file_obj.write(
+            'Reviews for the last %d days in projects: %s\n' %
+            (options.days, [project['name'] for project in projects]))
+    else:
+        file_obj.write(
+            'Reviews for the last %d days in %s\n'
+            % (options.days, projects[0]['name']))
+    if options.all:
+        file_obj.write(
+            '** -- Member of at least one core reviewer team\n')
+    else:
+        file_obj.write(
+            '** -- %s-core team member\n' % projects[0]['name'])
+
     columns = ['Reviewer',
                'Reviews   -2  -1  +1  +2  +A    +/- %',
                'Disagreements*']
@@ -134,6 +152,67 @@ def write_pretty(reviewer_data, file_obj):
             row.append(s)
         table.add_row(row)
     file_obj.write("%s\n" % table)
+
+    file_obj.write(
+        '\nTotal reviews: %d (%.1f/day)\n' % (
+        totals['all'], float(totals['all']) / options.days))
+    num_reviewers = len([r for r in reviewers if r[0]['total']])
+    file_obj.write(
+        'Total reviewers: %d (avg %.1f reviews/day)\n' % (
+        num_reviewers, float(totals['all']) / options.days / num_reviewers))
+    file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
+        totals['core'], float(totals['core']) / options.days))
+    core_team_size = sum([len(project['core-team'])
+                          for project in projects])
+    file_obj.write('Core team size: %d (avg %.1f reviews/day)\n' % (
+                   core_team_size,
+                   float(totals['core']) / options.days / core_team_size))
+    file_obj.write(
+        'New patch sets in the last %d days: %d (%.1f/day)\n'
+        % (options.days, change_stats['patches'],
+           float(change_stats['patches']) / options.days))
+    file_obj.write(
+        'Changes involved in the last %d days: %d (%.1f/day)\n'
+        % (options.days, change_stats['involved'],
+           float(change_stats['involved']) / options.days))
+    file_obj.write(
+        '  New changes in the last %d days: %d (%.1f/day)\n'
+        % (options.days, change_stats['created'],
+           float(change_stats['created']) / options.days))
+    file_obj.write(
+        '  Changes merged in the last %d days: %d (%.1f/day)\n'
+        % (options.days, change_stats['merged'],
+           float(change_stats['merged']) / options.days))
+    file_obj.write(
+        '  Changes abandoned in the last %d days: %d (%.1f/day)\n'
+        % (options.days, change_stats['abandoned'],
+           float(change_stats['abandoned']) / options.days))
+    file_obj.write(
+        ('  Changes left in state WIP in the last %d days: %d '
+         '(%.1f/day)\n')
+        % (options.days, change_stats['wip'],
+           float(change_stats['wip']) / options.days))
+    queue_growth = (change_stats['created'] - change_stats['merged'] -
+                    change_stats['abandoned'] - change_stats['wip'])
+    file_obj.write(
+        ('  Queue growth in the last %d days: %d '
+         '(%.1f/day)\n')
+        % (options.days, queue_growth,
+           float(queue_growth) / options.days))
+    file_obj.write(
+        '  Average number of patches per changeset: %.1f\n'
+        % (float(change_stats['patches']) / change_stats['involved']))
+    file_obj.write(
+        '\n(*) Disagreements are defined as a +1 or +2 vote on a '
+        'patch where a core team member later gave a -1 or -2 vote'
+        ', or a negative vote overridden with a positive one '
+        'afterwards.\n')
+    if ENABLE_RECEIVED:
+        file_obj.write(
+            '\n(***) Received - number of reviews that this person '
+            'received on their patches in this time period. The given '
+            'ratio is the number of reviews given over the number '
+            'received.\n')
 
 
 def main(argv=None):
@@ -178,12 +257,14 @@ def main(argv=None):
     ts = calendar.timegm(cut_off.timetuple())
     now_ts = calendar.timegm(now.timetuple())
 
-    patches_created = 0
-    changes_created = 0
-    changes_involved = 0
-    changes_merged = 0
-    changes_abandoned = 0
-    changes_wip = 0
+    change_stats = {
+        'patches': 0,
+        'created': 0,
+        'involved': 0,
+        'merged': 0,
+        'abandoned': 0,
+        'wip': 0,
+    }
 
     for project in projects:
         changes = utils.get_changes([project], options.user, options.key)
@@ -194,27 +275,29 @@ def main(argv=None):
                 process_patchset(project, patchset, reviewers, ts)
                 age = utils.get_age_of_patch(patchset, now_ts)
                 if (now_ts - age) > ts:
-                    patches_created += 1
+                    change_stats['patches'] += 1
                     patch_for_change = True
                     if first_patchset:
-                        changes_created += 1
+                        change_stats['created'] += 1
                 first_patchset = False
             if patch_for_change:
-                changes_involved += 1
+                change_stats['involved'] += 1
                 if change['status'] == 'MERGED':
-                    changes_merged += 1
+                    change_stats['merged'] += 1
                 elif change['status'] == 'ABANDONED':
-                    changes_abandoned += 1
+                    change_stats['abandoned'] += 1
                 elif change['status'] == 'WORKINPROGRESS':
-                    changes_wip += 1
+                    change_stats['wip'] += 1
 
     reviewers = [(v, k) for k, v in reviewers.iteritems()
                  if k.lower() not in ('jenkins', 'smokestack')]
     reviewers.sort(reverse=True, key=lambda r: r[0]['total'])
     # Do logical processing of reviewers.
     reviewer_data = []
-    total = 0
-    core_total = 0
+    totals = {
+        'all': 0,
+        'core': 0,
+    }
     for k, v in reviewers:
         in_core_team = False
         for project in projects:
@@ -236,9 +319,9 @@ def main(argv=None):
                   if k['received'] else 0)
         s = (k['received'], "%5.1f%%" % sratio if k['received'] else 'inf')
         reviewer_data.append((name, r, d, s))
-        total += k['total']
+        totals['all'] += k['total']
         if in_core_team:
-            core_total += k['total']
+            totals['core'] += k['total']
     # And output.
     writers = {
         'csv': write_csv,
@@ -256,82 +339,8 @@ def main(argv=None):
             on_done = file_obj.close
         try:
             writer = writers[output]
-            if options.all:
-                file_obj.write(
-                    'Reviews for the last %d days in projects: %s\n' %
-                    (options.days, [project['name'] for project in projects]))
-            else:
-                file_obj.write(
-                    'Reviews for the last %d days in %s\n'
-                    % (options.days, projects[0]['name']))
-            if options.all:
-                file_obj.write(
-                    '** -- Member of at least one core reviewer team\n')
-            else:
-                file_obj.write(
-                    '** -- %s-core team member\n' % projects[0]['name'])
-            writer(reviewer_data, file_obj)
-            file_obj.write(
-                '\nTotal reviews: %d (%.1f/day)\n' % (
-                total, float(total) / options.days))
-            num_reviewers = len([r for r in reviewers if r[0]['total']])
-            file_obj.write(
-                'Total reviewers: %d (avg %.1f reviews/day)\n' % (
-                num_reviewers, float(total) / options.days / num_reviewers))
-            file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
-                core_total, float(core_total) / options.days))
-            core_team_size = sum([len(project['core-team'])
-                                  for project in projects])
-            file_obj.write('Core team size: %d (avg %.1f reviews/day)\n' % (
-                           core_team_size,
-                           float(core_total) / options.days / core_team_size))
-            file_obj.write(
-                'New patch sets in the last %d days: %d (%.1f/day)\n'
-                % (options.days, patches_created,
-                   float(patches_created) / options.days))
-            file_obj.write(
-                'Changes involved in the last %d days: %d (%.1f/day)\n'
-                % (options.days, changes_involved,
-                   float(changes_involved) / options.days))
-            file_obj.write(
-                '  New changes in the last %d days: %d (%.1f/day)\n'
-                % (options.days, changes_created,
-                   float(changes_created) / options.days))
-            file_obj.write(
-                '  Changes merged in the last %d days: %d (%.1f/day)\n'
-                % (options.days, changes_merged,
-                   float(changes_merged) / options.days))
-            file_obj.write(
-                '  Changes abandoned in the last %d days: %d (%.1f/day)\n'
-                % (options.days, changes_abandoned,
-                   float(changes_abandoned) / options.days))
-            file_obj.write(
-                ('  Changes left in state WIP in the last %d days: %d '
-                 '(%.1f/day)\n')
-                % (options.days, changes_wip,
-                   float(changes_wip) / options.days))
-            queue_growth = (changes_created - changes_merged -
-                            changes_abandoned - changes_wip)
-            file_obj.write(
-                ('  Queue growth in the last %d days: %d '
-                 '(%.1f/day)\n')
-                % (options.days, queue_growth,
-                   float(queue_growth) / options.days))
-            file_obj.write(
-                '  Average number of patches per changeset: %.1f\n'
-                % (float(patches_created) / changes_involved))
-            file_obj.write(
-                '\n(*) Disagreements are defined as a +1 or +2 vote on a '
-                'patch where a core team member later gave a -1 or -2 vote'
-                ', or a negative vote overridden with a positive one '
-                'afterwards.\n')
-            if ENABLE_RECEIVED:
-                file_obj.write(
-                    '\n(***) Received - number of reviews that this person '
-                    'received on their patches in this time period. The given '
-                    'ratio is the number of reviews given over the number '
-                    'received.\n')
-
+            writer(reviewer_data, file_obj, options, reviewers, projects,
+                   totals, change_stats)
         finally:
             if on_done:
                 on_done()
