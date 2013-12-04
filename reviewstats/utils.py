@@ -15,11 +15,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import cPickle as pickle
 import glob
 import json
 import logging
 import os
+from six.moves import cPickle as pickle
 import time
 
 import paramiko
