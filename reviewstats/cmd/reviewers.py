@@ -113,7 +113,7 @@ def write_csv(reviewer_data, file_obj):
         )
     for (name, r_data, d_data, s_data) in reviewer_data:
         row = [name, r_data, d_data]
-        if ENABLED_RECEIVED:
+        if ENABLE_RECEIVED:
             row.append(s_data)
         writer.writerow(row)
 
