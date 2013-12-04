@@ -11,11 +11,9 @@
     "openstack/tuskar",
     "openstack/tuskar-ui"
 ], "core-team": [
-    "arata776",
     "clint-fewbar",
     "cmsj",
     "derekh",
-    "devananda",
     "ifarkas",
     "jcoufal",
     "jistr",
