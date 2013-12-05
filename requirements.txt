@@ -2,3 +2,4 @@ paramiko
 pbr>=0.5.21,<1.0
 prettytable
 Babel>=0.9.6
+six>=1.4.1
