@@ -109,8 +109,7 @@ def write_csv(reviewer_data, file_obj):
          'Disagreements', 'Disagreement%']
     if ENABLE_RECEIVED:
         row.append('Received')
-    writer.writerow(
-        )
+    writer.writerow(row)
     for (name, r_data, d_data, s_data) in reviewer_data:
         row = [name, r_data, d_data]
         if ENABLE_RECEIVED:
