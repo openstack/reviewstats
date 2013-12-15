@@ -3,7 +3,8 @@
     "subprojects": [
 	"openstack/openstack-manuals",
 	"openstack/api-site",
-	"openstack/operations-guide"
+	"openstack/operations-guide",
+	"openstack/openstack-doc-tools"
     ],
     "core-team": [
 	"annegentle",
