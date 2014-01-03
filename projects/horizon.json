@@ -1,1 +1,1 @@
-{"name": "horizon", "subprojects": ["openstack/horizon"], "core-team": ["gabriel-hurley", "mrunge", "ttrifonov", "jpichon", "kspear", "amotoki", "john-postlethwait", "paul-mcmillan", "tres", "lin-hua-cheng", "david-lyle"]}
+{"name": "horizon", "subprojects": ["openstack/horizon"], "core-team": ["gabriel-hurley", "mrunge", "ttrifonov", "jpichon", "kspear", "amotoki", "tmazur", "tres", "lin-hua-cheng", "david-lyle"]}
