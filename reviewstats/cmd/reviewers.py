@@ -111,11 +111,13 @@ def write_csv(reviewer_data, file_obj, options, reviewers, projects,
     if ENABLE_RECEIVED:
         row.append('Received')
     writer.writerow(row)
-    for (name, r_data, d_data, s_data) in reviewer_data:
+    for i, (name, r_data, d_data, s_data) in enumerate(reviewer_data, start=1):
         row = [name, r_data, d_data]
         if ENABLE_RECEIVED:
             row.append(s_data)
         writer.writerow(row)
+        if options.csv_rows and i == options.csv_rows:
+            break
 
 
 def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
@@ -241,6 +243,9 @@ def main(argv=None):
         '-u', '--user', default=getpass.getuser(), help='gerrit user')
     optparser.add_option(
         '-k', '--key', default=None, help='ssh key for gerrit')
+    optparser.add_option(
+        '-r', '--csv-rows', default=0, help='Max rows for CSV output',
+        type='int', dest='csv_rows')
 
     options, args = optparser.parse_args()
 
