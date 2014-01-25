@@ -1,13 +1,15 @@
 {
     "name": "storyboard",
     "subprojects": [
-        "openstack-infra/storyboard"
+        "openstack-infra/storyboard",
+        "openstack-infra/storyboard-webclient"
     ],
     "core-team": [
         "ttx",
         "cboylan",
         "fungi",
         "corvus",
-        "monty"
+        "mordred",
+        "krotscheck"
     ]
 }
