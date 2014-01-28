@@ -2,7 +2,9 @@
     "name": "climate",
     "unofficial": true,
     "subprojects": [
-        "stackforge/climate"
+        "stackforge/climate",
+        "stackforge/climate-nova",
+        "stackforge/python-climateclient"
     ],
     "core-team": [
         "jdanjou",
