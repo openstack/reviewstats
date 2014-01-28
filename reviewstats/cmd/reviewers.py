@@ -168,7 +168,8 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
                           for project in projects])
     file_obj.write('Core team size: %d (avg %.1f reviews/day)\n' % (
                    core_team_size,
-                   float(totals['core']) / options.days / core_team_size))
+                   (float(totals['core']) / options.days / core_team_size) if
+                   core_team_size else 0))
     file_obj.write(
         'New patch sets in the last %d days: %d (%.1f/day)\n'
         % (options.days, change_stats['patches'],
