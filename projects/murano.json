@@ -1,0 +1,19 @@
+{
+    "name": "murano",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/murano-agent",
+        "stackforge/murano-api",
+        "stackforge/murano-common",
+        "stackforge/murano-conductor",
+        "stackforge/murano-dashboard",
+        "stackforge/murano-deployment",
+        "stackforge/murano-docs",
+        "stackforge/murano-metadataclient",
+        "stackforge/python-muranoclient",
+        "stackforge/murano-repository",
+        "stackforge/murano-tests"
+    ],
+    "core-team": [
+    ]
+}
