@@ -1,0 +1,12 @@
+{
+    "name": "mistral",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/mistral",
+        "stackforge/mistral-extra",
+        "stackforge/python-mistralclient"
+    ],
+    "core-team": [
+        "rakhmerov"
+    ]
+}
