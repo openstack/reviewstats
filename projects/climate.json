@@ -7,11 +7,9 @@
         "stackforge/python-climateclient"
     ],
     "core-team": [
-        "jdanjou",
         "sbauza",
         "dbelova",
         "swann",
-        "frossigneux",
         "starodubcevna"
     ]
 }
