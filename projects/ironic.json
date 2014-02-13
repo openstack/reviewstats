@@ -3,9 +3,9 @@
     "openstack/python-ironicclient"
 ], "core-team": [
     "devananda",
-    "lucasagomes",
     "lifeless",
-    "mikalstill",
+    "lucasagomes",
+    "max_lobur",
     "nobodycam",
-    "sdague"
+    "prykhodchenko"
 ]}
