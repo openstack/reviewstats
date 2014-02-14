@@ -158,7 +158,7 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
         changes.append('%s %s (%s)' % (sec_to_period_string(change['age2']),
                                        format_url(change['url'], options),
                                        change['subject']))
-    stats.append(('Longest waiting reviews (since first revision, total age)',
+    stats.append(('Oldest reviews (time since first revision)',
                   changes))
 
     result.append(stats)
