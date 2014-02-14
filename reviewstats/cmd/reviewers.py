@@ -230,6 +230,10 @@ def main(argv=None):
         '-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')
     optparser.add_option(
+        '-s', '--stable', default='', metavar='BRANCH',
+        help='Generate stats for the specified stable BRANCH ("havana") '
+             'across all integrated projects')
+    optparser.add_option(
         '-o', '--output', default='-',
         help='Where to write output. If - stdout is used and only one output'
             'format may be given. Otherwise the output format is appended to'
@@ -250,7 +254,10 @@ def main(argv=None):
 
     options, args = optparser.parse_args()
 
-    projects = utils.get_projects_info(options.project, options.all)
+    if options.stable:
+        projects = utils.get_projects_info('projects/stable.json', False)
+    else:
+        projects = utils.get_projects_info(options.project, options.all)
 
     if not projects:
         print "Please specify a project."
@@ -273,7 +280,8 @@ def main(argv=None):
     }
 
     for project in projects:
-        changes = utils.get_changes([project], options.user, options.key)
+        changes = utils.get_changes([project], options.user, options.key,
+                                    stable=options.stable)
         for change in changes:
             patch_for_change = False
             first_patchset = True
