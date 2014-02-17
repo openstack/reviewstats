@@ -57,7 +57,7 @@ def projects_q(project):
             ')')
 
 
-def get_changes(projects, ssh_user, ssh_key, only_open=False,
+def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 server='review.openstack.org'):
     all_changes = []
 
@@ -69,10 +69,12 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False,
         changes = []
         logging.debug('Getting changes for project %s' % project['name'])
 
-        if not only_open:
+        if not only_open and not stable:
             # Only use the cache for *all* changes (the entire history).
             # Requesting only the open changes isn't nearly as big of a deal,
             # so just get the current data.
+            # Also do not use cache for stable stats as they cover different
+            # results.
             pickle_fn = '.%s-changes.pickle' % project['name']
 
             if os.path.isfile(pickle_fn):
@@ -89,6 +91,8 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False,
                        '--format JSON' % projects_q(project))
                 if only_open:
                     cmd += ' status:open'
+                if stable:
+                    cmd += ' branch:stable/%s' % stable
                 if changes:
                     cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
                 stdin, stdout, stderr = client.exec_command(cmd)
@@ -97,7 +101,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False,
                 if changes[-1]['rowCount'] == 0:
                     break
 
-            if not only_open:
+            if not only_open and not stable:
                 with open(pickle_fn, 'w') as f:
                     pickle.dump(changes, f)
 

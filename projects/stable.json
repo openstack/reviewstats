@@ -1,0 +1,42 @@
+{
+    "name": "stable",
+    "unofficial": true,
+    "subprojects": [
+        "openstack/nova",
+        "openstack/swift",
+        "openstack/glance",
+        "openstack/heat",
+        "openstack/ceilometer",
+        "openstack/keystone",
+        "openstack/cinder",
+        "openstack/neutron",
+        "openstack/horizon"
+    ],
+    "core-team": [
+        "arosen",
+        "gandelman-a",
+        "apevec",
+        "zulcss",
+        "danms",
+        "davewalker",
+        "david-lyle",
+        "dolph",
+        "doug-hellmann",
+        "eglynn",
+        "flaper87",
+        "gabriel-hurley",
+        "john-griffith",
+        "jdanjou",
+        "markmc",
+        "markwash",
+        "treinish",
+        "mrunge",
+        "russellb",
+        "stevebaker",
+        "shardy",
+        "vishvananda",
+        "garyk",
+        "markmcclain",
+        "p-draigbrady"
+    ]
+}
