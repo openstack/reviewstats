@@ -15,5 +15,9 @@
         "stackforge/murano-tests"
     ],
     "core-team": [
+        "ativelkov",
+        "dteselkin",
+        "tsufiev",
+        "istalker2"
     ]
 }
