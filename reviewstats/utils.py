@@ -81,7 +81,10 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 mtime = os.stat(pickle_fn).st_mtime
                 if (time.time() - mtime) <= CACHE_AGE:
                     with open(pickle_fn, 'r') as f:
-                        changes = pickle.load(f)
+                        try:
+                            changes = pickle.load(f)
+                        except MemoryError:
+                            changes = None
 
         if not changes:
             while True:
