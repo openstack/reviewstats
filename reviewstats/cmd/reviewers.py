@@ -206,7 +206,8 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
            float(queue_growth) / options.days))
     file_obj.write(
         '  Average number of patches per changeset: %.1f\n'
-        % (float(change_stats['patches']) / change_stats['involved']))
+        % (float(change_stats['patches']) / change_stats['involved']
+           if change_stats['involved'] else 0))
     file_obj.write(
         '\n(*) Disagreements are defined as a +1 or +2 vote on a '
         'patch where a core team member later gave a -1 or -2 vote'
