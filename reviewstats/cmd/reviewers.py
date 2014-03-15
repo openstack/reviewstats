@@ -161,7 +161,9 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
     num_reviewers = len([r for r in reviewers if r[0]['total']])
     file_obj.write(
         'Total reviewers: %d (avg %.1f reviews/day)\n' % (
-        num_reviewers, float(totals['all']) / options.days / num_reviewers))
+        num_reviewers,
+        float(totals['all']) / options.days / num_reviewers
+            if num_reviewers else 0))
     file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
         totals['core'], float(totals['core']) / options.days))
     core_team_size = sum([len(project['core-team'])
