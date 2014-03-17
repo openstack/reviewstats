@@ -1,0 +1,17 @@
+{
+    "name": "sahara",
+    "subprojects": [
+        "openstack/sahara",
+        "openstack/sahara-pythonclient",
+        "openstack/sahara-dashboard",
+        "openstack/sahara-extra",
+        "openstack/sahara-image-elements",
+        "stackforge/puppet-sahara"
+    ],
+    "core-team": [
+        "slukjanov",
+        "aignatov",
+        "farrellee",
+        "jspeidel"
+    ]
+}
