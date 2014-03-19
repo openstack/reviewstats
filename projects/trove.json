@@ -1,1 +1,14 @@
-{"name": "trove", "subprojects": ["openstack/trove", "openstack/python-troveclient"], "core-team": ["tim-simpson", "vipuls", "hubcap", "slicknik", "amcreynolds"]}
+{
+    "name":"trove",
+    "subprojects":[
+        "openstack/trove",
+        "openstack/python-troveclient"
+    ],
+    "core-team":[
+        "tim-simpson",
+        "vipuls",
+        "hubcap",
+        "slicknik",
+        "amcreynolds"
+    ]
+}
