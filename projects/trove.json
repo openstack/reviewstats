@@ -4,6 +4,10 @@
         "openstack/trove",
         "openstack/python-troveclient"
     ],
+    "lp_projects":[
+        "trove",
+        "python-troveclient"
+    ],
     "core-team":[
         "tim-simpson",
         "vipuls",

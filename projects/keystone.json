@@ -5,6 +5,10 @@
         "openstack/python-keystoneclient",
         "openstack/identity-api"
     ],
+    "lp_projects":[
+        "keystone",
+        "python-keystoneclient",
+    ],
     "core-team":[
         "ayoung",
         "blk-u",

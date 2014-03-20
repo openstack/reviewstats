@@ -1,11 +1,15 @@
 {
-    "name": "solum",
-    "unofficial": true,
-    "subprojects": [
+    "name":"solum",
+    "unofficial":true,
+    "subprojects":[
         "stackforge/solum",
         "stackforge/python-solumclient"
     ],
-    "core-team": [
+    "lp_projects":[
+        "solum",
+        "python-solumclient"
+    ],
+    "core-team":[
         "aotto",
         "russellb",
         "lifeless",

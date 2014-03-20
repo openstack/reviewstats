@@ -1,6 +1,6 @@
 {
-    "name": "sahara",
-    "subprojects": [
+    "name":"sahara",
+    "subprojects":[
         "openstack/sahara",
         "openstack/sahara-pythonclient",
         "openstack/sahara-dashboard",
@@ -8,7 +8,10 @@
         "openstack/sahara-image-elements",
         "stackforge/puppet-sahara"
     ],
-    "core-team": [
+    "lp_projects":[
+        "sahara"        
+    ],
+    "core-team":[
         "slukjanov",
         "aignatov",
         "farrellee",

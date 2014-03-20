@@ -1,6 +1,6 @@
 {
-    "name": "oslo",
-    "subprojects": [
+    "name":"oslo",
+    "subprojects":[
         "openstack-dev/hacking",
         "openstack-dev/pbr",
         "openstack/oslo-incubator",
@@ -9,7 +9,14 @@
         "openstack/oslo.sphinx",
         "openstack/requirements"
     ],
-    "core-team": [
+    "lp_projects":[
+        "hacking",
+        "pbr",
+        "oslo",
+        "oslo.messaging",
+        
+    ],
+    "core-team":[
         "bnemec",
         "dims-v",
         "doug-hellmann",

@@ -1,7 +1,7 @@
 {
-    "name": "stable",
-    "unofficial": true,
-    "subprojects": [
+    "name":"stable",
+    "unofficial":true,
+    "subprojects":[
         "openstack/nova",
         "openstack/swift",
         "openstack/glance",
@@ -12,7 +12,18 @@
         "openstack/neutron",
         "openstack/horizon"
     ],
-    "core-team": [
+    "lp_projects":[
+        "nova",
+        "swift",
+        "glance",
+        "heat",
+        "ceilometer",
+        "keystone",
+        "cinder",
+        "neutron",
+        "horizon"
+    ],
+    "core-team":[
         "arosen",
         "gandelman-a",
         "apevec",

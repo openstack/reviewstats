@@ -1,10 +1,13 @@
 {
-    "name": "rubick",
-    "unofficial": true,
-    "subprojects": [
+    "name":"rubick",
+    "unofficial":true,
+    "subprojects":[
         "stackforge/rubick"
     ],
-    "core-team": [
+    "lp_projects":[
+        "rubick"
+    ],
+    "core-team":[
         "mkulkin",
         "gelbuhos"
     ]

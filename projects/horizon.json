@@ -3,6 +3,9 @@
     "subprojects":[
         "openstack/horizon"
     ],
+    "lp_projects":[
+        "horizon"
+    ],
     "core-team":[
         "gabriel-hurley",
         "mrunge",

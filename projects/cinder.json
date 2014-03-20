@@ -5,6 +5,10 @@
         "openstack/python-cinderclient",
         "openstack/volume-api"
     ],
+    "lp_projects":[
+        "cinder",
+        "python-cinderclient"
+    ],
     "core-team":[
         "john-griffith",
         "avishay-il",

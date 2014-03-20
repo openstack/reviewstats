@@ -1,12 +1,12 @@
 {
-    "name": "nova",
-    "subprojects": [
+    "name":"nova",
+    "subprojects":[
         "openstack/nova",
         "openstack/python-novaclient",
         "openstack/compute-api",
         "openstack/gantt"
     ],
-    "core-team": [
+    "core-team":[
         "alaski",
         "belliott",
         "berrange",
@@ -27,5 +27,9 @@
         "sdague",
         "vishvananda"
     ],
-    "lp_projects": ["nova", "python-novaclient"]
+    "lp_projects":[
+        "nova",
+        "python-novaclient",
+        "gantt"
+    ]
 }

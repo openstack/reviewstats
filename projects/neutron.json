@@ -5,6 +5,10 @@
         "openstack/python-neutronclient",
         "openstack/netconn-api"
     ],
+    "lp_projects":[
+        "neutron",
+        "python-neutronclient"
+    ],
     "core-team":[
         "arosen",
         "amotoki",

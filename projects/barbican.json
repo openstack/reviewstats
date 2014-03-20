@@ -1,9 +1,10 @@
 {
     "name": "barbican",
-    "unofficial": true,
+    "unofficial": false,
     "subprojects": [
         "stackforge/barbican"
     ],
+    "lp_projects": ["barbican"],
     "core-team": [
         "dougmendizabal",
         "woodster",

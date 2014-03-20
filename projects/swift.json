@@ -5,6 +5,11 @@
         "openstack/python-swiftclient",
         "openstack/swift-bench"
     ],
+    "lp_projects":[
+        "swift",
+        "python-swiftclient",
+        "swift-bench"
+    ],
     "core-team":[
         "darrellb",
         "torgomatic",

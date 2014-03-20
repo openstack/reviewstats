@@ -5,6 +5,10 @@
         "openstack/python-glanceclient",
         "openstack/image-api"
     ],
+    "lp_projects":[
+        "glance",
+        "python-glanceclient",
+    ],
     "core-team":[
         "markwash",
         "bcwaldon",

@@ -1,7 +1,7 @@
 {
-    "name": "murano",
-    "unofficial": true,
-    "subprojects": [
+    "name":"murano",
+    "unofficial":true,
+    "subprojects":[
         "stackforge/murano-agent",
         "stackforge/murano-api",
         "stackforge/murano-common",
@@ -14,7 +14,10 @@
         "stackforge/murano-repository",
         "stackforge/murano-tests"
     ],
-    "core-team": [
+    "lp_projects":[
+        "murano",        
+    ],
+    "core-team":[
         "ativelkov",
         "dteselkin",
         "tsufiev",

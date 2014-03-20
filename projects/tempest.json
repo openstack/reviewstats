@@ -1,7 +1,12 @@
 {
-    "name": "tempest",
-    "subprojects": ["openstack/tempest"],
-    "core-team": [
+    "name":"tempest",
+    "subprojects":[
+        "openstack/tempest"
+    ],
+    "lp_projects":[
+        "tempest"
+    ],
+    "core-team":[
         "afazekas",
         "cyeoh-0",
         "david-kranz",
