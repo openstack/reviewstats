@@ -1,1 +1,24 @@
-{"name": "glance", "subprojects": ["openstack/glance", "openstack/python-glanceclient", "openstack/image-api"], "core-team": ["markwash", "bcwaldon", "eglynn", "dan-prince", "flaper87", "alex-meade", "jbresnah", "iccha-sethi", "flwang", "lzy-dev"]}
+{
+    "name":"glance",
+    "subprojects":[
+        "openstack/glance",
+        "openstack/python-glanceclient",
+        "openstack/image-api"
+    ],
+    "lp_projects":[
+        "glance",
+        "python-glanceclient",
+    ],
+    "core-team":[
+        "markwash",
+        "bcwaldon",
+        "eglynn",
+        "dan-prince",
+        "flaper87",
+        "alex-meade",
+        "jbresnah",
+        "iccha-sethi",
+        "flwang",
+        "lzy-dev"
+    ]
+}

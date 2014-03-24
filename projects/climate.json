@@ -1,12 +1,16 @@
 {
-    "name": "climate",
-    "unofficial": true,
-    "subprojects": [
+    "name":"climate",
+    "unofficial":true,
+    "subprojects":[
         "stackforge/climate",
         "stackforge/climate-nova",
         "stackforge/python-climateclient"
     ],
-    "core-team": [
+    "lp_projects":[
+        "climate",
+        
+    ],
+    "core-team":[
         "sbauza",
         "dbelova",
         "swann",

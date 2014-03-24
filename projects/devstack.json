@@ -1,7 +1,12 @@
 {
-    "name": "devstack",
-    "subprojects": ["openstack-dev/devstack"],
-    "core-team": [
+    "name":"devstack",
+    "subprojects":[
+        "openstack-dev/devstack"
+    ],
+    "lp_projects":[
+        "devstack"
+    ],
+    "core-team":[
         "sdague",
         "dtroyer",
         "garyk",

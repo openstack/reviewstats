@@ -1,6 +1,7 @@
 {
     "name": "grenade",
     "subprojects": ["openstack-dev/grenade"],
+    "lp_projects": ["grenade"],
     "core-team": [
         "sdague",
         "dtroyer"

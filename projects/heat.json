@@ -1,12 +1,18 @@
 {
-    "name": "heat",
-    "subprojects": [
+    "name":"heat",
+    "subprojects":[
         "openstack/heat",
         "openstack/heat-templates",
         "openstack/heat-cfntools",
         "openstack/python-heatclient"
     ],
-    "core-team": [
+    "lp_projects":[
+        "heat",
+        "heat-templates",
+        "heat-cfntools",
+        "python-heatclient"
+    ],
+    "core-team":[
         "asalkeld",
         "bartosz-gorski",
         "clint-fewbar",

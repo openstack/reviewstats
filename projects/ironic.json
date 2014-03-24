@@ -1,11 +1,19 @@
-{"name": "ironic", "subprojects": [
-    "openstack/ironic",
-    "openstack/python-ironicclient"
-], "core-team": [
-    "devananda",
-    "lifeless",
-    "lucasagomes",
-    "max_lobur",
-    "nobodycam",
-    "prykhodchenko"
-]}
+{
+    "name":"ironic",
+    "subprojects":[
+        "openstack/ironic",
+        "openstack/python-ironicclient"
+    ],
+    "lp_projects":[
+        "ironic",
+        "python-ironicclient"
+    ],
+    "core-team":[
+        "devananda",
+        "lifeless",
+        "lucasagomes",
+        "max_lobur",
+        "nobodycam",
+        "prykhodchenko"
+    ]
+}

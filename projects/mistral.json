@@ -1,12 +1,16 @@
 {
-    "name": "mistral",
-    "unofficial": true,
-    "subprojects": [
+    "name":"mistral",
+    "unofficial":true,
+    "subprojects":[
         "stackforge/mistral",
         "stackforge/mistral-extra",
         "stackforge/python-mistralclient"
     ],
-    "core-team": [
+    "lp_projects":[
+        "mistral",
+        
+    ],
+    "core-team":[
         "rakhmerov"
     ]
 }

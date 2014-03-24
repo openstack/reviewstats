@@ -1,1 +1,23 @@
-{"name": "cinder", "subprojects": ["openstack/cinder", "openstack/python-cinderclient", "openstack/volume-api"], "core-team": ["john-griffith", "avishay-il", "zhiteng-huang", "eharney", "duncan-thomas", "thingee", "walter-boring", "jdurgin", "jsbryant"]}
+{
+    "name":"cinder",
+    "subprojects":[
+        "openstack/cinder",
+        "openstack/python-cinderclient",
+        "openstack/volume-api"
+    ],
+    "lp_projects":[
+        "cinder",
+        "python-cinderclient"
+    ],
+    "core-team":[
+        "john-griffith",
+        "avishay-il",
+        "zhiteng-huang",
+        "eharney",
+        "duncan-thomas",
+        "thingee",
+        "walter-boring",
+        "jdurgin",
+        "jsbryant"
+    ]
+}
