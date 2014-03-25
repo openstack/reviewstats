@@ -88,8 +88,13 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
 
         if not changes:
             while True:
-                client.connect(server, port=29418,
-                               key_filename=ssh_key, username=ssh_user)
+                try:
+                    client.connect(server, port=29418,
+                                   key_filename=ssh_key, username=ssh_user)
+                except paramiko.SSHException:
+                    client.connect(server, port=29418,
+                                   key_filename=ssh_key, username=ssh_user,
+                                   allow_agent=False)
                 cmd = ('gerrit query %s --all-approvals --patch-sets '
                        '--format JSON' % projects_q(project))
                 if only_open:
