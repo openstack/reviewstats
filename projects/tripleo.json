@@ -3,6 +3,7 @@
     "openstack/diskimage-builder",
     "openstack/os-apply-config",
     "openstack/os-collect-config",
+    "openstack/os-cloud-config",
     "openstack/os-refresh-config",
     "openstack/python-tuskarclient",
     "openstack/tripleo-heat-templates",
