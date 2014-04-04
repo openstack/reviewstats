@@ -9,8 +9,7 @@
     "openstack/tripleo-heat-templates",
     "openstack/tripleo-image-elements",
     "openstack/tripleo-incubator",
-    "openstack/tuskar",
-    "openstack/tuskar-ui"
+    "openstack/tuskar"
 ], "core-team": [
     "clint-fewbar",
     "cmsj",
