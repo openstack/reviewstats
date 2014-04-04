@@ -1,11 +1,16 @@
 {"name": "ironic", "subprojects": [
     "openstack/ironic",
-    "openstack/python-ironicclient"
+    "openstack/python-ironicclient",
+    "openstack/ironic-python-agent"
 ], "core-team": [
     "devananda",
     "lifeless",
     "lucasagomes",
     "max_lobur",
     "nobodycam",
-    "prykhodchenko"
+    "prykhodchenko",
+    "jayf",
+    "jimrollenhagen",
+    "joshnang",
+    "russell_h"
 ]}
