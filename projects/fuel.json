@@ -1,0 +1,25 @@
+{
+    "name": "fuel",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/fuel-main",
+        "stackforge/fuel-web",
+        "stackforge/fuel-docs",
+        "stackforge/fuel-library",
+        "stackforge/fuel-devops",
+        "stackforge/fuel-astute",
+        "stackforge/fuel-ostf",
+        "stackforge/fuel-provision"
+    ],
+    "core-team": [
+        "mihgen",
+        "NastyaUrlapova",
+        "evgeniyl",
+        "aleksey",
+        "r0mikiam",
+        "vkramskikh",
+        "aglarendil",
+        "dpyzhov",
+        "tatyana-leontovich"
+    ]
+}
