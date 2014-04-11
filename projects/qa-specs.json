@@ -1,0 +1,15 @@
+{
+    "name": "qa-specs",
+    "subprojects": ["openstack/qa-specs"],
+    "core-team": [
+        "afazekas",
+        "cyeoh-0",
+        "david-kranz",
+        "gfidente",
+        "igawa",
+        "mkoderer",
+        "oomichi",
+        "treinish",
+        "sdague"
+    ]
+}
