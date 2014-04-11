@@ -1,0 +1,13 @@
+{
+    "name": "nova-specs",
+    "subprojects": [
+        "openstack/nova-specs"
+    ],
+    "core-team": [
+        "alaski",
+        "danms",
+        "jogo",
+        "johngarbutt",
+        "russellb"
+    ]
+}
