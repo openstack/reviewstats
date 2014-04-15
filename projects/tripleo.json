@@ -11,12 +11,15 @@
     "openstack/tripleo-incubator",
     "openstack/tuskar"
 ], "core-team": [
+    "bnemec",
     "clint-fewbar",
     "cmsj",
     "derekh",
     "dan-prince",
     "ghe.rivero",
+    "greghaynes",
     "ifarkas",
+    "jdob",
     "jistr",
     "jprovazn",
     "lifeless",
