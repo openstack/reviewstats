@@ -4,20 +4,16 @@
     "subprojects": [
         "stackforge/murano-agent",
         "stackforge/murano-api",
-        "stackforge/murano-common",
-        "stackforge/murano-conductor",
         "stackforge/murano-dashboard",
         "stackforge/murano-deployment",
         "stackforge/murano-docs",
-        "stackforge/murano-metadataclient",
-        "stackforge/python-muranoclient",
-        "stackforge/murano-repository",
-        "stackforge/murano-tests"
+        "stackforge/python-muranoclient"
     ],
     "core-team": [
         "ativelkov",
         "dteselkin",
         "tsufiev",
-        "istalker2"
+        "istalker2",
+        "ruhe"
     ]
 }
