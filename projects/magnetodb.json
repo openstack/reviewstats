@@ -1,0 +1,12 @@
+{
+    "name": "magnetodb",
+    "unofficial": true,
+    "subprojects": [
+        "stackforge/magnetodb"
+    ],
+    "core-team": [
+        "isviridov",
+        "dukhlov",
+        "ikhudoshyn"
+    ]
+}
