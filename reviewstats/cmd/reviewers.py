@@ -124,6 +124,8 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
                  totals, change_stats):
     """Write out reviewers using PrettyTable."""
 
+    file_obj.write(str(datetime.datetime.utcnow()) + '\n\n')
+
     if options.all:
         file_obj.write(
             'Reviews for the last %d days in projects: %s\n' %
