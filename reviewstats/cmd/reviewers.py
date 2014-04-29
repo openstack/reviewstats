@@ -54,9 +54,9 @@ def process_patchset(project, patchset, reviewers, ts):
     submitter = patchset['uploader'].get('username', 'unknown')
 
     for review in patchset.get('approvals', []):
-        if review['type'] != 'CRVW':
+        if review['type'] != 'Code-Review':
             # Only count code reviews.  Don't add another for Approved, which
-            # is type 'APRV'
+            # is type 'Approved' or 'Workflow'
             continue
         if review['by'].get('username', 'unknown') not in project['core-team']:
             # Only checking for disagreements from core team members
@@ -72,16 +72,17 @@ def process_patchset(project, patchset, reviewers, ts):
         if review['grantedOn'] < ts:
             continue
 
-        if review['type'] not in ('CRVW', 'APRV'):
+        if review['type'] not in ('Code-Review', 'Approved', 'Workflow'):
             continue
 
         reviewer = review['by'].get('username', 'unknown')
         set_defaults(reviewer, reviewers)
 
-        if review['type'] == 'APRV':
+        if (review['type'] == 'Approved' or
+                (review['type'] == 'Workflow' and int(review['value']) > 0)):
             cur = reviewers[reviewer]['votes']['A']
             reviewers[reviewer]['votes']['A'] = cur + 1
-        else:
+        elif review['type'] != 'Workflow':
             cur_total = reviewers[reviewer].get('total', 0)
             reviewers[reviewer]['total'] = cur_total + 1
             set_defaults(submitter, reviewers)

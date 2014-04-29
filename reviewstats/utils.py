@@ -197,7 +197,8 @@ def patch_set_approved(patch_set):
     """
     approvals = patch_set.get('approvals', [])
     for review in approvals:
-        if review['type'] == 'APRV':
+        if (review['type'] == 'Approved' or
+                (review['type'] == 'Workflow' and int(review['value']) > 0)):
             return True
     return False
 
