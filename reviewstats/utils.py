@@ -203,6 +203,31 @@ def patch_set_approved(patch_set):
     return False
 
 
+def is_workinprogress(change):
+    """Return True if the patchset is WIP
+
+    :param dict change: De-serialized dict of a gerrit change
+
+    :return: True if one of the votes on the review sets it to WIP.
+    """
+    # This indicates WIP for older Gerrit versions
+    if change['status'] != 'NEW':
+        return True
+
+    # Gerrit 2.8 WIP
+    last_patch = change['patchSets'][-1]
+    try:
+        approvals = last_patch['approvals']
+    except KeyError:
+        # Means no one has voted on the latest patch set yet
+        return False
+    for a in approvals:
+        if a['type'] == 'Workflow' and int(a['value']) < 0:
+            return True
+
+    return False
+
+
 def get_age_of_patch(patch, now_ts):
     """Compute the number of seconds since the patch submission and now.
 

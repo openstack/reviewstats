@@ -298,7 +298,7 @@ def main(argv=None):
             continue
         if not options.stable and 'stable' in change['branch']:
             continue
-        if change['status'] != 'NEW':
+        if utils.is_workinprogress(change):
             # Filter out WORKINPROGRESS
             continue
         latest_patch = change['patchSets'][-1]
