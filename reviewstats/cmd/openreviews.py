@@ -175,7 +175,7 @@ def print_stats_txt(stats, f=sys.stdout):
 
     def print_item_txt(item, level):
         if isinstance(item, basestring):
-            f.write('%s\n' % item)
+            f.write('%s\n' % item.encode('utf-8'))
         elif isinstance(item, list):
             print_list_txt(item, level + 1)
         elif isinstance(item, tuple):
@@ -204,7 +204,7 @@ def print_stats_html(stats, f=sys.stdout):
 
     def print_item_html(item, level):
         if isinstance(item, basestring):
-            f.write('%s' % item)
+            f.write('%s' % item.encode('utf-8'))
         elif isinstance(item, list):
             print_list_html(item, level + 1)
         elif isinstance(item, tuple):
