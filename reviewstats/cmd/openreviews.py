@@ -91,7 +91,7 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     latest_rev_stats = []
     latest_rev_stats.append(('Average wait time', '%s'
                              % (average_age(waiting_on_reviewer))))
-    latest_rev_stats.append(('1rd quartile wait time', '%s'
+    latest_rev_stats.append(('1st quartile wait time', '%s'
                              % (quartile_age(waiting_on_reviewer,
                                              quartile=1))))
     latest_rev_stats.append(('Median wait time', '%s'
@@ -109,7 +109,7 @@ def gen_stats(projects, waiting_on_reviewer, waiting_on_submitter, options):
     last_without_nack_stats.append(('Average wait time', '%s'
                                     % (average_age(waiting_on_reviewer,
                                                    key='age3'))))
-    last_without_nack_stats.append(('1rd quartile wait time', '%s'
+    last_without_nack_stats.append(('1st quartile wait time', '%s'
                                     % (quartile_age(waiting_on_reviewer,
                                                     quartile=1,
                                                     key='age3'))))
