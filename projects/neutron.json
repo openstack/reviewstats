@@ -3,7 +3,8 @@
     "subprojects": [
         "openstack/neutron",
         "openstack/python-neutronclient",
-        "openstack/netconn-api"
+        "openstack/netconn-api",
+        "openstack/neutron-specs"
     ],
     "core-team": [
         "arosen",
