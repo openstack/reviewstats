@@ -5,14 +5,14 @@
         "openstack/tripleo-ui"
     ],
     "core-team": [
-        "gabriel-hurley",
+        "akrivoka",
         "mrunge",
         "ttrifonov",
         "jpichon",
         "kspear",
         "amotoki",
         "tmazur",
-        "tres",
+        "niu-zglinux",
         "lin-hua-cheng",
         "david-lyle",
         "thesheep"
