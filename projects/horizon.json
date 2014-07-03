@@ -1,1 +1,20 @@
-{"name": "horizon", "subprojects": ["openstack/horizon", "openstack/tripleo-ui"], "core-team": ["gabriel-hurley", "mrunge", "ttrifonov", "jpichon", "kspear", "amotoki", "tmazur", "tres", "lin-hua-cheng", "david-lyle", "thesheep"]}
+{
+    "name": "horizon",
+    "subprojects": [
+        "openstack/horizon",
+        "openstack/tripleo-ui"
+    ],
+    "core-team": [
+        "gabriel-hurley",
+        "mrunge",
+        "ttrifonov",
+        "jpichon",
+        "kspear",
+        "amotoki",
+        "tmazur",
+        "tres",
+        "lin-hua-cheng",
+        "david-lyle",
+        "thesheep"
+    ]
+}
