@@ -1,0 +1,14 @@
+{
+    "name": "taskflow",
+    "subprojects": [
+        "openstack/taskflow"
+    ],
+    "core-team": [
+        "doug-hellmann",
+        "changbl",
+        "imelnikov",
+        "harlowja",
+        "pran1990",
+        "dankrause"
+    ]
+}
