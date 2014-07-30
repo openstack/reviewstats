@@ -241,8 +241,8 @@ def main(argv=None):
              'across all integrated projects')
     optparser.add_option(
         '-o', '--output', default='-',
-        help='Where to write output. If - stdout is used and only one output'
-            'format may be given. Otherwise the output format is appended to'
+        help='Where to write output. If - stdout is used and only one output '
+            'format may be given. Otherwise the output format is appended to '
             'the output parameter to generate file names.')
     optparser.add_option(
         '--outputs', default=['txt'], action='append',
