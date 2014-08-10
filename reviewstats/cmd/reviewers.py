@@ -257,6 +257,9 @@ def main(argv=None):
     optparser.add_option(
         '-r', '--csv-rows', default=0, help='Max rows for CSV output',
         type='int', dest='csv_rows')
+    optparser.add_option(
+        '--server', default='review.openstack.org',
+        help='Gerrit server to connect to')
 
     options, args = optparser.parse_args()
 
@@ -287,7 +290,8 @@ def main(argv=None):
 
     for project in projects:
         changes = utils.get_changes([project], options.user, options.key,
-                                    stable=options.stable)
+                                    stable=options.stable,
+                                    server=options.server)
         for change in changes:
             patch_for_change = False
             first_patchset = True
