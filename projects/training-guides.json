@@ -1,0 +1,13 @@
+{
+    "name": "training-guides",
+    "subprojects": [
+        "openstack/training-guides"
+    ],
+    "core-team": [
+        "colinmcnamara",
+        "dguitarbite",
+        "rluethi",
+        "matjazp",
+        "seanrob"
+    ]
+}
