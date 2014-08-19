@@ -1,0 +1,14 @@
+{
+    "name": "security-doc",
+    "subprojects": [
+        "openstack/security-doc"
+    ],
+    "core-team": [
+        "annegentle",
+        "bdpayne",
+        "berendt",
+        "hyakuhei",
+        "jaegerandi",
+        "nkinder"
+    ]
+}

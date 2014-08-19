@@ -1,0 +1,12 @@
+{
+    "name": "docs-specs",
+    "subprojects": [
+        "openstack/docs-specs"
+    ],
+    "core-team": [
+        "annegentle",
+        "bdpayne",
+        "jaegerandi",
+        "sroberts"
+    ]
+}
