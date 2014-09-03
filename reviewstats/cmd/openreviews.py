@@ -270,6 +270,10 @@ def main(argv=None):
     optparser.add_option(
         '--projects-dir', default='./projects',
         help='Directory where to locate the project files')
+    optparser.add_option(
+        '--output', '-o', default='-',
+        help="Where to write output. - for stdout. The file will be appended"
+             " if it exists.")
 
     options, args = optparser.parse_args()
 
@@ -329,7 +333,15 @@ def main(argv=None):
     stats = gen_stats(projects, waiting_on_reviewer, waiting_on_submitter,
                       options)
 
-    if options.html:
-        print_stats_html(stats)
+    if options.output == '-':
+        output = sys.stdout
     else:
-        print_stats_txt(stats)
+        output = open(options.output, 'at')
+    try:
+        if options.html:
+            print_stats_html(stats, f=output)
+        else:
+            print_stats_txt(stats, f=output)
+    finally:
+        if output is not sys.stdout:
+            output.close()
