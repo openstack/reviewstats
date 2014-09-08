@@ -26,8 +26,8 @@ metadata() {
 
 for project in ${projects} ; do
 	project_base=$(basename $(echo ${project} | cut -f1 -d'.'))
-	(metadata && openreviews -p ${project} -l 15 ${EXTRA_ARGS}) > results/${project_base}-openreviews.txt
-	openreviews -p ${project} --html -l 15 ${EXTRA_ARGS} > results/${project_base}-openreviews.html
+	(metadata > results/${project_base}-openreviews.txt && openreviews -p ${project} -l 15 ${EXTRA_ARGS} -o results/${project_base}-openreviews.txt)
+	openreviews -p ${project} --html -l 15 ${EXTRA_ARGS} -o results/${project_base}-openreviews.html
 	(metadata && openapproved -p ${project} ${EXTRA_ARGS}) > results/${project_base}-openapproved.txt
 done
 
