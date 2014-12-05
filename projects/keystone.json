@@ -1,1 +1,21 @@
-{"name": "keystone", "subprojects": ["openstack/keystone", "openstack/python-keystoneclient", "openstack/identity-api"], "core-team": ["ayoung", "blk-u", "dolph", "guang-yee", "henry-nash", "mdrnstm", "stevemar", "jamielennox", "dstanek", "ldbragst"]}
+{
+    "name": "keystone",
+    "subprojects": [
+        "openstack/keystone",
+        "openstack/python-keystoneclient",
+        "openstack/identity-api"
+    ],
+    "core-team": [
+        "ayoung",
+        "blk-u",
+        "dolph",
+        "guang-yee",
+        "henry-nash",
+        "mdrnstm",
+        "stevemar",
+        "jamielennox",
+        "dstanek",
+        "ldbragst"
+    ]
+}
+
