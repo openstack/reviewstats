@@ -6,15 +6,16 @@
     ],
     "core-team": [
         "akrivoka",
-        "mrunge",
-        "ttrifonov",
-        "jpichon",
-        "kspear",
         "amotoki",
-        "tmazur",
-        "niu-zglinux",
-        "lin-hua-cheng",
+        "clu-m",
         "david-lyle",
-        "thesheep"
+        "jpichon",
+        "lin-hua-cheng",
+        "mrunge",
+        "niu-zglinux",
+        "thesheep",
+        "tmazur",
+        "tqtran",
+        "ttrifonov"
     ]
 }
