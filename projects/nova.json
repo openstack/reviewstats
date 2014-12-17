@@ -8,12 +8,9 @@
     ],
     "core-team": [
         "alaski",
-        "belliott",
         "berrange",
-        "cbehrens",
         "cerberus",
         "cyeoh-0",
-        "dan-prince",
         "danms",
         "jaypipes",
         "jogo",
@@ -23,10 +20,8 @@
         "mriedem",
         "ndipanov",
         "oomichi",
-        "p-draigbrady",
         "russellb",
-        "sdague",
-        "vishvananda"
+        "sdague"
     ],
     "lp_projects": ["nova", "python-novaclient"]
 }
