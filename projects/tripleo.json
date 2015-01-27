@@ -19,7 +19,6 @@
     "dan-prince",
     "ghe.rivero",
     "greghaynes",
-    "ifarkas",
     "jdob",
     "jistr",
     "jonpaul-sullivan",
@@ -29,14 +28,12 @@
     "lxsli",
     "marios",
     "mtaylor",
-    "mattydubs",
     "pblaho",
     "rdopieralski",
     "slagle",
     "stevenk",
     "tchaypo",
-    "tomas-8c8",
-    "tzumainn"
+    "tomas-8c8"
 ], "lp_projects": [
     "diskimage-builder",
     "os-apply-config",
