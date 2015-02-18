@@ -2,6 +2,9 @@
     "name": "neutron",
     "subprojects": [
         "openstack/neutron",
+        "openstack/neutron-fwaas",
+        "openstack/neutron-lbaas",
+        "openstack/neutron-vpnaas",
         "openstack/python-neutronclient",
         "openstack/netconn-api",
         "openstack/neutron-specs"
@@ -11,7 +14,7 @@
         "amotoki",
         "armando-migliaccio",
         "carl-baldwin",
-        "dougwig",
+        "dougw",
         "emagana",
         "garyk",
         "HenryG",
