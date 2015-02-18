@@ -5,11 +5,14 @@
         "openstack/python-troveclient"
     ],
     "core-team": [
-        "tim-simpson",
-        "vipuls",
-        "hubcap",
-        "slicknik",
         "amcreynolds",
-        "cp16net"
+        "amrith",
+        "cp16net",
+        "ekotowski",
+        "iccha-sethi",
+        "peterstac",
+        "slicknik",
+        "vipuls",
+        "vkmc"
     ]
 }
