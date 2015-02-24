@@ -2,6 +2,8 @@
     "name": "trove",
     "subprojects": [
         "openstack/trove",
+        "openstack/trove-integration",
+        "openstack/trove-specs",
         "openstack/python-troveclient"
     ],
     "core-team": [
