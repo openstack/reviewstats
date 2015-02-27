@@ -1,0 +1,10 @@
+{"name": "ironic-specs", "subprojects": [
+    "openstack/ironic-specs"
+], "core-team": [
+    "devananda",
+    "nobodycam",
+    "lucasagomes",
+    "dtantsur",
+    "JayF",
+    "jimrollenhagen"
+]}

@@ -1,0 +1,7 @@
+{"name": "ironic-discoverd", "subprojects": [
+    "stackforge/ironic-discoverd"
+], "core-team": [
+    "lucasagomes",
+    "ifarkas",
+    "dtantsur"
+]}
