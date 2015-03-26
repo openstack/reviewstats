@@ -17,6 +17,14 @@ if [ -n "${GERRIT_USER}" ] ; then
 	EXTRA_ARGS="-u ${GERRIT_USER}"
 fi
 
+if [ -n "${GERRIT_KEY}" ]; then
+	EXTRA_ARGS="${EXTRA_ARGS} -k ${GERRIT_KEY}"
+fi
+
+if [ -n "${GERRIT_SERVER}" ]; then
+	EXTRA_ARGS="${EXTRA_ARGS} --server ${GERRIT_SERVER}"
+fi
+
 metadata() {
 	date -u
 	echo -n "reviewstats HEAD: "
