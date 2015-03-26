@@ -44,8 +44,10 @@ def main(argv=None):
         '-k', '--key', default=None, help='ssh key for gerrit')
     optparser.add_option('-s', '--stable', action='store_true',
                          help='Include stable branch commits')
+    optparser.add_option(
+        '--server', default='review.openstack.org',
+        help='Gerrit server to connect to')
     options, args = optparser.parse_args()
-
     projects = utils.get_projects_info(options.project, options.all)
 
     if not projects:
@@ -53,7 +55,8 @@ def main(argv=None):
         sys.exit(1)
 
     changes = utils.get_changes(projects, options.user, options.key,
-                                only_open=True)
+                                only_open=True,
+                                server=options.server)
 
     approved_and_rebased = set()
     for change in changes:
