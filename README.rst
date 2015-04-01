@@ -16,7 +16,9 @@ Features
 Usage
 -----
 
-pip install reviewstats
+Clone the git repository, then install the library::
+
+    pip install .
 
 Run the scripts.
 
