@@ -4,29 +4,24 @@
         "openstack/openstack-manuals",
         "openstack/api-site",
         "openstack/operations-guide",
-        "openstack/openstack-doc-tools"
+        "openstack/openstack-doc-tools",
+        "openstack/openstackdocstheme"
     ],
     "core-team": [
+        "Alexander",
         "annegentle",
         "bdpayne",
         "berendt",
-        "colinmcnamara",
-        "daisy-ycguo",
-        "david-thingbag",
         "diane-fleming",
-        "emilienm",
         "fifieldt",
         "gpocentek",
         "ionosphere80",
         "jaegerandi",
         "loquacity",
-        "lorinh",
-        "salvatore-orlando",
-        "sarob",
-        "sdeaton2",
+        "mzlatkova",
+        "Olga",
         "sgordon",
-        "shilla-saebi",
-        "slong-g",
-        "sroberts"
+        "shillasaebi",
+        "slong"
     ]
 }
