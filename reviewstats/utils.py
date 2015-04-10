@@ -26,8 +26,6 @@ import time
 
 import paramiko
 
-CACHE_AGE = 3600  # Seconds
-
 LOG = logging.getLogger(__name__)
 
 
@@ -119,14 +117,14 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
         Cached results are pickled per project in the following filenames:
         “.{projectname}-changes.pickle”.
     """
-    all_changes = []
+    all_changes = {}
 
     client = paramiko.SSHClient()
     client.load_system_host_keys()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     for project in projects:
-        changes = []
+        changes = {}
         logging.debug('Getting changes for project %s' % project['name'])
 
         if not only_open and not stable:
@@ -134,55 +132,83 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
             pickle_fn = '.%s-changes.pickle' % project['name']
 
             if os.path.isfile(pickle_fn):
-                mtime = os.stat(pickle_fn).st_mtime
-                if (time.time() - mtime) <= CACHE_AGE:
-                    with open(pickle_fn, 'r') as f:
-                        try:
-                            changes = pickle.load(f)
-                        except MemoryError:
-                            changes = None
+                with open(pickle_fn, 'r') as f:
+                    try:
+                        changes = pickle.load(f)
+                    except MemoryError:
+                        changes = {}
 
-        if not changes:
-            while True:
-                connect_attempts = 3
-                for attempt in range(connect_attempts):
+        if not isinstance(changes, dict):
+            # The cache is in the old list format
+            changes = {}
+
+        sortkey = None
+        while True:
+            connect_attempts = 3
+            for attempt in range(connect_attempts):
+                try:
+                    client.connect(server, port=29418,
+                                   key_filename=ssh_key,
+                                   username=ssh_user)
+                except paramiko.SSHException:
                     try:
                         client.connect(server, port=29418,
                                        key_filename=ssh_key,
-                                       username=ssh_user)
+                                       username=ssh_user,
+                                       allow_agent=False)
                     except paramiko.SSHException:
-                        try:
-                            client.connect(server, port=29418,
-                                           key_filename=ssh_key,
-                                           username=ssh_user,
-                                           allow_agent=False)
-                        except paramiko.SSHException:
-                            if attempt == connect_attempts + 1:
-                                raise
-                            time.sleep(3)
-                            continue
-                    # Connected successfully
+                        if attempt == connect_attempts + 1:
+                            raise
+                        time.sleep(3)
+                        continue
+                # Connected successfully
+                break
+
+            cmd = ('gerrit query %s --all-approvals --patch-sets '
+                   '--format JSON' % projects_q(project))
+            if only_open:
+                cmd += ' status:open'
+            if stable:
+                cmd += ' branch:stable/%s' % stable
+            if sortkey:
+                cmd += ' resume_sortkey:%s' % sortkey
+            else:
+                # Get a small set the first time so we can get to checking
+                # againt the cache sooner
+                cmd += ' limit:5'
+            stdin, stdout, stderr = client.exec_command(cmd)
+            end_of_changes = False
+            for l in stdout:
+                new_change = json.loads(l)
+                if 'rowCount' in new_change:
+                    if new_change['rowCount'] == 0:
+                        # We've reached the end of all changes
+                        end_of_changes = True
+                        break
+                    else:
+                        break
+                if changes.get(new_change['id'], None) == new_change:
+                    # Changes are ordered by latest to be updated.  As soon
+                    # as we hit one that hasn't changed since our cached
+                    # version, we're done.
+                    end_of_changes = True
                     break
+                sortkey = new_change['sortKey']
+                changes[new_change['id']] = new_change
+            if end_of_changes:
+                break
 
-                cmd = ('gerrit query %s --all-approvals --patch-sets '
-                       '--format JSON' % projects_q(project))
-                if only_open:
-                    cmd += ' status:open'
-                if stable:
-                    cmd += ' branch:stable/%s' % stable
-                if changes:
-                    cmd += ' resume_sortkey:%s' % changes[-2]['sortKey']
-                stdin, stdout, stderr = client.exec_command(cmd)
-                for l in stdout:
-                    changes += [json.loads(l)]
-                if changes[-1]['rowCount'] == 0:
-                    break
+        if not only_open and not stable:
+            with open(pickle_fn, 'w') as f:
+                pickle.dump(changes, f)
 
-            if not only_open and not stable:
-                with open(pickle_fn, 'w') as f:
-                    pickle.dump(changes, f)
+        all_changes.update(changes)
 
-        all_changes.extend(changes)
+    # changes used to be a list, but is now a dict.  Convert it back to a list
+    # for the sake of not having to change all the code that calls this
+    # function (yet, anyway).
+
+    all_changes = [value for value in all_changes.itervalues()]
 
     return all_changes
 
