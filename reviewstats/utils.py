@@ -122,6 +122,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
     client = paramiko.SSHClient()
     client.load_system_host_keys()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    connected = False
 
     for project in projects:
         changes = {}
@@ -146,6 +147,8 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
         while True:
             connect_attempts = 3
             for attempt in range(connect_attempts):
+                if connected:
+                    break
                 try:
                     client.connect(server, port=29418,
                                    key_filename=ssh_key,
@@ -161,7 +164,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                             raise
                         time.sleep(3)
                         continue
-                # Connected successfully
+                connected = True
                 break
 
             cmd = ('gerrit query %s --all-approvals --patch-sets '
@@ -176,7 +179,16 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 # Get a small set the first time so we can get to checking
                 # againt the cache sooner
                 cmd += ' limit:5'
-            stdin, stdout, stderr = client.exec_command(cmd)
+            try:
+                stdin, stdout, stderr = client.exec_command(cmd)
+            except paramiko.SSHException:
+                try:
+                    client.close()
+                except Exception:
+                    pass
+                connected = False
+                time.sleep(5)
+                continue
             end_of_changes = False
             for l in stdout:
                 new_change = json.loads(l)
@@ -203,6 +215,12 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 pickle.dump(changes, f)
 
         all_changes.update(changes)
+
+    if connected:
+        try:
+            client.close()
+        except Exception:
+            pass
 
     # changes used to be a list, but is now a dict.  Convert it back to a list
     # for the sake of not having to change all the code that calls this
