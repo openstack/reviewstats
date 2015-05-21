@@ -295,3 +295,7 @@ def get_age_of_patch(patch, now_ts):
         return now_ts - approvals[0]['grantedOn']
     else:
         return now_ts - patch['createdOn']
+
+
+def get_core_team(project):
+    return project['core-team']

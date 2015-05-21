@@ -58,7 +58,8 @@ def process_patchset(project, patchset, reviewers, ts):
             # Only count code reviews.  Don't add another for Approved, which
             # is type 'Approved' or 'Workflow'
             continue
-        if review['by'].get('username', 'unknown') not in project['core-team']:
+        core_team = utils.get_core_team(project)
+        if review['by'].get('username', 'unknown') not in core_team:
             # Only checking for disagreements from core team members
             continue
         if int(review['value']) > 0:
@@ -169,7 +170,7 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
             if num_reviewers else 0))
     file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
         totals['core'], float(totals['core']) / options.days))
-    core_team_size = sum([len(project['core-team'])
+    core_team_size = sum([len(utils.get_core_team(project))
                           for project in projects])
     file_obj.write('Core team size: %d (avg %.1f reviews/day)\n' % (
                    core_team_size,
@@ -325,7 +326,7 @@ def main(argv=None):
     for k, v in reviewers:
         in_core_team = False
         for project in projects:
-            if v in project['core-team']:
+            if v in utils.get_core_team(project):
                 in_core_team = True
                 break
         name = '%s%s' % (v, ' **' if in_core_team else '')
