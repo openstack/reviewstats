@@ -3,10 +3,5 @@
     "subprojects": [
         "openstack/docs-specs"
     ],
-    "core-team": [
-        "annegentle",
-        "bdpayne",
-        "jaegerandi",
-        "sroberts"
-    ]
+    "core-team-gerrit-group": "openstack-doc-specs-core"
 }

@@ -9,18 +9,6 @@
         "openstack/python-keystoneclient-kerberos",
         "openstack/identity-api"
     ],
-    "core-team": [
-        "ayoung",
-        "blk-u",
-        "dolph",
-        "dstanek",
-        "guang-yee",
-        "henry-nash",
-        "jamielennox",
-        "ldbragst",
-        "marek-denis",
-        "mdrnstm",
-        "stevemar"
-    ]
+    "core-team-gerrit-group": "keystone-core"
 }
 

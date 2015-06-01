@@ -3,11 +3,5 @@
     "subprojects": [
         "openstack/training-guides"
     ],
-    "core-team": [
-        "colinmcnamara",
-        "dguitarbite",
-        "rluethi",
-        "matjazp",
-        "seanrob"
-    ]
+    "core-team-gerrit-group": "openstack-training-guides-core"
 }

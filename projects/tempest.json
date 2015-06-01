@@ -1,15 +1,5 @@
 {
     "name": "tempest",
     "subprojects": ["openstack/tempest"],
-    "core-team": [
-        "afazekas",
-        "cyeoh-0",
-        "andrea-frittoli",
-        "david-kranz",
-        "igawa",
-        "mkoderer",
-        "oomichi",
-        "treinish",
-        "sdague"
-    ]
+    "core-team-gerrit-group": "tempest-core"
 }

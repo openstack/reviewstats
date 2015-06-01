@@ -3,15 +3,5 @@
     "subprojects": [
         "openstack/oslo.messaging"
     ],
-    "core-team": [
-        "bnemec",
-        "dims-v",
-        "doug-hellmann",
-        "flaper87",
-        "jdanjou",
-        "markmc",
-        "mikalstill",
-        "russellb",
-        "zyluo"
-    ]
+    "core-team-gerrit-group": "oslo-messaging-core"
 }

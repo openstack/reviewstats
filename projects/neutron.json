@@ -9,20 +9,5 @@
         "openstack/netconn-api",
         "openstack/neutron-specs"
     ],
-    "core-team": [
-        "arosen",
-        "amotoki",
-        "armando-migliaccio",
-        "carl-baldwin",
-        "dougw",
-        "emagana",
-        "garyk",
-        "HenryG",
-        "kevinbenton",
-        "markmcclain",
-        "maru",
-        "mestery",
-        "obondarev",
-        "salvatore-orlando"
-    ]
+    "core-team-gerrit-group": "neutron-core"
 }

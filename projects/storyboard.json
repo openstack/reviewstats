@@ -4,12 +4,5 @@
         "openstack-infra/storyboard",
         "openstack-infra/storyboard-webclient"
     ],
-    "core-team": [
-        "ttx",
-        "cboylan",
-        "fungi",
-        "corvus",
-        "mordred",
-        "krotscheck"
-    ]
+    "core-team-gerrit-group": "storyboard-core"
 }

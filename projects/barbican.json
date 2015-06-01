@@ -4,10 +4,5 @@
     "subprojects": [
         "stackforge/barbican"
     ],
-    "core-team": [
-        "dougmendizabal",
-        "woodster",
-        "reaperhulk",
-        "john.vrbanac"
-    ]
+    "core-team-gerrit-group": "barbican-core"
 }

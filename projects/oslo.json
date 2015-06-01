@@ -22,16 +22,5 @@
         "openstack/taskflow",
         "openstack/requirements"
     ],
-    "core-team": [
-        "bnemec",
-        "dims-v",
-        "doug-hellmann",
-        "flaper87",
-        "haypo",
-        "jdanjou",
-        "markmc",
-        "mikalstill",
-        "russellb",
-        "zyluo"
-    ]
+    "core-team-gerrit-group": "oslo-core"
 }

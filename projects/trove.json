@@ -6,15 +6,5 @@
         "openstack/trove-specs",
         "openstack/python-troveclient"
     ],
-    "core-team": [
-        "amcreynolds",
-        "amrith",
-        "cp16net",
-        "ekotowski",
-        "iccha-sethi",
-        "peterstac",
-        "slicknik",
-        "vipuls",
-        "vkmc"
-    ]
+    "core-team-gerrit-group": "trove-core"
 }

@@ -15,29 +15,9 @@
     "openstack/tripleo-incubator",
     "openstack/tripleo-specs",
     "openstack/tuskar"
-], "core-team": [
-    "bnemec",
-    "clint-fewbar",
-    "cmsj",
-    "derekh",
-    "dan-prince",
-    "ghe.rivero",
-    "greghaynes",
-    "jdob",
-    "jistr",
-    "jonpaul-sullivan",
-    "jprovazn",
-    "lsmola",
-    "lxsli",
-    "marios",
-    "mtaylor",
-    "pblaho",
-    "rdopieralski",
-    "slagle",
-    "stevenk",
-    "tchaypo",
-    "tomas-8c8"
-], "lp_projects": [
+],
+    "core-team-gerrit-group": "tripleo-core",
+"lp_projects": [
     "diskimage-builder",
     "os-apply-config",
     "os-cloud-config",

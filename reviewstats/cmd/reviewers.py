@@ -47,7 +47,7 @@ def set_defaults(reviewer, reviewers):
     reviewers[reviewer].setdefault('received', 0)
 
 
-def process_patchset(project, patchset, reviewers, ts):
+def process_patchset(project, patchset, reviewers, ts, options):
     latest_core_neg_vote = 0
     latest_core_pos_vote = 0
 
@@ -58,7 +58,8 @@ def process_patchset(project, patchset, reviewers, ts):
             # Only count code reviews.  Don't add another for Approved, which
             # is type 'Approved' or 'Workflow'
             continue
-        core_team = utils.get_core_team(project)
+        core_team = utils.get_core_team(project, options.server, options.user,
+                options.password)
         if review['by'].get('username', 'unknown') not in core_team:
             # Only checking for disagreements from core team members
             continue
@@ -170,7 +171,8 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
             if num_reviewers else 0))
     file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
         totals['core'], float(totals['core']) / options.days))
-    core_team_size = sum([len(utils.get_core_team(project))
+    core_team_size = sum([len(utils.get_core_team(project, options.server,
+        options.user, options.password))
                           for project in projects])
     file_obj.write('Core team size: %d (avg %.1f reviews/day)\n' % (
                    core_team_size,
@@ -254,6 +256,9 @@ def main(argv=None):
     optparser.add_option(
         '-u', '--user', default=getpass.getuser(), help='gerrit user')
     optparser.add_option(
+        '-P', '--password', default=getpass.getuser(),
+        help='gerrit HTTP password')
+    optparser.add_option(
         '-k', '--key', default=None, help='ssh key for gerrit')
     optparser.add_option(
         '-r', '--csv-rows', default=0, help='Max rows for CSV output',
@@ -297,7 +302,7 @@ def main(argv=None):
             patch_for_change = False
             first_patchset = True
             for patchset in change.get('patchSets', []):
-                process_patchset(project, patchset, reviewers, ts)
+                process_patchset(project, patchset, reviewers, ts, options)
                 age = utils.get_age_of_patch(patchset, now_ts)
                 if (now_ts - age) > ts:
                     change_stats['patches'] += 1
@@ -326,7 +331,8 @@ def main(argv=None):
     for k, v in reviewers:
         in_core_team = False
         for project in projects:
-            if v in utils.get_core_team(project):
+            if v in utils.get_core_team(project, options.server, options.user,
+                    options.password):
                 in_core_team = True
                 break
         name = '%s%s' % (v, ' **' if in_core_team else '')

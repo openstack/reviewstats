@@ -4,18 +4,5 @@
         "openstack/horizon",
         "openstack/tripleo-ui"
     ],
-    "core-team": [
-        "akrivoka",
-        "amotoki",
-        "clu-m",
-        "david-lyle",
-        "jpichon",
-        "lin-hua-cheng",
-        "mrunge",
-        "niu-zglinux",
-        "thesheep",
-        "tmazur",
-        "tqtran",
-        "ttrifonov"
-    ]
+    "core-team-gerrit-group": "horizon-core"
 }

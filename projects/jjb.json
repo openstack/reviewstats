@@ -1,12 +1,7 @@
-{"name": "jjb", "subprojects": [
-    "openstack-infra/jenkins-job-builder"
-], "core-team": [
-    "arnaud.fabre",
-    "cboylan",
-    "corvus",
-    "fungi",
-    "hashar",
-    "mgagne",
-    "mordred",
-    "zaro0508"
-]}
+{
+    "name": "jjb",
+    "subprojects": [
+        "openstack-infra/jenkins-job-builder"
+    ],
+    "core-team-gerrit-group": "jenkins-job-builder-core"
+}

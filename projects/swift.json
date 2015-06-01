@@ -1,1 +1,9 @@
-{"name": "swift", "subprojects": ["openstack/swift", "openstack/python-swiftclient", "openstack/swift-bench"], "core-team": ["darrellb", "torgomatic", "notmyname", "clay-gerrard", "david-goetz", "redbo", "greglange", "zaitcev", "acoles", "peluse", "mattoliverau", "cschwede"]}
+{
+    "name": "swift",
+    "subprojects": [
+        "openstack/swift",
+        "openstack/python-swiftclient",
+        "openstack/swift-bench"
+    ],
+    "core-team-gerrit-group": "swift-core"
+}

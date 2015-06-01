@@ -8,14 +8,5 @@
         "openstack/sahara-image-elements",
         "stackforge/puppet-sahara"
     ],
-    "core-team": [
-        "slukjanov",
-        "aignatov",
-        "farrellee",
-        "jspeidel",
-        "alazarev",
-        "tmckay",
-        "mimccune",
-        "sreshetniak"
-    ]
+    "core-team-gerrit-group": "sahara-core"
 }

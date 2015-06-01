@@ -21,6 +21,8 @@ import glob
 import json
 import logging
 import os
+import requests
+import requests.auth
 from six.moves import cPickle as pickle
 import time
 
@@ -297,5 +299,36 @@ def get_age_of_patch(patch, now_ts):
         return now_ts - patch['createdOn']
 
 
-def get_core_team(project):
-    return project['core-team']
+TEAM_MEMBERS = {}
+
+
+def get_team_members(team_name, server, user, pw):
+    global TEAM_MEMBERS
+    if team_name in TEAM_MEMBERS:
+        return TEAM_MEMBERS[team_name]
+    auth = requests.auth.HTTPDigestAuth(user, pw)
+    groups_request = requests.get('http://%s/a/groups/' % server, auth=auth)
+    if groups_request.status_code != 200:
+        raise Exception('Please provide your Gerrit HTTP Password.')
+    text = groups_request.text
+    teams = json.loads(text[text.find('{'):])
+    text = requests.get('http://%s/a/groups/%s/detail' % (server,
+                        teams[team_name]['id']), auth=auth).text
+    team = json.loads(text[text.find('{'):])
+    members_list = [n['username'] for n in team['members']]
+    if 'hudson-openstack' in members_list:
+        # This is a review.openstack.org specific hack.  This user is
+        # automatically included in core teams, but we don't want to include it
+        # in the stats.
+        members_list.remove('hudson-openstack')
+    TEAM_MEMBERS[team_name] = members_list
+    return members_list
+
+
+def get_core_team(project, server, user, pw):
+    if 'core-team' in project:
+        return project['core-team']
+    if 'core-team-gerrit-group' in project:
+        return get_team_members(project['core-team-gerrit-group'],
+                                server, user, pw)
+    return []

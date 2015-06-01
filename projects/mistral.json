@@ -6,7 +6,5 @@
         "stackforge/mistral-extra",
         "stackforge/python-mistralclient"
     ],
-    "core-team": [
-        "rakhmerov"
-    ]
+    "core-team-gerrit-group": "mistral-core"
 }

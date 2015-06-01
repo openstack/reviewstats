@@ -5,13 +5,5 @@
         "stackforge/solum",
         "stackforge/python-solumclient"
     ],
-    "core-team": [
-        "aotto",
-        "lifeless",
-        "noorul",
-        "asalkeld",
-        "devdatta-kulkarni",
-        "gokrokve",
-        "julienvey"
-    ]
+    "core-team-gerrit-group": "solum-core"
 }

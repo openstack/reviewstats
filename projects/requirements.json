@@ -1,24 +1,8 @@
-{"name": "requirements", "subprojects": [
-    "openstack/requirements"
-], "core-team": [
-    "alex_gaynor",
-    "cboylan",
-    "corvus",
-    "dan-prince",
-    "davewalker",
-    "doug-hellmann",
-    "ewindisch",
-    "fungi",
-    "gabriel-hurley",
-    "ghe.rivero",
-    "heckj",
-    "jdanjou",
-    "markmc",
-    "markmcclain",
-    "mordred",
-    "sdague",
-    "slukjanov",
-    "ttx",
-    "zulcss"
-]}
+{
+    "name": "requirements",
+    "subprojects": [
+        "openstack/requirements"
+    ],
+    "core-team-gerrit-group": "requirements-core"
+}
 

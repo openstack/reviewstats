@@ -3,12 +3,5 @@
     "subprojects": [
         "openstack/nova-specs"
     ],
-    "core-team": [
-        "alaski",
-        "berrange",
-        "danms",
-        "jogo",
-        "johngarbutt",
-        "mikalstill"
-    ]
+    "core-team-gerrit-group": "nova-specs-core"
 }

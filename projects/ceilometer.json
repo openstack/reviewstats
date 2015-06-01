@@ -1,1 +1,8 @@
-{"name": "ceilometer", "subprojects": ["openstack/ceilometer", "openstack/python-ceilometerclient"], "core-team": ["jdanjou", "doug-hellmann", "chungg", "lianhao-lu", "asalkeld", "eglynn", "nijaba", "corvus", "ildikov", "nprivalova"]}
+{
+    "name": "ceilometer",
+    "subprojects": [
+        "openstack/ceilometer",
+        "openstack/python-ceilometerclient"
+    ],
+    "core-team-gerrit-group": "ceilometer-core"
+}

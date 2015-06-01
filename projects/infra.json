@@ -115,12 +115,6 @@
     "openstack-infra/zuul",
     "openstack-infra/zuul-packaging",
     "openstack/openstack-planet"
-], "core-team": [
-    "cboylan",
-    "corvus",
-    "fungi",
-    "jhesketh",
-    "lyz",
-    "mordred",
-    "slukjanov"
-]}
+],
+    "core-team-gerrit-group": "infra-core"
+}

@@ -11,16 +11,5 @@
         "stackforge/fuel-ostf",
         "stackforge/fuel-provision"
     ],
-    "core-team": [
-        "mihgen",
-        "NastyaUrlapova",
-        "evgeniyl",
-        "aleksey",
-        "r0mikiam",
-        "vkramskikh",
-        "aglarendil",
-        "dpyzhov",
-        "tatyana-leontovich",
-        "angdraug"
-    ]
+    "core-team-gerrit-group": "fuel-core"
 }

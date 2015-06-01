@@ -9,11 +9,5 @@
         "stackforge/murano-docs",
         "stackforge/python-muranoclient"
     ],
-    "core-team": [
-        "ativelkov",
-        "dteselkin",
-        "tsufiev",
-        "istalker2",
-        "ruhe"
-    ]
+    "core-team-gerrit-group": "murano-core"
 }

@@ -4,8 +4,5 @@
     "subprojects": [
         "stackforge/rubick"
     ],
-    "core-team": [
-        "mkulkin",
-        "gelbuhos"
-    ]
+    "core-team-gerrit-group": "rubick-core"
 }

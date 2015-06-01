@@ -6,18 +6,5 @@
         "openstack/heat-cfntools",
         "openstack/python-heatclient"
     ],
-    "core-team": [
-        "asalkeld",
-        "huangtianhua",
-        "jbd",
-        "pshchelo",
-        "randall-burt",
-        "steve-stevebaker",
-        "shardy",
-        "skraynev",
-        "tengqm",
-        "therve",
-        "thomasspatzier",
-        "zaneb"
-    ]
+    "core-team-gerrit-group": "heat-core"
 }

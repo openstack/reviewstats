@@ -1,17 +1,9 @@
-{"name": "ironic", "subprojects": [
-    "openstack/ironic",
-    "openstack/python-ironicclient",
-    "openstack/ironic-python-agent"
-], "core-team": [
-    "devananda",
-    "lucasagomes",
-    "nobodycam",
-    "JayF",
-    "jimrollenhagen",
-    "rloo",
-    "yuriyz",
-    "whaom",
-    "dtantsur",
-    "dshrews",
-    "JoshNang"
-]}
+{
+    "name": "ironic",
+    "subprojects": [
+        "openstack/ironic",
+        "openstack/python-ironicclient",
+        "openstack/ironic-python-agent"
+    ],
+    "core-team-gerrit-group": "ironic-core"
+}

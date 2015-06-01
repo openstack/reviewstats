@@ -1,8 +1,5 @@
 {
     "name": "grenade",
     "subprojects": ["openstack-dev/grenade"],
-    "core-team": [
-        "sdague",
-        "dtroyer"
-    ]
+    "core-team-gerrit-group": "grenade-core"
 }

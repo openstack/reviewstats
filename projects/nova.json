@@ -6,21 +6,6 @@
         "openstack/python-novaclient",
         "openstack/compute-api"
     ],
-    "core-team": [
-        "alaski",
-        "berrange",
-        "cerberus",
-        "danms",
-        "jaypipes",
-        "jogo",
-        "johngarbutt",
-        "klmitch",
-        "mikalstill",
-        "melwitt",
-        "mriedem",
-        "ndipanov",
-        "oomichi",
-        "sdague"
-    ],
+    "core-team-gerrit-group": "nova-core",
     "lp_projects": ["nova", "python-novaclient"]
 }

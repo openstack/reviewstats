@@ -7,21 +7,5 @@
         "openstack/openstack-doc-tools",
         "openstack/openstackdocstheme"
     ],
-    "core-team": [
-        "Alexander",
-        "annegentle",
-        "bdpayne",
-        "berendt",
-        "diane-fleming",
-        "fifieldt",
-        "gpocentek",
-        "ionosphere80",
-        "jaegerandi",
-        "loquacity",
-        "mzlatkova",
-        "Olga",
-        "sgordon",
-        "shillasaebi",
-        "slong"
-    ]
+    "core-team-gerrit-group": "openstack-doc-core"
 }
