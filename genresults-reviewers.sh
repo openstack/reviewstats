@@ -17,7 +17,7 @@ if [ -n "${GERRIT_USER}" ] ; then
 fi
 
 if [ -n "${GERRIT_PASS}" ] ; then
-	EXTRA_ARGS="-P ${GERRIT_PASS}"
+	EXTRA_ARGS="${EXTRA_ARGS} -P ${GERRIT_PASS}"
 fi
 
 if [ -n "${GERRIT_KEY}" ] ; then
