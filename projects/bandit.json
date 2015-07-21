@@ -1,0 +1,7 @@
+{
+    "name": "bandit",
+    "subprojects": [
+        "openstack/bandit"
+    ],
+    "core-team-gerrit-group": "bandit-core"
+}
