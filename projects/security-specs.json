@@ -1,0 +1,5 @@
+{
+    "name": "security-specs",
+    "subprojects": ["openstack/security-specs"],
+    "core-team-gerrit-group": "security-specs-core"
+}
