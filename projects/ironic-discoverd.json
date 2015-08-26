@@ -1,7 +1,0 @@
-{
-    "name": "ironic-discoverd",
-    "subprojects": [
-        "stackforge/ironic-discoverd"
-    ],
-    "core-team-gerrit-group": "ironic-discoverd-core"
-}
