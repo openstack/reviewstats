@@ -4,4 +4,4 @@ source = reviewstats
 omit = reviewstats/tests/*,reviewstats/openstack/*
 
 [report]
-ignore-errors = True
+ignore_errors = True
