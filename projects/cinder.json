@@ -3,7 +3,7 @@
     "subprojects": [
         "openstack/cinder",
         "openstack/python-cinderclient",
-        "openstack/volume-api"
+        "openstack/os-brick"
     ],
     "core-team-gerrit-group": "cinder-core"
 }
