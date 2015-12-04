@@ -2,7 +2,7 @@
     "name": "barbican",
     "unofficial": true,
     "subprojects": [
-        "stackforge/barbican"
+        "openstack/barbican"
     ],
     "core-team-gerrit-group": "barbican-core"
 }
