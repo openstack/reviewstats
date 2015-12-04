@@ -1,12 +1,13 @@
 {
     "name": "sahara",
     "subprojects": [
+        "openstack/puppet-sahara",
+        "openstack/python-saharaclient",
         "openstack/sahara",
-        "openstack/sahara-pythonclient",
+        "openstack/sahara-ci-config",
         "openstack/sahara-dashboard",
         "openstack/sahara-extra",
-        "openstack/sahara-image-elements",
-        "stackforge/puppet-sahara"
+        "openstack/sahara-image-elements"
     ],
     "core-team-gerrit-group": "sahara-core"
 }
