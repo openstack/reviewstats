@@ -2,14 +2,13 @@
     "name": "fuel",
     "unofficial": true,
     "subprojects": [
-        "stackforge/fuel-main",
-        "stackforge/fuel-web",
-        "stackforge/fuel-docs",
-        "stackforge/fuel-library",
-        "stackforge/fuel-devops",
-        "stackforge/fuel-astute",
-        "stackforge/fuel-ostf",
-        "stackforge/fuel-provision"
+        "openstack/fuel-main",
+        "openstack/fuel-web",
+        "openstack/fuel-docs",
+        "openstack/fuel-library",
+        "openstack/fuel-devops",
+        "openstack/fuel-astute",
+        "openstack/fuel-ostf"
     ],
     "core-team-gerrit-group": "fuel-core"
 }
