@@ -2,12 +2,14 @@
     "name": "murano",
     "unofficial": true,
     "subprojects": [
-        "stackforge/murano-agent",
-        "stackforge/murano-api",
-        "stackforge/murano-dashboard",
-        "stackforge/murano-deployment",
-        "stackforge/murano-docs",
-        "stackforge/python-muranoclient"
+        "openstack/murano",
+        "openstack/murano-agent",
+        "openstack/murano-apps",
+        "openstack/murano-dashboard",
+        "openstack/murano-deployment",
+        "openstack/murano-specs",
+        "openstack/python-muranoclient",
+        "openstack/puppet-murano"
     ],
     "core-team-gerrit-group": "murano-core"
 }
