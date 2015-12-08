@@ -1,0 +1,9 @@
+{
+    "name": "kolla",
+    "unofficial": true,
+    "subprojects": [
+        "openstack/kolla",
+        "openstack/kolla-mesos"
+    ],
+    "core-team-gerrit-group": "kolla-core"
+}
