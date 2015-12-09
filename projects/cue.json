@@ -1,0 +1,10 @@
+{
+    "name": "cue",
+    "unofficial": true,
+    "subprojects": [
+        "openstack/cue",
+        "openstack/cue-dashbaord",
+        "openstack/python-cueclient"
+    ],
+    "core-team-gerrit-group": "cue-core"
+}
