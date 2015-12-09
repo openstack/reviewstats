@@ -2,9 +2,12 @@
     "name": "mistral",
     "unofficial": true,
     "subprojects": [
-        "stackforge/mistral",
-        "stackforge/mistral-extra",
-        "stackforge/python-mistralclient"
+	"openstack/mistral",
+        "openstack/mistral-dashboard",
+        "openstack/mistral-extra",
+        "openstack/mistral-specs",
+        "openstack/puppet-mistral",
+        "openstack/python-mistralclient"
     ],
     "core-team-gerrit-group": "mistral-core"
 }
