@@ -1,9 +1,18 @@
 {
     "name": "ironic",
     "subprojects": [
+        "openstack/bifrost", 
+        "openstack/coreos-image-builder",
         "openstack/ironic",
-        "openstack/python-ironicclient",
-        "openstack/ironic-python-agent"
+        "openstack/ironic-inspector",
+        "openstack/ironic-inspector-specs",
+        "openstack/ironic-lib",
+        "openstack/ironic-python-agent",
+        "openstack/ironic-specs",
+        "openstack/ironic-webclient",
+        "openstack/python-dracclient",
+        "openstack/python-ironic-inspector-client",
+        "openstack/python-ironicclient"
     ],
     "core-team-gerrit-group": "ironic-core"
 }

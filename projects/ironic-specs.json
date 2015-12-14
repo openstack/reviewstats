@@ -1,7 +1,0 @@
-{
-    "name": "ironic-specs",
-    "subprojects": [
-        "openstack/ironic-specs"
-    ],
-    "core-team-gerrit-group": "ironic-specs-core"
-}
