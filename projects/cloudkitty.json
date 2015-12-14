@@ -1,0 +1,10 @@
+{
+    "name": "cloudkitty",
+    "subprojects": [
+        "openstack/cloudkitty",
+        "openstack/cloudkitty-dashboard",
+        "openstack/python-cloudkittyclient"
+    ],
+    "core-team-gerrit-group": "cloudkitty-core"
+
+}
