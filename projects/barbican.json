@@ -2,7 +2,13 @@
     "name": "barbican",
     "unofficial": true,
     "subprojects": [
-        "openstack/barbican"
+        "openstack/barbican",
+        "openstack/barbican-specs",
+        "openstack/castellan",
+        "openstack/kite",
+        "openstack/python-barbicanclient",
+        "openstack/python-kiteclient"
     ],
     "core-team-gerrit-group": "barbican-core"
 }
+
