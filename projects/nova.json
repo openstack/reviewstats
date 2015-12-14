@@ -3,8 +3,8 @@
     "subprojects": [
         "openstack/nova",
         "openstack/nova-specs",
-        "openstack/python-novaclient",
-        "openstack/compute-api"
+        "openstack/os-vif",
+        "openstack/python-novaclient"
     ],
     "core-team-gerrit-group": "nova-core",
     "lp_projects": ["nova", "python-novaclient"]

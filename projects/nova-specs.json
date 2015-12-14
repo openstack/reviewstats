@@ -1,7 +1,0 @@
-{
-    "name": "nova-specs",
-    "subprojects": [
-        "openstack/nova-specs"
-    ],
-    "core-team-gerrit-group": "nova-specs-core"
-}
