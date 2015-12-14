@@ -1,0 +1,10 @@
+{
+    "name": "blazar",
+    "unofficial": true,
+    "subprojects": [
+        "openstack/blazar",
+        "openstack/blazar-nova",
+        "openstack/python-blazarclient"
+    ],
+    "core-team-gerrit-group": "blazar-core"
+}
