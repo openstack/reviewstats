@@ -145,7 +145,14 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
             # The cache is in the old list format
             changes = {}
 
-        sortkey = None
+        if changes:
+            for k, v in changes.items():
+                # The cache is only using the id as a key.  We now need both
+                # id and branch.
+                if not isinstance(k, tuple):
+                    changes = {}
+                break
+
         while True:
             connect_attempts = 3
             for attempt in range(connect_attempts):
@@ -175,8 +182,8 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 cmd += ' status:open'
             if stable:
                 cmd += ' branch:stable/%s' % stable
-            if sortkey:
-                cmd += ' resume_sortkey:%s' % sortkey
+            if len(changes):
+                cmd += ' --start %d' % len(changes)
             else:
                 # Get a small set the first time so we can get to checking
                 # againt the cache sooner
@@ -201,14 +208,17 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                         break
                     else:
                         break
-                if changes.get(new_change['id'], None) == new_change:
+                if changes.get((new_change['id'],
+                                new_change['project'],
+                                new_change['branch']), None) == new_change:
                     # Changes are ordered by latest to be updated.  As soon
                     # as we hit one that hasn't changed since our cached
                     # version, we're done.
                     end_of_changes = True
                     break
-                sortkey = new_change['sortKey']
-                changes[new_change['id']] = new_change
+                changes[(new_change['id'],
+                         new_change['project'],
+                         new_change['branch'])] = new_change
             if end_of_changes:
                 break
 
