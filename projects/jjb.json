@@ -1,7 +1,0 @@
-{
-    "name": "jjb",
-    "subprojects": [
-        "openstack-infra/jenkins-job-builder"
-    ],
-    "core-team-gerrit-group": "jenkins-job-builder-core"
-}
