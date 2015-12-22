@@ -2,8 +2,9 @@
     "name": "cinder",
     "subprojects": [
         "openstack/cinder",
-        "openstack/python-cinderclient",
-        "openstack/os-brick"
+        "openstack/cinder-specs",
+        "openstack/os-brick",
+        "openstack/python-cinderclient"
     ],
     "core-team-gerrit-group": "cinder-core"
 }
