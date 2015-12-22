@@ -1,8 +1,0 @@
-{
-    "name": "ironic-inspector",
-    "subprojects": [
-        "openstack/ironic-inspector",
-        "openstack/python-ironic-inspector-client"
-    ],
-    "core-team-gerrit-group": "ironic-inspector-core"
-}
