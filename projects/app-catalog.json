@@ -1,0 +1,9 @@
+{
+    "name": "Community App Catalog", 
+    "subprojects": [
+        "openstack/app-catalog", 
+        "openstack/app-catalog-common", 
+        "openstack/app-catalog-ui"
+    ],
+    "core-team-gerrit-group": "app-catalog-core"
+}
