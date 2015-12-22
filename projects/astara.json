@@ -1,0 +1,10 @@
+{
+    "name": "astara",
+    "subprojects": [
+        "openstack/astara",
+        "openstack/astara-appliance",
+        "openstack/astara-horizon",
+        "openstack/astara-neutron"
+    ],
+    "core-team-gerrit-group": "astara-core"
+}
