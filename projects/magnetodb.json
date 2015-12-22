@@ -1,8 +1,0 @@
-{
-    "name": "magnetodb",
-    "unofficial": true,
-    "subprojects": [
-        "stackforge/magnetodb"
-    ],
-    "core-team-gerrit-group": "magnetodb-core"
-}
