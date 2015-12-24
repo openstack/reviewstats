@@ -1,0 +1,8 @@
+{
+    "name": "rally",
+    "subprojects": [
+        "openstack/performance-docs",
+        "openstack/rally"
+    ],
+    "core-team-gerrit-group": "rally-core"
+}
