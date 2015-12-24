@@ -1,0 +1,8 @@
+{
+    "name": "RefStack",
+    "subprojects": [
+        "openstack/refstack",
+        "openstack/refstack-client"
+    ],
+    "core-team-gerrit-group": "refstack-core"
+}
