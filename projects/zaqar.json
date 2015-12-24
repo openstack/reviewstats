@@ -1,0 +1,10 @@
+{
+    "name": "zaqar",
+    "subprojects": [
+        "openstack/python-zaqarclient",
+        "openstack/zaqar",
+        "openstack/zaqar-specs",
+        "openstack/zaqar-ui"
+    ],
+    "core-team-gerrit-group": "zaqar-core"
+}
