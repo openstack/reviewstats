@@ -1,0 +1,31 @@
+{
+    "name": "Packaging deb",
+    "subprojects": [
+        "openstack/deb-ceilometer",
+        "openstack/deb-ceilometermiddleware",
+        "openstack/deb-cinder",
+        "openstack/deb-designate",
+        "openstack/deb-designate-dashboard",
+        "openstack/deb-glance",
+        "openstack/deb-heat",
+        "openstack/deb-horizon",
+        "openstack/deb-ironic",
+        "openstack/deb-keystone",
+        "openstack/deb-mistral",
+        "openstack/deb-mistral-dashboard",
+        "openstack/deb-murano",
+        "openstack/deb-murano-dashboard",
+        "openstack/deb-neutron",
+        "openstack/deb-neutron-fwaas",
+        "openstack/deb-neutron-lbaas",
+        "openstack/deb-neutron-vpnaas",
+        "openstack/deb-nova",
+        "openstack/deb-openstack-pkg-tools",
+        "openstack/deb-rally",
+        "openstack/deb-sahara",
+        "openstack/deb-swift",
+        "openstack/deb-tempest",
+        "openstack/deb-trove"
+    ],
+    "core-team-gerrit-group": "deb-packaging-core"
+}
