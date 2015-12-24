@@ -1,10 +1,14 @@
 {
     "name": "heat",
     "subprojects": [
+        "openstack-dev/heat-cfnclient",
         "openstack/heat",
-        "openstack/heat-templates",
         "openstack/heat-cfntools",
-        "openstack/python-heatclient"
+        "openstack/heat-specs",
+        "openstack/heat-templates",
+        "openstack/heat-translator",
+        "openstack/python-heatclient",
+        "openstack/tosca-parser"
     ],
     "core-team-gerrit-group": "heat-core"
 }
