@@ -1,0 +1,7 @@
+{
+    "name": "I18n",
+    "subprojects": [
+        "openstack/i18n"
+    ],
+    "core-team-gerrit-group": "i18n-core"
+}
