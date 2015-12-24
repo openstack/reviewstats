@@ -1,0 +1,10 @@
+{
+    "name": "congress",
+    "subprojects": [
+        "openstack/congress",
+        "openstack/congress-specs",
+        "openstack/python-congressclient"
+    ],
+    "core-team-gerrit-group": "congress-core"
+}
+
