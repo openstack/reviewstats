@@ -2,8 +2,9 @@
     "name": "glance",
     "subprojects": [
         "openstack/glance",
-        "openstack/python-glanceclient",
-        "openstack/image-api"
+        "openstack/glance-specs",
+        "openstack/glance_store",
+        "openstack/python-glanceclient"
     ],
     "core-team-gerrit-group": "glance-core"
 }
