@@ -1,0 +1,10 @@
+{
+    "name": "Packaging rpm",
+    "subprojects": [
+        "openstack/pymod2pkg",
+        "openstack/renderspec",
+        "openstack/rpm-packaging",
+        "openstack/rpm-packaging-tools"
+    ],
+    "core-team-gerrit-group": "packaging-rpm-core"
+}
