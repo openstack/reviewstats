@@ -1,0 +1,11 @@
+{
+    "name": "Release Cycle Management",
+    "subprojects": [
+        "openstack-dev/specs-cookiecutter",
+        "openstack-infra/release-tools",
+        "openstack/releases",
+        "openstack/reno",
+        "openstack/requirements"
+    ],
+    "core-team-gerrit-group": "release-tools-core"
+}
