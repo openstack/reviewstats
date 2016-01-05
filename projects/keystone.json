@@ -3,11 +3,12 @@
     "subprojects": [
         "openstack/keystone",
         "openstack/keystone-specs",
+        "openstack/keystoneauth",
+        "openstack/keystoneauth-saml2",
         "openstack/keystonemiddleware",
+        "openstack/pycadf",
         "openstack/python-keystoneclient",
-        "openstack/python-keystoneclient-federation",
-        "openstack/python-keystoneclient-kerberos",
-        "openstack/identity-api"
+        "openstack/python-keystoneclient-kerberos"
     ],
     "core-team-gerrit-group": "keystone-core"
 }
