@@ -1,0 +1,9 @@
+{
+    "name": "manila",
+    "subprojects": [
+        "openstack/manila",
+        "openstack/manila-image-elements",
+        "openstack/python-manilaclient"
+    ],
+    "core-team-gerrit-group": "manila-core"
+}
