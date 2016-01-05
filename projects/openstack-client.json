@@ -1,0 +1,9 @@
+{
+    "name": "OpenStack client",
+    "subprojects": [
+        "openstack/cliff",
+        "openstack/os-client-config",
+        "openstack/python-openstackclient"
+    ],
+    "core-team-gerrit-group": "python-openstackclient-core"
+}
