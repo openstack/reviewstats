@@ -128,6 +128,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
 
     for project in projects:
         changes = {}
+        new_count = 0
         logging.debug('Getting changes for project %s' % project['name'])
 
         if not only_open and not stable:
@@ -182,8 +183,8 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 cmd += ' status:open'
             if stable:
                 cmd += ' branch:stable/%s' % stable
-            if len(changes):
-                cmd += ' --start %d' % len(changes)
+            if new_count:
+                cmd += ' --start %d' % new_count
             else:
                 # Get a small set the first time so we can get to checking
                 # againt the cache sooner
@@ -219,6 +220,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 changes[(new_change['id'],
                          new_change['project'],
                          new_change['branch'])] = new_change
+                new_count += 1
             if end_of_changes:
                 break
 
