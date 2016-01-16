@@ -6,5 +6,5 @@
         "openstack/rpm-packaging",
         "openstack/rpm-packaging-tools"
     ],
-    "core-team-gerrit-group": "packaging-rpm-core"
+    "core-team-gerrit-group": "rpm-packaging-core"
 }
