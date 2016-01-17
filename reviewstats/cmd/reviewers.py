@@ -52,14 +52,14 @@ def process_patchset(project, patchset, reviewers, ts, options):
     latest_core_pos_vote = 0
 
     submitter = patchset['uploader'].get('username', 'unknown')
+    core_team = utils.get_core_team(project, options.server, options.user,
+        options.password)
 
     for review in patchset.get('approvals', []):
         if review['type'] != 'Code-Review':
             # Only count code reviews.  Don't add another for Approved, which
             # is type 'Approved' or 'Workflow'
             continue
-        core_team = utils.get_core_team(project, options.server, options.user,
-                options.password)
         if review['by'].get('username', 'unknown') not in core_team:
             # Only checking for disagreements from core team members
             continue
