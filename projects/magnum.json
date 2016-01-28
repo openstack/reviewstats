@@ -1,0 +1,9 @@
+{
+    "name": "magnum",
+    "subprojects": [
+        "openstack/magnum",
+        "openstack/magnum-ui",
+        "openstack/python-magnumclient"
+    ],
+    "core-team-gerrit-group": "magnum-core"
+}
