@@ -1,0 +1,10 @@
+{
+    "name": "designate",
+    "subprojects": [
+        "openstack/designate",
+        "openstack/designate-specs",
+        "openstack/designate-dashboard",
+        "openstack/python-designateclient"
+    ],
+    "core-team-gerrit-group": "designate-core"
+}
