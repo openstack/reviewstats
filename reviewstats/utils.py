@@ -31,7 +31,8 @@ import paramiko
 LOG = logging.getLogger(__name__)
 
 
-def get_projects_info(project=None, all_projects=False, base_dir='./projects'):
+def get_projects_info(project=None, all_projects=False,
+                      base_dir='./projects/'):
     """Return the list of project dict objects.
 
     :param project: pathname of the JSON project info file.
@@ -57,6 +58,12 @@ def get_projects_info(project=None, all_projects=False, base_dir='./projects'):
     if all_projects:
         files = glob.glob('%s/*.json' % base_dir)
     else:
+        # handle just passing the project name
+        if not os.path.isfile(project):
+            if not project.startswith(base_dir):
+                project = base_dir + project
+            if not project.endswith('.json'):
+                project = project + '.json'
         files = [project]
 
     projects = []

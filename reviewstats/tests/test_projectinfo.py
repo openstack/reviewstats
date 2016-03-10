@@ -18,3 +18,11 @@ class TestProjectInfo(base.TestCase):
 
     def test_project_definitions_load(self):
         utils.get_projects_info('', True)
+
+    def test_get_projects_info_single_name(self):
+        projects = utils.get_projects_info('nova')
+        self.assertEqual(1, len(projects))
+
+    def test_get_projects_info_single_name_projects_prefixed(self):
+        projects = utils.get_projects_info('projects/stable.json')
+        self.assertEqual(1, len(projects))
