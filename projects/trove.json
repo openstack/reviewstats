@@ -4,7 +4,8 @@
         "openstack/trove",
         "openstack/trove-integration",
         "openstack/trove-specs",
-        "openstack/python-troveclient"
+        "openstack/python-troveclient",
+        "openstack/trove-dashboard"
     ],
     "core-team-gerrit-group": "trove-core"
 }
