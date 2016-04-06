@@ -334,7 +334,7 @@ def get_team_members(team_name, server, user, pw):
     text = requests.get('http://%s/a/groups/%s/detail' % (server,
                         teams[team_name]['id']), auth=auth).text
     team = json.loads(text[text.find('{'):])
-    members_list = [n['username'] for n in team['members']]
+    members_list = [n['username'] for n in team['members'] if 'username' in n]
     if 'hudson-openstack' in members_list:
         # This is a review.openstack.org specific hack.  This user is
         # automatically included in core teams, but we don't want to include it
