@@ -134,9 +134,12 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
             'Reviews for the last %d days in projects: %s\n' %
             (options.days, [project['name'] for project in projects]))
     else:
+        project_name = projects[0]['name']
+        if options.stable:
+            project_name = "stable/%s" % (options.stable)
         file_obj.write(
             'Reviews for the last %d days in %s\n'
-            % (options.days, projects[0]['name']))
+            % (options.days, project_name))
     if options.all:
         file_obj.write(
             '** -- Member of at least one core reviewer team\n')
