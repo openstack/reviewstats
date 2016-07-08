@@ -17,6 +17,7 @@
     "openstack/tripleo-image-elements",
     "openstack/tripleo-puppet-elements",
     "openstack/tripleo-incubator",
+    "openstack/tripleo-quickstart",
     "openstack/tripleo-specs",
     "openstack/tuskar"
 ],
@@ -29,5 +30,6 @@
     "os-refresh-config",
     "python-tuskarclient",
     "tripleo",
+    "tripleo-quickstart",
     "tuskar"
 ]}
