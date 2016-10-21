@@ -1,0 +1,12 @@
+{
+    "name": "freezer",
+    "subprojects": [
+        "openstack/python-freezerclient",
+        "openstack/freezer",
+        "openstack/freezer-api",
+        "openstack/freezer-dr",
+        "openstack/freezer-specs",
+        "openstack/freezer-web-ui"
+    ],
+    "core-team-gerrit-group": "freezer-core"
+}
