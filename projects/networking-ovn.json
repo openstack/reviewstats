@@ -1,0 +1,7 @@
+{
+    "name": "networking-ovn",
+    "subprojects": [
+        "openstack/networking-ovn"
+    ],
+    "core-team-gerrit-group": "networking-ovn-core"
+}
