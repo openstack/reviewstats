@@ -8,7 +8,6 @@
     "openstack/os-net-config",
     "openstack/os-refresh-config",
     "openstack/python-tripleoclient",
-    "openstack/python-tuskarclient",
     "openstack/tripleo-common",
     "openstack/tripleo-docs",
     "openstack/tripleo-heat-templates",
@@ -16,8 +15,7 @@
     "openstack/tripleo-puppet-elements",
     "openstack/tripleo-incubator",
     "openstack/tripleo-quickstart",
-    "openstack/tripleo-specs",
-    "openstack/tuskar"
+    "openstack/tripleo-specs"
 ],
     "core-team-gerrit-group": "tripleo-core",
 "lp_projects": [
@@ -27,6 +25,5 @@
     "os-refresh-config",
     "python-tuskarclient",
     "tripleo",
-    "tripleo-quickstart",
-    "tuskar"
+    "tripleo-quickstart"
 ]}
