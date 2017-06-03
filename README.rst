@@ -40,8 +40,8 @@ Examples
 
 #. Get reviewer stats for the last 14 days (default) in the stable/pike branch:
 
-  ``$ reviewers --stable pike --output ~/reviewers-stable-pike-14``
+    ``$ reviewers --stable pike --output ~/reviewers-stable-pike-14``
 
 #. Get reviewer stats for the last 90 days across all stable branches:
 
-  ``$ reviewers --stable all --days 90 --output ~/reviewers-stable-all-90``
+    ``$ reviewers --stable all --days 90 --output ~/reviewers-stable-all-90``
