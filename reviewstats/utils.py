@@ -111,7 +111,8 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
     :param bool only_open: If True, get only the not closed reviews.
     :param str stable:
         Name of the stable branch. If empty string, the changesets are not
-        filtered by any branch.
+        filtered by any branch. The special value "all" is handled to get
+        changes for all open stable branches.
 
     :return: List of de-serialized JSON changeset data as returned by gerrit.
     :rtype: list
@@ -189,7 +190,11 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
             if only_open:
                 cmd += ' status:open'
             if stable:
-                cmd += ' branch:stable/%s' % stable
+                # Check for "all" to query all stable branches.
+                if stable.strip() == 'all':
+                    cmd += ' branch:^stable/.*'
+                else:
+                    cmd += ' branch:stable/%s' % stable
             if new_count:
                 cmd += ' --start %d' % new_count
             else:
