@@ -1,7 +1,5 @@
 {"name": "tripleo", "subprojects": [
     "openstack-infra/tripleo-ci",
-    "openstack/dib-utils",
-    "openstack/diskimage-builder",
     "openstack/instack",
     "openstack/instack-undercloud",
     "openstack/os-apply-config",
@@ -23,7 +21,6 @@
 ],
     "core-team-gerrit-group": "tripleo-core",
 "lp_projects": [
-    "diskimage-builder",
     "os-apply-config",
     "os-cloud-config",
     "os-collect-config",

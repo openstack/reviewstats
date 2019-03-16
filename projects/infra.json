@@ -1,6 +1,8 @@
 {
     "name": "OpenStack Infrastructure",
     "subprojects": [
+        "openstack/dib-utils",
+        "openstack/diskimage-builder",
         "openstack-dev/openstack-nose",
         "openstack-infra/activity-board",
         "openstack-infra/ansible-build-image",
