@@ -136,7 +136,11 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
     else:
         project_name = projects[0]['name']
         if options.stable:
-            project_name = "stable/%s" % (options.stable)
+            # Handle the wildcare case.
+            if options.stable.strip() == 'all':
+                project_name = 'all open stable branches'
+            else:
+                project_name = "stable/%s" % (options.stable)
         file_obj.write(
             'Reviews for the last %d days in %s\n'
             % (options.days, project_name))
@@ -244,7 +248,8 @@ def main(argv=None):
     optparser.add_option(
         '-s', '--stable', default='', metavar='BRANCH',
         help='Generate stats for the specified stable BRANCH ("havana") '
-             'across all integrated projects')
+             'across all integrated projects. Specify "all" for all '
+             'open stable branches.')
     optparser.add_option(
         '-o', '--output', default='-',
         help='Where to write output. If - stdout is used and only one output '

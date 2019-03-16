@@ -34,3 +34,14 @@ object containing the following keys:
 * core-team: A list of Gerrit usernames to consider as core reviewers across
   subprojects.
 * lp_projects: A list of Launchpad project ids to include.
+
+Examples
+--------
+
+#. Get reviewer stats for the last 14 days (default) in the stable/pike branch:
+
+  ``$ reviewers --stable pike --output ~/reviewers-stable-pike-14``
+
+#. Get reviewer stats for the last 90 days across all stable branches:
+
+  ``$ reviewers --stable all --days 90 --output ~/reviewers-stable-all-90``
