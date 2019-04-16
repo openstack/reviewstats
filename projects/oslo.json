@@ -5,7 +5,6 @@
         "openstack-dev/hacking",
         "openstack-dev/oslo-cookiecutter",
         "openstack-dev/pbr",
-        "openstack/cliff",
         "openstack/oslo-incubator",
         "openstack/oslo-specs",
         "openstack/oslo.config",
@@ -19,8 +18,7 @@
         "openstack/oslotest",
         "openstack/pycadf",
         "openstack/stevedore",
-        "openstack/taskflow",
-        "openstack/requirements"
+        "openstack/taskflow"
     ],
     "core-team-gerrit-group": "oslo-core"
 }
