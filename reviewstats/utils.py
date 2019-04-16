@@ -18,6 +18,7 @@
 """
 
 import glob
+import gzip
 import json
 import logging
 import os
@@ -25,10 +26,48 @@ import requests
 import requests.auth
 from six.moves import cPickle as pickle
 import time
+import yaml
 
 import paramiko
+from six.moves import cStringIO
+from six.moves import urllib
 
 LOG = logging.getLogger(__name__)
+
+
+PROJECTS_YAML = ('http://git.openstack.org/cgit/openstack/governance/plain/'
+                 'reference/projects.yaml')
+
+
+class DataRetrievalFailed(Exception):
+    pass
+
+
+# Copied from https://github.com/cybertron/zuul-status/blob/master/app.py
+def get_remote_data(address, datatype='json'):
+    req = urllib.request.Request(address)
+    req.add_header('Accept-encoding', 'gzip')
+    try:
+        remote_data = urllib.request.urlopen(req, timeout=10)
+    except Exception as e:
+        msg = 'Failed to retrieve data from %s: %s' % (address, str(e))
+        raise DataRetrievalFailed(msg)
+    data = ""
+    while True:
+        chunk = remote_data.read()
+        if not chunk:
+            break
+        data += chunk
+
+    if remote_data.info().get('Content-Encoding') == 'gzip':
+        buf = cStringIO.StringIO(data)
+        f = gzip.GzipFile(fileobj=buf)
+        data = f.read()
+
+    if datatype == 'json':
+        return json.loads(data)
+    else:
+        return yaml.safe_load(data)
 
 
 def get_projects_info(project=None, all_projects=False,
@@ -78,6 +117,16 @@ def get_projects_info(project=None, all_projects=False,
                     raise
                 if not (all_projects and project.get('unofficial')):
                     projects.append(project)
+        # Get base project name
+        project_name = os.path.splitext(os.path.basename(fn))[0]
+        project_data = get_remote_data(PROJECTS_YAML, 'yaml')
+        for name, data in project_data.items():
+            if name == project_name:
+                for d, d_data in data['deliverables'].items():
+                    projects[-1]['subprojects'] += d_data['repos']
+        projects[-1]['subprojects'] = sorted(
+            list(set(projects[-1]['subprojects']))
+            )
 
     return projects
 
