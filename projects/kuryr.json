@@ -1,0 +1,10 @@
+{
+    "name": "kuryr",
+    "subprojects": [
+        "openstack/kuryr-kubernetes",
+        "openstack/kuryr-libnetwork",
+        "openstack/kuryr",
+        "openstack/kuryr-tempest-plugin"
+    ],
+    "core-team-gerrit-group": "kuryr-core"
+}
