@@ -147,7 +147,9 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 with open(pickle_fn, 'r') as f:
                     try:
                         changes = pickle.load(f)
-                    except MemoryError:
+                    except Exception:
+                        logging.warning('Failed to load cached data from %s',
+                                        pickle_fn)
                         changes = {}
 
         if not isinstance(changes, dict):
