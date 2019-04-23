@@ -240,7 +240,11 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
 
         if not only_open and not stable:
             with open(pickle_fn, 'w') as f:
-                pickle.dump(changes, f)
+                try:
+                    pickle.dump(changes, f)
+                except Exception:
+                    logging.warning('Failed to save cached data to %s',
+                                    pickle_fn)
 
         all_changes.update(changes)
 
