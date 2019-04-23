@@ -45,7 +45,7 @@ def main(argv=None):
     optparser.add_option('-s', '--stable', action='store_true',
                          help='Include stable branch commits')
     optparser.add_option(
-        '--server', default='review.openstack.org',
+        '--server', default='review.opendev.org',
         help='Gerrit server to connect to')
     options, args = optparser.parse_args()
     projects = utils.get_projects_info(options.project, options.all)

@@ -272,7 +272,7 @@ def main(argv=None):
         '-r', '--csv-rows', default=0, help='Max rows for CSV output',
         type='int', dest='csv_rows')
     optparser.add_option(
-        '--server', default='review.openstack.org',
+        '--server', default='review.opendev.org',
         help='Gerrit server to connect to')
 
     options, args = optparser.parse_args()

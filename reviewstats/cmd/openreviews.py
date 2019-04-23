@@ -263,7 +263,7 @@ def main(argv=None):
         '-H', '--html', action='store_true',
         help='Use HTML output instead of plain text')
     optparser.add_option(
-        '--server', default='review.openstack.org',
+        '--server', default='review.opendev.org',
         help='Gerrit server to connect to')
     optparser.add_option(
         '--debug', action='store_true', help='Show extra debug output')
