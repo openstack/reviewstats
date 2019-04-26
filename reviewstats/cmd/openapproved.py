@@ -51,7 +51,7 @@ def main(argv=None):
     projects = utils.get_projects_info(options.project, options.all)
 
     if not projects:
-        print "Please specify a project."
+        print("Please specify a project.")
         sys.exit(1)
 
     changes = utils.get_changes(projects, options.user, options.key,
@@ -76,8 +76,8 @@ def main(argv=None):
                                                     change['subject']))
 
     for x in approved_and_rebased:
-        print x
-    print "total %d" % len(approved_and_rebased)
+        print()
+    print("total %d" % len(approved_and_rebased))
 
 
 def has_negative_feedback(patch_set):

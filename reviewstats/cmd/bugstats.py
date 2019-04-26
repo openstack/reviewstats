@@ -14,7 +14,8 @@
 
 from argparse import ArgumentParser
 import bisect
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 import prettytable
 import sys
 from textwrap import dedent
@@ -37,7 +38,7 @@ offsets = {
     }
 
 
-class Listener:
+class Listener(object):
 
     def __init__(self, project_name, lp_projects):
         self.name = project_name
@@ -171,7 +172,7 @@ def main():
     for project in projects:
         lp_projects = project.get('lp_projects', [])
         if not lp_projects:
-            print "Please specify a project."
+            print("Please specify a project.")
             return 1
         listener = Listener(project['name'], lp_projects)
         listeners.add(listener)

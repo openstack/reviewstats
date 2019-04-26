@@ -1,4 +1,4 @@
-## -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # Copyright (C) 2011 - Soren Hansen
 # Copyright (C) 2013 - Red Hat, Inc.
 #
@@ -14,21 +14,20 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-"""Utility functions module
-"""
+"""Utility functions module"""
 
 import glob
 import gzip
 import json
 import logging
 import os
-import requests
-import requests.auth
-from six.moves import cPickle as pickle
 import time
 import yaml
 
 import paramiko
+import requests
+import requests.auth
+from six.moves import cPickle as pickle
 from six.moves import cStringIO
 from six.moves import urllib
 
