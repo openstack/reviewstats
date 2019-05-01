@@ -5,7 +5,8 @@
         "openstack/cinder-specs",
         "openstack/os-brick",
         "openstack/python-cinderclient",
-        "openstack/python-brick-cinderclient-ext"
+        "openstack/python-brick-cinderclient-ext",
+        "openstack/cinder-tempest-plugin"
     ],
     "core-team-gerrit-group": "cinder-core"
 }
