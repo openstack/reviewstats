@@ -1,0 +1,11 @@
+{
+    "name": "vitrage",
+    "subprojects": [
+        "openstack/vitrage",
+        "openstack/vitrage-specs",
+        "openstack/vitrage-tempest-plugin",
+        "openstack/python-vitrageclient",
+        "openstack/vitrage-dashboard"
+    ],
+    "core-team-gerrit-group": "vitrage-core"
+}
