@@ -10,19 +10,23 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import mock
+
 from reviewstats.tests import base
 from reviewstats import utils
 
 
+@mock.patch('reviewstats.utils.get_remote_data', return_value={})
 class TestProjectInfo(base.TestCase):
 
-    def test_project_definitions_load(self):
+    def test_project_definitions_load(self, get_remote_data):
         utils.get_projects_info('', True)
 
-    def test_get_projects_info_single_name(self):
+    def test_get_projects_info_single_name(self, get_remote_data):
         projects = utils.get_projects_info('nova')
         self.assertEqual(1, len(projects))
 
-    def test_get_projects_info_single_name_projects_prefixed(self):
+    def test_get_projects_info_single_name_projects_prefixed(self,
+                                                             get_remote_data):
         projects = utils.get_projects_info('projects/stable.json')
         self.assertEqual(1, len(projects))
