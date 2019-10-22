@@ -169,12 +169,12 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
 
     file_obj.write(
         '\nTotal reviews: %d (%.1f/day)\n' % (
-        totals['all'], float(totals['all']) / options.days))
-    num_reviewers = len([r for r in reviewers if r[0]['total']])
+            totals['all'], float(totals['all']) / options.days))
+    num_reviewers = len([rev for rev in reviewers if rev[0]['total']])
     file_obj.write(
         'Total reviewers: %d (avg %.1f reviews/day)\n' % (
-        num_reviewers,
-        float(totals['all']) / options.days / num_reviewers
+            num_reviewers,
+            float(totals['all']) / options.days / num_reviewers
             if num_reviewers else 0))
     file_obj.write('Total reviews by core team: %d (%.1f/day)\n' % (
         totals['core'], float(totals['core']) / options.days))
@@ -253,8 +253,8 @@ def main(argv=None):
     optparser.add_option(
         '-o', '--output', default='-',
         help='Where to write output. If - stdout is used and only one output '
-            'format may be given. Otherwise the output format is appended to '
-            'the output parameter to generate file names.')
+             'format may be given. Otherwise the output format is appended to '
+             'the output parameter to generate file names.')
     optparser.add_option(
         '--outputs', default=['txt'], action='append',
         help='Select what outputs to generate. (txt,csv).')
@@ -283,7 +283,7 @@ def main(argv=None):
         projects = utils.get_projects_info(options.project, options.all)
 
     if not projects:
-        print "Please specify a project."
+        print("Please specify a project.")
         sys.exit(1)
 
     reviewers = {}

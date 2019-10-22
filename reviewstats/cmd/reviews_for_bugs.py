@@ -40,7 +40,7 @@ def main():
     project_name = projects[0]['name']
 
     if not projects:
-        print "Please specify a project."
+        print("Please specify a project.")
         return 1
 
     launchpad = Launchpad.login_with('openstack-releasing', 'production')
@@ -77,14 +77,14 @@ def main():
         milestones.setdefault(milestone, [])
         milestones[milestone].append((change['url'], bugid))
 
-    print 'Reviews for bugs grouped by milestone for project: %s\n' % (
-        project_name)
+    print('Reviews for bugs grouped by milestone for project: %s\n' % (
+          project_name))
 
     for milestone, reviews in milestones.items():
         if args.milestone and milestone != args.milestone:
             continue
-        print 'Milestone: %s' % milestone
+        print('Milestone: %s' % milestone)
         for review, bugid in reviews:
-            print '--> %s -- https://bugs.launchpad.net/%s/+bug/%s' \
-                % (review, project_name, bugid)
-        print
+            print('--> %s -- https://bugs.launchpad.net/%s/+bug/%s' %
+                  (review, project_name, bugid))
+        print()

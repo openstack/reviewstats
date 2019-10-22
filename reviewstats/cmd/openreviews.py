@@ -21,6 +21,8 @@ import logging
 import optparse
 import sys
 
+import six
+
 from reviewstats import utils
 
 
@@ -174,7 +176,7 @@ def print_stats_txt(stats, f=sys.stdout):
             print_item_txt(item, level)
 
     def print_item_txt(item, level):
-        if isinstance(item, basestring):
+        if isinstance(item, six.text_type):
             f.write('%s\n' % item.encode('utf-8'))
         elif isinstance(item, list):
             print_list_txt(item, level + 1)
@@ -203,7 +205,7 @@ def print_stats_html(stats, f=sys.stdout):
             f.write('</%s>\n' % ('ul' if level == 1 else 'ol'))
 
     def print_item_html(item, level):
-        if isinstance(item, basestring):
+        if isinstance(item, six.text_type):
             f.write('%s' % item.encode('utf-8'))
         elif isinstance(item, list):
             print_list_html(item, level + 1)
@@ -285,7 +287,7 @@ def main(argv=None):
                                        base_dir=options.projects_dir)
 
     if not projects:
-        print "Please specify a project."
+        print("Please specify a project.")
         sys.exit(1)
 
     changes = utils.get_changes(projects, options.user, options.key,
