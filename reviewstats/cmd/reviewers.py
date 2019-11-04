@@ -16,11 +16,11 @@
 # under the License.
 
 
+import argparse
 import calendar
 import csv
 import datetime
 import getpass
-import optparse
 import prettytable
 import sys
 
@@ -238,44 +238,44 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    optparser = optparse.OptionParser()
-    optparser.add_option(
+    optparser = argparse.ArgumentParser()
+    optparser.add_argument(
         '-p', '--project', default='projects/nova.json',
         help='JSON file describing the project to generate stats for')
-    optparser.add_option(
-        '-a', '--all', action='store_true',
+    optparser.add_argument(
+        '-a', '--all', action='store_true', default=False,
         help='Generate stats across all known projects (*.json)')
-    optparser.add_option(
+    optparser.add_argument(
         '-s', '--stable', default='', metavar='BRANCH',
         help='Generate stats for the specified stable BRANCH ("havana") '
              'across all integrated projects. Specify "all" for all '
              'open stable branches.')
-    optparser.add_option(
+    optparser.add_argument(
         '-o', '--output', default='-',
         help='Where to write output. If - stdout is used and only one output '
              'format may be given. Otherwise the output format is appended to '
              'the output parameter to generate file names.')
-    optparser.add_option(
+    optparser.add_argument(
         '--outputs', default=['txt'], action='append',
         help='Select what outputs to generate. (txt,csv).')
-    optparser.add_option(
-        '-d', '--days', type='int', default=14,
+    optparser.add_argument(
+        '-d', '--days', type=int, default=14,
         help='Number of days to consider')
-    optparser.add_option(
+    optparser.add_argument(
         '-u', '--user', default=getpass.getuser(), help='gerrit user')
-    optparser.add_option(
+    optparser.add_argument(
         '-P', '--password', default=getpass.getuser(),
         help='gerrit HTTP password')
-    optparser.add_option(
+    optparser.add_argument(
         '-k', '--key', default=None, help='ssh key for gerrit')
-    optparser.add_option(
+    optparser.add_argument(
         '-r', '--csv-rows', default=0, help='Max rows for CSV output',
-        type='int', dest='csv_rows')
-    optparser.add_option(
+        type=int)
+    optparser.add_argument(
         '--server', default='review.opendev.org',
         help='Gerrit server to connect to')
 
-    options, args = optparser.parse_args()
+    options = optparser.parse_args()
 
     if options.stable:
         projects = utils.get_projects_info('projects/stable.json', False)
