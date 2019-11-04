@@ -239,17 +239,26 @@ def main(argv=None):
         argv = sys.argv
 
     optparser = argparse.ArgumentParser()
-    optparser.add_argument(
+    # --stable and --project are mutually exclusive right now, so if
+    # --project is specified it's likely an attempt to only show stable
+    # reviews for a given project which isn't how --stable works right now
+    # unfortunately, so error out to let the user know they are trying to
+    # do something unsupported if both are specified.
+    # It would be a nice feature addition to allow specifying --project with
+    # --stable and filter the stable.json subprojects by the given project.
+    project_group = optparser.add_mutually_exclusive_group(required=False)
+    project_group.add_argument(
         '-p', '--project', default='projects/nova.json',
-        help='JSON file describing the project to generate stats for')
+        help='JSON file describing the project to generate stats for. '
+             'Mutually exclusive with --stable.')
     optparser.add_argument(
-        '-a', '--all', action='store_true', default=False,
+        '-a', '--all', action='store_true',
         help='Generate stats across all known projects (*.json)')
-    optparser.add_argument(
+    project_group.add_argument(
         '-s', '--stable', default='', metavar='BRANCH',
         help='Generate stats for the specified stable BRANCH ("havana") '
              'across all integrated projects. Specify "all" for all '
-             'open stable branches.')
+             'open stable branches. Mutually exclusive with --project.')
     optparser.add_argument(
         '-o', '--output', default='-',
         help='Where to write output. If - stdout is used and only one output '
