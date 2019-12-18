@@ -34,7 +34,7 @@ import requests.auth
 LOG = logging.getLogger(__name__)
 
 
-PROJECTS_YAML = ('http://git.openstack.org/cgit/openstack/governance/plain/'
+PROJECTS_YAML = ('https://opendev.org/openstack/governance/raw/branch/master/'
                  'reference/projects.yaml')
 
 
@@ -141,7 +141,7 @@ def projects_q(project):
     :rtype: str
 
     .. _Searching Changes:
-        https://review.openstack.org/Documentation/user-search.html
+        https://review.opendev.org/Documentation/user-search.html
     """
     return ('('
             + ' OR '.join(['project:' + p for p in project['subprojects']])
@@ -149,7 +149,7 @@ def projects_q(project):
 
 
 def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
-                server='review.openstack.org'):
+                server='review.opendev.org'):
     """Get the changesets data list.
 
     :param projects: List of gerrit project names.

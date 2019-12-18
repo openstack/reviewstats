@@ -5,7 +5,7 @@ reviewstats
 Utility scripts for generating stats about OpenStack development.
 
 * Free software: Apache license
-* Documentation: http://docs.openstack.org/reviewstats
+* Documentation: https://docs.openstack.org/reviewstats/latest/
 
 Features
 --------
