@@ -80,8 +80,9 @@ def process_patchset(project, patchset, reviewers, ts, options):
         reviewer = review['by'].get('username', 'unknown')
         set_defaults(reviewer, reviewers)
 
-        if (review['type'] == 'Approved' or
-                (review['type'] == 'Workflow' and int(review['value']) > 0)):
+        if (review['type'] == 'Approved'
+            or (review['type'] == 'Workflow'
+                and int(review['value']) > 0)):
             cur = reviewers[reviewer]['votes']['A']
             reviewers[reviewer]['votes']['A'] = cur + 1
         elif review['type'] != 'Workflow':
@@ -210,8 +211,8 @@ def write_pretty(reviewer_data, file_obj, options, reviewers, projects,
          '(%.1f/day)\n')
         % (options.days, change_stats['wip'],
            float(change_stats['wip']) / options.days))
-    queue_growth = (change_stats['created'] - change_stats['merged'] -
-                    change_stats['abandoned'] - change_stats['wip'])
+    queue_growth = (change_stats['created'] - change_stats['merged']
+                    - change_stats['abandoned'] - change_stats['wip'])
     file_obj.write(
         ('  Queue growth in the last %d days: %d '
          '(%.1f/day)\n')

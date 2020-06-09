@@ -12,9 +12,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import io
 import unittest
-
-import six
 
 import reviewstats.cmd.reviewers
 
@@ -27,7 +26,7 @@ class ReviewersCSVTestCase(unittest.TestCase):
         options = Options()
         options.csv_rows = 10
         reviewer_data = [('', '', '', '')] * 100
-        sio = six.StringIO()
+        sio = io.StringIO()
 
         reviewstats.cmd.reviewers.write_csv(reviewer_data, sio, options, {},
                                             {}, {}, {})

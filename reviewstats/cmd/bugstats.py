@@ -139,8 +139,8 @@ class Listener(object):
             closed in the period, and bug tags present on any critical bugs.
         """
         for period in self.periods:
-            yield ([period[0].strftime('%Y-%m-%d')] +
-                   period[1:-1] + [','.join(period[-1])])
+            yield ([period[0].strftime('%Y-%m-%d')]
+                   + period[1:-1] + [','.join(period[-1])])
 
 
 def main():

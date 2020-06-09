@@ -18,18 +18,18 @@
 
 import glob
 import gzip
+import io
 import json
 import logging
 import os
+import pickle
 import time
+import urllib
 import yaml
 
 import paramiko
 import requests
 import requests.auth
-from six.moves import cPickle as pickle
-from six.moves import cStringIO
-from six.moves import urllib
 
 LOG = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ def get_remote_data(address, datatype='json'):
         data += chunk
 
     if remote_data.info().get('Content-Encoding') == 'gzip':
-        buf = cStringIO.StringIO(data)
+        buf = io.StringIO(data)
         f = gzip.GzipFile(fileobj=buf)
         data = f.read()
 
@@ -143,9 +143,9 @@ def projects_q(project):
     .. _Searching Changes:
         https://review.openstack.org/Documentation/user-search.html
     """
-    return ('(' +
-            ' OR '.join(['project:' + p for p in project['subprojects']]) +
-            ')')
+    return ('('
+            + ' OR '.join(['project:' + p for p in project['subprojects']])
+            + ')')
 
 
 def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
@@ -321,8 +321,9 @@ def patch_set_approved(patch_set):
     """
     approvals = patch_set.get('approvals', [])
     for review in approvals:
-        if (review['type'] == 'Approved' or
-                (review['type'] == 'Workflow' and int(review['value']) > 0)):
+        if (review['type'] == 'Approved'
+            or (review['type'] == 'Workflow'
+                and int(review['value']) > 0)):
             return True
     return False
 

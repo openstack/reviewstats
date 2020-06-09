@@ -58,7 +58,7 @@ def main():
     milestones = {}
 
     changes = utils.get_changes(projects, args.user, args.key, only_open=True)
-    bug_regex = re.compile('bug/(\d+)')
+    bug_regex = re.compile(r'bug/(\d+)')
     for change in changes:
         if 'topic' not in change:
             continue
