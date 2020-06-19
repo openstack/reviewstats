@@ -52,7 +52,7 @@ def quartile_age(changes, quartile=2, key='age'):
     if not changes:
         return 0
     changes = sorted(changes, key=lambda change: change[key])
-    quartile_age = changes[len(changes) * quartile / 4][key]
+    quartile_age = changes[len(changes) * quartile // 4][key]
     return sec_to_period_string(quartile_age)
 
 
