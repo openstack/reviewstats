@@ -4,4 +4,3 @@ coverage>=3.6
 fixtures>=0.3.14
 python-subunit
 stestr>=2.0.0
-mock
