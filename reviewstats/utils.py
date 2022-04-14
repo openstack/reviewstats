@@ -53,7 +53,7 @@ def get_remote_data(address, datatype='json'):
         raise DataRetrievalFailed(msg)
     data = ""
     while True:
-        chunk = remote_data.read()
+        chunk = remote_data.read().decode('utf-8')
         if not chunk:
             break
         data += chunk
@@ -306,7 +306,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
     # for the sake of not having to change all the code that calls this
     # function (yet, anyway).
 
-    all_changes = [value for value in all_changes.itervalues()]
+    all_changes = [value for value in all_changes.values()]
 
     return all_changes
 

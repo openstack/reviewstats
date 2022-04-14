@@ -337,7 +337,7 @@ def main(argv=None):
                 elif change['status'] == 'WORKINPROGRESS':
                     change_stats['wip'] += 1
 
-    reviewers = [(v, k) for k, v in reviewers.iteritems()
+    reviewers = [(v, k) for k, v in reviewers.items()
                  if k.lower() not in ('jenkins', 'smokestack')]
     reviewers.sort(reverse=True, key=lambda r: r[0]['total'])
     # Do logical processing of reviewers.
