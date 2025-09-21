@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (C) 2011 - Soren Hansen
 # Copyright (C) 2013 - Red Hat, Inc.
 

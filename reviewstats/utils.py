@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
 # Copyright (C) 2011 - Soren Hansen
 # Copyright (C) 2013 - Red Hat, Inc.
 #
 
-# Licensed under the Apache License, Version 2.0 (the "License"); you may
-# not use this file except in compliance with the License. You may obtain
-# a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#    http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """Utility functions module"""
 
 import glob
@@ -25,11 +25,11 @@ import os
 import pickle
 import time
 import urllib
-import yaml
 
 import paramiko
 import requests
 import requests.auth
+import yaml
 
 LOG = logging.getLogger(__name__)
 
@@ -112,7 +112,7 @@ def get_projects_info(project=None, all_projects=False,
                 try:
                     project = json.loads(f.read())
                 except Exception:
-                    LOG.error('Failed to parse %s' % fn)
+                    LOG.error('Failed to parse %s', fn)
                     raise
                 if not (all_projects and project.get('unofficial')):
                     projects.append(project)
@@ -186,14 +186,14 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
     for project in projects:
         changes = {}
         new_count = 0
-        logging.debug('Getting changes for project %s' % project['name'])
+        logging.debug('Getting changes for project %s', project['name'])
 
         if not only_open and not stable:
             # Only use the cache for *all* changes (the entire history).
             pickle_fn = '.%s-changes.pickle' % project['name']
 
             if os.path.isfile(pickle_fn):
-                with open(pickle_fn, 'r') as f:
+                with open(pickle_fn, 'rb') as f:
                     try:
                         changes = pickle.load(f)
                     except Exception:
@@ -288,7 +288,7 @@ def get_changes(projects, ssh_user, ssh_key, only_open=False, stable='',
                 break
 
         if not only_open and not stable:
-            with open(pickle_fn, 'w') as f:
+            with open(pickle_fn, 'wb') as f:
                 try:
                     pickle.dump(changes, f)
                 except Exception:
@@ -387,12 +387,12 @@ def get_team_members(team_name, server, user, pw):
     if team_name in TEAM_MEMBERS:
         return TEAM_MEMBERS[team_name]
     auth = requests.auth.HTTPDigestAuth(user, pw)
-    groups_request = requests.get('http://%s/a/groups/' % server, auth=auth)
+    groups_request = requests.get('https://%s/a/groups/' % server, auth=auth)
     if groups_request.status_code != 200:
         raise Exception('Please provide your Gerrit HTTP Password.')
     text = groups_request.text
     teams = json.loads(text[text.find('{'):])
-    text = requests.get('http://%s/a/groups/%s/detail' % (server,
+    text = requests.get('https://%s/a/groups/%s/detail' % (server,
                         teams[team_name]['id']), auth=auth).text
     team = json.loads(text[text.find('{'):])
     members_list = [n['username'] for n in team['members'] if 'username' in n]
