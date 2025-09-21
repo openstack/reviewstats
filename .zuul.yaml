@@ -1,5 +1,5 @@
 - project:
     templates:
       - openstack-pep-publish-jobs
-      - openstack-python38-jobs-no-constraints
+      - openstack-python3-jobs
       - publish-openstack-docs-pti

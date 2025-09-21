@@ -123,9 +123,10 @@ def get_projects_info(project=None, all_projects=False,
             if name == project_name:
                 for d, d_data in data['deliverables'].items():
                     projects[-1]['subprojects'] += d_data['repos']
-        projects[-1]['subprojects'] = sorted(
-            list(set(projects[-1]['subprojects']))
-            )
+        if len(projects) > 0:
+            projects[-1]['subprojects'] = sorted(
+                list(set(projects[-1]['subprojects']))
+                )
 
     return projects
 
